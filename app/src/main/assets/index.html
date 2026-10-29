@@ -73,7 +73,7 @@ nav.tabs button.on { color: var(--brand); font-weight: 700; }
 
 /* 시트 */
 .dim { position: fixed; inset: 0; background: rgba(20,24,22,.42); z-index: 40; display: flex; align-items: flex-end; justify-content: center; animation: fade .15s; }
-.sheet { background: var(--bg); width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto; border-radius: 22px 22px 0 0; padding: 8px 16px calc(20px + env(safe-area-inset-bottom)); animation: up .2s ease-out; }
+.sheet { background: var(--bg); width: 100%; max-width: 560px; max-height: calc(92vh / var(--z, 1)); overflow-y: auto; border-radius: 22px 22px 0 0; padding: 8px 16px calc(20px + env(safe-area-inset-bottom)); animation: up .2s ease-out; }
 .sheet .grab { width: 40px; height: 4px; background: var(--grab); border-radius: 4px; margin: 4px auto 10px; }
 .sheet h2 { font-size: 19px; margin: 4px 0 14px; display: flex; align-items: center; justify-content: space-between; }
 .sheet h2 button { font-size: 14px; color: var(--sub); font-weight: 500; }
@@ -232,7 +232,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px s
 .pthumb.empty { display: grid; place-items: center; background: var(--card); border: 1px dashed var(--line); color: var(--sub); }
 .pthumb.empty svg { width: 22px; height: 22px; }
 .pbig { background: #111; border-radius: 16px; overflow: hidden; display: grid; place-items: center; min-height: 200px; }
-.pbig img { max-width: 100%; max-height: 62vh; display: block; }
+.pbig img { max-width: 100%; max-height: calc(62vh / var(--z, 1)); display: block; }
 .dphoto { display: block; width: 100%; padding: 0; margin-bottom: 12px; border-radius: 16px; overflow: hidden; background: var(--line); }
 .dphoto img { width: 100%; max-height: 220px; object-fit: cover; display: block; }
 
@@ -396,6 +396,68 @@ nav.tabs button { min-width: 0; }
 .fam { display: grid; gap: 8px; }
 .fam label { display: flex; gap: 10px; align-items: center; background: var(--card); border-radius: 12px; padding: 11px 12px; box-shadow: var(--shadow); font-size: 14.5px; }
 .fam label small { color: var(--sub); margin-left: auto; }
+
+/* ── v1.8: 정리·찾기·가계부·구독·식단·새 기능 ── */
+.ck-strip { margin-top: 6px; }
+.ck-strip .ck-i { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 7px; background: var(--ok-soft); color: var(--ok); margin-right: 6px; vertical-align: -6px; }
+.ck-strip .ck-i svg { width: 14px; height: 14px; }
+.ck-strip.due { background: var(--soon-soft); }
+.ck-strip.due .ck-i { background: var(--card); color: var(--soon); }
+.ck-n { font-size: 13px; color: var(--sub); font-weight: 600; margin-left: 6px; }
+.ck-bar { height: 4px; background: var(--line); border-radius: 4px; overflow: hidden; margin: -4px 0 14px; }
+.ck-bar i { display: block; height: 100%; background: var(--brand); transition: width .2s; }
+.ck-wrap { position: relative; padding: 4px 0 6px; }
+.ck-card { position: relative; background: var(--card); border-radius: 20px; box-shadow: var(--shadow); padding: 22px 18px 18px; text-align: center; display: grid; gap: 8px; justify-items: center; touch-action: pan-y; user-select: none; transition: transform .16s ease-out; }
+.ck-card .ck-ico { width: 64px; height: 64px; border-radius: 18px; }
+.ck-card .ck-ico svg { width: 34px; height: 34px; }
+.ck-ph { width: 96px; height: 96px; object-fit: cover; border-radius: 18px; }
+.ck-name { font-size: 20px; font-weight: 800; }
+.ck-meta { color: var(--sub); font-size: 13.5px; }
+.ck-qty { font-size: 13.5px; color: var(--sub); display: flex; gap: 8px; align-items: center; }
+.ck-memo { font-size: 13px; background: var(--soon-soft); border-radius: 10px; padding: 6px 10px; }
+.ck-tag { position: absolute; top: 14px; font-weight: 800; font-size: 13px; padding: 4px 10px; border-radius: 8px; opacity: 0; transition: opacity .1s; }
+.ck-tag.l { left: 14px; background: var(--ok-soft); color: var(--ok); }
+.ck-tag.r { right: 14px; background: var(--brand-soft); color: var(--brand); }
+.ck-card.go-l .ck-tag.l, .ck-card.go-r .ck-tag.r { opacity: 1; }
+.ck-btns { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 8px; margin-top: 4px; }
+.ck-btns .btn { padding: 14px 6px; }
+.ck-foot { display: flex; justify-content: space-between; margin-top: 10px; }
+.ck-foot .clink { margin: 0; }
+.ck-done { display: grid; gap: 6px; justify-items: center; text-align: center; padding: 10px 0 16px; }
+.ck-done .mascot svg { width: 72px; height: 72px; }
+.ck-done b { font-size: 18px; }
+.q-res { margin-top: 8px; }
+.budget h3 svg { width: 18px; height: 18px; vertical-align: -3px; color: var(--brand); }
+.bg-total { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 4px 0 8px; }
+.bg-total b { font-size: 24px; color: var(--brand); }
+.bg-total small { font-size: 14px; margin-left: 2px; }
+.bg-total span { color: var(--sub); font-size: 13px; }
+.budget .hbar .l { width: 96px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.budget .hbar .n { width: auto; min-width: 56px; font-weight: 600; }
+.subq { display: grid; gap: 4px; background: var(--card); border-radius: 14px; padding: 12px 14px; margin-top: 10px; box-shadow: var(--shadow); font-size: 13.5px; }
+.subq b { font-size: 14.5px; }
+.subq span { color: var(--sub); }
+.subq .row { margin-top: 6px; }
+.subq .row .btn { flex: 1; padding: 10px; }
+.subq.rec { background: var(--over-soft); box-shadow: none; }
+.rec-more { gap: 10px; align-items: center; justify-content: space-between; margin-top: 8px; }
+.rec-more .btn { padding: 8px 12px; font-size: 13.5px; }
+.rec-more .btn svg, .yearbtn svg { width: 16px; height: 16px; }
+.plan-day { margin-bottom: 10px; }
+.pd-h { display: flex; align-items: center; gap: 8px; margin: 0 2px 6px; }
+.pd-h span { color: var(--sub); font-size: 13px; }
+.pd-h .clink { margin: 0 0 0 auto; }
+.rcard.wide { width: 100%; background: var(--card); box-shadow: var(--shadow); }
+.news { display: grid; gap: 8px; }
+.nw { display: flex; gap: 12px; align-items: flex-start; background: var(--card); border-radius: 14px; padding: 11px 12px; box-shadow: var(--shadow); font-size: 14px; }
+.nw .ico { width: 36px; height: 36px; border-radius: 11px; background: var(--brand-soft); color: var(--brand); }
+.nw .ico svg { width: 20px; height: 20px; }
+.nw small { display: block; color: var(--sub); font-size: 12.5px; margin-top: 2px; }
+.sheet h2 svg { width: 20px; height: 20px; vertical-align: -3px; color: var(--soon); }
+body { word-break: keep-all; overflow-wrap: anywhere; }
+.title-row > div:first-child { min-width: 0; }
+.title-row .today { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rec-n { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 40%; }
 </style></head>
 <body><main id="app"></main>
 <script>// 교체 체크 — 화면과 상관없는 계산·인식 규칙 (node로 테스트 가능)
@@ -480,7 +542,7 @@ nav.tabs button { min-width: 0; }
     { k: ['칫솔'], p: '칫솔' }, { k: ['치약'], p: '치약' }, { k: ['수건', '타올', '타월'], p: '수건' },
     { k: ['수세미'], p: '수세미' }, { k: ['면도날', '면도기날', '리필날'], p: '면도날' }, { k: ['샤워볼', '샤워타올'], p: '샤워볼' }, { k: ['행주'], p: '행주' }, { k: ['양말', '삭스'], p: '양말' },
     { k: ['팬티', '브라', '런닝', '드로즈', '트렁크', '속옷', '내의'], p: '속옷' },
-    { k: ['우유', '밀크'], p: '우유' }, { k: ['두부'], p: '두부' }, { k: ['계란', '달걀', '란(', '구운란'], p: '계란' },
+    { k: ['우유', '밀크'], p: '우유' }, { k: ['두부'], p: '두부' }, { k: ['계란', '달걀', '란(', '구운란', '대란', '특란', '왕란', '유정란'], p: '계란' },
     { k: ['요거트', '요구르트', '요플레', '플레인'], p: '요거트' },
     { k: ['식빵', '모닝빵', '베이글', '빵'], p: '빵' },
     { k: ['돼지', '삼겹', '목살', '소고기', '한우', '우삼겹', '닭', '불고기', '갈비', '다짐육', '정육'], p: '고기' },
@@ -1125,11 +1187,17 @@ nav.tabs button { min-width: 0; }
       events: Array.isArray(o.events) ? o.events.slice(0, 3000).map(function (e) { return e && typeof e.id === 'string' && typeof e.name === 'string' && typeof e.type === 'string' && typeof e.date === 'string' ? cleanItem(Object.assign({}, e, { cat: CATS_OK[e.cat] ? e.cat : 'food' })) : null; }).filter(Boolean) : [],
       shop: Array.isArray(o.shop) ? o.shop.slice(0, 300).filter(function (x) { return x && typeof x.id === 'string' && typeof x.name === 'string' && x.name.length <= 100; }).map(function (x) { return { id: x.id, name: x.name, cat: CATS_OK[x.cat] ? x.cat : 'food', from: 'family', at: typeof x.at === 'string' ? x.at : '' }; }) : null,
       prices: Array.isArray(o.prices) ? o.prices.slice(0, 400).map(function (r) { return r && typeof r.id === 'string' && typeof r.name === 'string' && isFinite(+r.price) ? cleanItem(Object.assign({}, r, { cat: CATS_OK[r.cat] ? r.cat : 'food' })) : null; }).filter(Boolean) : [],
+      barcodes: o.barcodes && typeof o.barcodes === 'object' ? Object.keys(o.barcodes).slice(0, 3000).reduce(function (m, k) {
+        var b = o.barcodes[k];
+        if (/^\d{6,14}$/.test(k) && b && typeof b.name === 'string' && b.name.length <= 100 && CATS_OK[b.cat]) m[k] = cleanItem(Object.assign({ id: 'b' + k }, b, { cat: b.cat }));
+        if (m[k]) delete m[k].id;
+        return m;
+      }, {}) : {},
       car: o.car && typeof o.car === 'object' && Array.isArray(o.car.log) ? { name: String(o.car.name || '내 차').slice(0, 30), km: isFinite(+o.car.km) ? +o.car.km : null, log: o.car.log.filter(function (l) { return l && typeof l.date === 'string' && isFinite(+l.km); }).map(function (l) { return { date: l.date.slice(0, 10), km: +l.km }; }).slice(0, 500) } : null
     };
   }
   function famMerge(L, inc) {
-    var r = { added: 0, updated: 0, removed: 0, events: 0, shop: 0 };
+    var r = { added: 0, updated: 0, removed: 0, events: 0, shop: 0, barcodes: 0 };
     var del = Object.assign({}, L.del || {});
     Object.keys(inc.del || {}).forEach(function (k) { del[k] = Math.max(del[k] || 0, inc.del[k]); });
     var byId = {}; L.items.forEach(function (it) { byId[it.id] = it; });
@@ -1166,10 +1234,124 @@ nav.tabs button { min-width: 0; }
         car = { name: car.name, km: log.length ? log[log.length - 1].km : car.km, log: log };
       }
     }
-    return { items: items, del: del, events: events, shop: shop, prices: prices, car: car, stats: r };
+    var barcodes = Object.assign({}, L.barcodes || {});
+    Object.keys(inc.barcodes || {}).forEach(function (k) { if (!barcodes[k]) { barcodes[k] = inc.barcodes[k]; r.barcodes++; } });
+    return { items: items, del: del, events: events, shop: shop, prices: prices, car: car, barcodes: barcodes, stats: r };
+  }
+
+  // ══ v1.8 ══
+  // 공유한 주문 내역 글(쿠팡·컬리 등)에서 산 물건 찾기
+  var ORDER_SKIP = /(배송|도착|주문번호|주문일|주문 ?상세|결제|장바구니|리뷰|교환|반품|취소|구매 ?확정|판매자|문의|쿠폰|적립|할인|상품금액|배송비|로켓|새벽|오늘출발|더보기|자세히|옵션|수량 ?변경|다시 ?담기|무료|합계|총 ?결제|총 ?금액|받는 ?분|연락처|주소|요청사항|영수증|카드|포인트|전체|선택|고객센터|사업자)/;
+  function parseOrder(text, today) {
+    var raw = String(text || '').slice(0, 20000).replace(/https?:\/\/\S+/g, ' ');
+    var lines = raw.split(/\r?\n/).map(function (l) { return l.replace(/\s+/g, ' ').trim(); }).filter(Boolean);
+    var store = null, sm = raw.match(STORES); if (sm) store = sm[1];
+    var dates = findDates(lines, today).filter(function (c) { var g = diffDays(c.date, today); return g <= 1 && g >= -60; });
+    var buy = dates.length ? dates[0].date : today;
+    var items = [], last = null, seen = {};
+    lines.forEach(function (l) {
+      l = l.replace(/\[[^\]]*\]|【[^】]*】/g, ' ').replace(/\s+/g, ' ').trim();
+      if (!l) return;
+      var pOnly = l.match(/^(?:[₩\\]\s*)?(\d{1,3}(?:,\d{3})+|\d{3,7})\s*원?$/);
+      if (pOnly) { if (last && !last.price) { var v = +pOnly[1].replace(/,/g, ''); if (v >= 100 && v <= 2000000) last.price = v; } return; }
+      if (ORDER_SKIP.test(l) || /주문|구매일/.test(l) || findDates([l], today).length || STORES.test(l) && l.replace(STORES, '').trim().length < 3) return;
+      if ((l.match(/[가-힣]/g) || []).length < 2) return;
+      var price = null, pm = l.match(/(\d{1,3}(?:,\d{3})+|\d{4,7})\s*원/);
+      if (pm) { price = +pm[1].replace(/,/g, ''); l = l.replace(pm[0], ' ').trim(); }
+      var qty = 1, qm = l.match(/(?:,|\s|^)(\d{1,2})\s*개\s*$/) || l.match(/수량\s*:?\s*(\d{1,2})/) || l.match(/[x×]\s*(\d{1,2})\s*$/i);
+      if (qm) { qty = +qm[1]; l = l.replace(qm[0], ' '); }
+      var name = l.replace(/\[[^\]]*\]/g, ' ').replace(/외\s*\d+\s*건/g, ' ').replace(/,/g, ' ').replace(/\s+/g, ' ').trim();
+      if (name.length > 40) name = name.slice(0, 40).trim();
+      if ((name.match(/[가-힣]/g) || []).length < 2) return;
+      var key = name.replace(/\s/g, ''); if (seen[key]) return; seen[key] = 1;
+      var g = guess(name), it = { raw: l, name: name, matched: !!g, qty: qty > 1 ? qty : 1 };
+      if (price && price >= 100) it.price = price;
+      var am = parseAmount(name); if (am) { it.amt = am.amt; it.unit = am.unit; }
+      if (g) {
+        it.cat = g.cat; it.mode = g.mode; it.loc = g.loc;
+        if (g.mode === 'expiry') { it.due = addDays(buy, g.est); it.est = g.est; } else { it.start = buy; it.days = g.days; it.due = addDays(buy, g.days); }
+      } else { it.cat = 'food'; it.mode = 'expiry'; it.loc = '냉장'; it.est = 7; it.due = addDays(buy, 7); }
+      items.push(it); last = it;
+    });
+    return { date: buy, store: store, items: items };
+  }
+
+  // 장보기 가계부: 그 달에 산 기록(가격 넣은 것)
+  function monthSpend(prices, ym) {
+    var r = { ym: ym, total: 0, n: 0, byStore: [], byCat: { food: 0, daily: 0, clothes: 0 } };
+    var st = {};
+    (prices || []).forEach(function (p) {
+      if (String(p.date).slice(0, 7) !== ym || !(p.price > 0)) return;
+      r.total += p.price; r.n++;
+      var k = p.store || '가게 모름'; st[k] = (st[k] || 0) + p.price;
+      if (r.byCat[p.cat] != null) r.byCat[p.cat] += p.price;
+    });
+    r.byStore = Object.keys(st).map(function (k) { return { store: k, won: st[k] }; }).sort(function (a, b) { return b.won - a.won; });
+    return r;
+  }
+
+  // 안 쓰는 구독 찾기: 결제 3일 전에 "이번 달 썼어요?" 묻고, 2달 연속 안 쓰면 해지 추천
+  function subUsage(it, today) {
+    if (it.kind !== 'sub') return null;
+    var f = ddayInfo(it, today);
+    if (!f.due || f.trial) return { ask: false, rec: false, unused: 0 };
+    var ym = f.due.slice(0, 7), use = it.use || {};
+    var left = diffDays(f.due, today);
+    var answered = Object.keys(use).sort().reverse();
+    var unused = 0;
+    for (var i = 0; i < answered.length; i++) { if (use[answered[i]] === false) unused++; else break; }
+    var rec = unused >= 2 && !(it.keepUntil && it.keepUntil >= today);
+    return { ask: left >= 0 && left <= 3 && use[ym] == null, ym: ym, left: left, due: f.due, rec: rec, unused: unused, monthly: f.monthly };
+  }
+
+  // 계기판 사진 글자에서 주행거리 고르기
+  function parseOdometer(lines, prevKm, rate, lastDate, today) {
+    var cands = [];
+    (lines || []).forEach(function (raw) {
+      var l = fixOcr(String(raw));
+      var trip = /trip|구간|평균|연비|주행 ?가능|range|dte|°|℃|:\d\d|\d\.\d/i.test(l);
+      var odo = /odo|총 ?주행|km|㎞|키로/i.test(l);
+      var re = /(\d{1,3}(?:[,. ]\d{3})+|\d{3,7})(?![\d.]*\s*(?:°|℃|%|원))/g, m;
+      while ((m = re.exec(l))) {
+        var v = +m[1].replace(/[,. ]/g, '');
+        if (!(v >= 100 && v <= 2000000)) continue;
+        var sc = 0;
+        if (odo) sc += 3;
+        if (/odo/i.test(l)) sc += 4;
+        if (trip && !/odo/i.test(l)) sc -= 6;
+        cands.push({ km: v, line: String(raw).trim(), sc: sc });
+      }
+    });
+    if (!cands.length) return null;
+    var exp = null;
+    if (prevKm != null) {
+      var days = lastDate ? Math.max(0, diffDays(today, lastDate)) : 0;
+      exp = prevKm + (rate || 40) * days;
+      var hi = prevKm + Math.max(20000, (rate || 60) * days * 3 + 3000);
+      cands = cands.filter(function (c) { return c.km >= prevKm && c.km <= hi; });
+      if (!cands.length) return null;
+      cands.forEach(function (c) { c.sc -= Math.abs(c.km - exp) / 2000; });
+    } else cands.forEach(function (c) { c.sc += c.km >= 1000 ? 1 : 0; });
+    cands.sort(function (a, b) { return b.sc - a.sc || b.km - a.km; });
+    var uniq = [];
+    cands.forEach(function (c) { if (!uniq.some(function (u) { return u.km === c.km; })) uniq.push(c); });
+    return { km: uniq[0].km, line: uniq[0].line, alts: uniq.slice(1, 4).map(function (c) { return c.km; }) };
+  }
+
+  // 검색: 이름·메모·산 곳·보관 위치, 초성(ㅇㅇ → 우유)도
+  var CHO = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ';
+  function cho(str) { return String(str || '').replace(/[가-힣]/g, function (c) { return CHO[Math.floor((c.charCodeAt(0) - 0xAC00) / 588)]; }); }
+  function matchSearch(it, q) {
+    q = String(q || '').replace(/\s/g, '').toLowerCase();
+    if (!q) return false;
+    var hay = [it.name, it.memo, it.store, it.loc].filter(Boolean).join(' ').replace(/\s/g, '').toLowerCase();
+    if (hay.indexOf(q) >= 0) return true;
+    if (/^[ㄱ-ㅎ]+$/.test(q)) return cho(String(it.name).replace(/\s/g, '')).indexOf(q) >= 0;
+    return false;
   }
 
   root.GC = {
+    parseOrder: parseOrder, monthSpend: monthSpend, subUsage: subUsage, parseOdometer: parseOdometer, cho: cho, matchSearch: matchSearch,
     parseFamily: parseFamily, famMerge: famMerge,
     HOMEMADE: HOMEMADE, homemade: homemade,
     REPEATS: REPEATS, repeatStart: repeatStart, runout: runout, zeroChallenge: zeroChallenge, yearStats: yearStats, parseVoice: parseVoice, sinoNum: sinoNum,
@@ -1232,7 +1414,25 @@ nav.tabs button { min-width: 0; }
     '고등어': ['고등어'],
     '김': ['김(', '조미김', '김밥김', '파래김'],
     '베이컨': ['베이컨'],
-    '밥': ['햇반', '즉석밥', '찬밥']
+    '밥': ['햇반', '즉석밥', '찬밥'],
+    '무': [/^(조선|월동|제주|가을)?무(\d|\(|$)|무우/],
+    '배추': [/(^|[^양])배추|알배기/],
+    '가지': [/^가지/],
+    '브로콜리': ['브로콜리'],
+    '파프리카': ['파프리카', '피망'],
+    '연어': ['연어'],
+    '바지락': ['바지락', '조개', '홍합'],
+    '미역': ['미역'],
+    '황태': ['황태', '북어'],
+    '당면': ['당면'],
+    '카레': ['카레', '커리'],
+    '짜장': ['짜장', '춘장'],
+    '칼국수면': ['칼국수'],
+    '돈까스': ['돈까스', '돈가스'],
+    '멸치': ['멸치'],
+    '진미채': ['진미채', '오징어채'],
+    '청경채': ['청경채'],
+    '옥수수': ['옥수수', '스위트콘']
   };
   var PANTRY = '밥·간장·소금·설탕·식용유·고춧가루·고추장·된장·참기름·다진 마늘·후추';
 
@@ -1268,17 +1468,89 @@ nav.tabs button { min-width: 0; }
     { name: '비빔국수', time: 15, need: ['소면'], opt: ['오이', '계란', '김치', '상추'], steps: ['소면을 3~4분 삶아 찬물에 비벼 헹궈요.', '고추장 2, 식초 1.5, 설탕 1, 참기름 1숟가락으로 양념을 만들어요.', '면과 양념을 비비고 채 썬 오이, 반숙 계란을 올려요.'] },
     { name: '떡볶이', time: 20, need: ['떡'], opt: ['어묵', '대파', '양배추', '계란', '라면'], steps: ['물 2컵에 고추장 2, 고춧가루 1, 설탕 2, 간장 1숟가락을 풀어 끓여요.', '떡과 어묵을 넣고 중불에서 8분 졸여요.', '대파·양배추를 넣고 2분 더 졸여요.'] },
     { name: '만두국', time: 15, need: ['만두'], opt: ['계란', '대파', '김'], steps: ['물 3컵에 간장 1숟가락을 넣고 끓여요.', '만두를 넣고 떠오를 때까지 6분 끓여요.', '계란을 풀어 넣고 대파, 김가루를 올려요.'] },
-    { name: '토스트', time: 10, need: ['식빵', '계란'], opt: ['햄', '치즈', '양배추', '버터'], steps: ['채 썬 양배추와 계란을 섞어 도톰하게 부쳐요.', '버터에 식빵을 노릇하게 구워요.', '빵 사이에 계란, 햄, 치즈를 넣고 설탕이나 케첩을 뿌려요.'] },
-    { name: '프렌치토스트', time: 10, need: ['식빵', '계란', '우유'], opt: ['버터', '바나나'], steps: ['계란 2개, 우유 반 컵, 설탕 1숟가락을 섞어요.', '식빵을 담가 충분히 적셔요.', '버터에 약불로 앞뒤 노릇하게 구워요.'] },
-    { name: '바나나 우유 스무디', time: 5, need: ['바나나', '우유'], opt: ['요거트', '사과'], steps: ['바나나 1개, 우유 1컵, 요거트 몇 숟가락을 믹서에 넣어요.', '곱게 갈아 바로 마셔요. 얼음을 넣으면 더 시원해요.'] },
-    { name: '요거트 과일볼', time: 5, need: ['요거트'], opt: ['바나나', '사과'], steps: ['그릇에 요거트를 담아요.', '과일을 썰어 올리고 꿀이나 견과류를 뿌려요.'] },
+    { name: '토스트', snack: true, time: 10, need: ['식빵', '계란'], opt: ['햄', '치즈', '양배추', '버터'], steps: ['채 썬 양배추와 계란을 섞어 도톰하게 부쳐요.', '버터에 식빵을 노릇하게 구워요.', '빵 사이에 계란, 햄, 치즈를 넣고 설탕이나 케첩을 뿌려요.'] },
+    { name: '프렌치토스트', snack: true, time: 10, need: ['식빵', '계란', '우유'], opt: ['버터', '바나나'], steps: ['계란 2개, 우유 반 컵, 설탕 1숟가락을 섞어요.', '식빵을 담가 충분히 적셔요.', '버터에 약불로 앞뒤 노릇하게 구워요.'] },
+    { name: '바나나 우유 스무디', snack: true, time: 5, need: ['바나나', '우유'], opt: ['요거트', '사과'], steps: ['바나나 1개, 우유 1컵, 요거트 몇 숟가락을 믹서에 넣어요.', '곱게 갈아 바로 마셔요. 얼음을 넣으면 더 시원해요.'] },
+    { name: '요거트 과일볼', snack: true, time: 5, need: ['요거트'], opt: ['바나나', '사과'], steps: ['그릇에 요거트를 담아요.', '과일을 썰어 올리고 꿀이나 견과류를 뿌려요.'] },
     { name: '크림 파스타', time: 20, need: ['파스타면', '우유'], opt: ['베이컨', '버섯', '양파', '치즈'], steps: ['면을 소금물에 포장지 시간보다 1분 덜 삶아요.', '버터나 기름에 베이컨·양파·버섯을 볶고 우유 1.5컵을 부어요.', '치즈를 녹이고 면을 넣어 1분 졸인 뒤 소금·후추로 간해요.'] },
     { name: '고등어구이', time: 15, need: ['고등어'], opt: [], steps: ['고등어 물기를 키친타월로 닦아요.', '기름 두른 팬에 껍질부터 중불로 5분 구워요.', '뒤집어 4분 더 구워요.'] },
     { name: '오징어볶음', time: 20, need: ['오징어'], opt: ['양파', '대파', '양배추', '당근'], steps: ['고추장 2, 고춧가루 1, 간장 1, 설탕 1, 다진 마늘 1로 양념을 만들어요.', '채소를 먼저 볶다가 오징어와 양념을 넣어요.', '센불에서 3분만 볶아야 질기지 않아요.'] },
     { name: '새우 볶음밥', time: 15, need: ['새우'], opt: ['계란', '양파', '대파', '당근'], steps: ['파기름에 새우를 볶아 덜어 둬요.', '채소와 계란을 볶고 밥을 넣어요.', '새우를 다시 넣고 굴소스(없으면 간장)로 간해요.'] },
     { name: '감자채전', time: 20, need: ['감자'], opt: ['양파', '치즈'], steps: ['감자를 가늘게 채 썰어 소금 한 꼬집과 섞어요(물에 헹구지 않아요).', '팬에 기름을 두르고 얇게 펴요.', '약불에서 앞뒤 바삭하게 구워요.'] },
-    { name: '고구마 맛탕', time: 25, need: ['고구마'], opt: [], steps: ['고구마를 한입 크기로 썰어 물기를 닦아요.', '기름을 넉넉히 두르고 약불에서 속까지 익혀요.', '기름을 따라내고 설탕 3숟가락을 넣어 녹이며 버무려요.'] },
-    { name: '상추 쌈밥', time: 10, need: ['상추'], opt: ['돼지고기', '참치캔', '깻잎'], steps: ['상추와 깻잎을 씻어 물기를 털어요.', '된장 1, 고추장 1, 참기름 약간으로 쌈장을 만들어요.', '밥과 고기나 참치를 올려 싸 먹어요.'] }
+    { name: '고구마 맛탕', snack: true, time: 25, need: ['고구마'], opt: [], steps: ['고구마를 한입 크기로 썰어 물기를 닦아요.', '기름을 넉넉히 두르고 약불에서 속까지 익혀요.', '기름을 따라내고 설탕 3숟가락을 넣어 녹이며 버무려요.'] },
+    { name: '상추 쌈밥', time: 10, need: ['상추'], opt: ['돼지고기', '참치캔', '깻잎'], steps: ['상추와 깻잎을 씻어 물기를 털어요.', '된장 1, 고추장 1, 참기름 약간으로 쌈장을 만들어요.', '밥과 고기나 참치를 올려 싸 먹어요.'] },
+    { name: '계란찜', time: 15, need: ['계란'], opt: ['대파', '당근'], steps: ['계란 3개에 물 반 컵, 소금 한 꼬집을 넣고 곱게 풀어요.', '뚝배기나 냄비에 붓고 약불에서 바닥을 저어가며 몽글해질 때까지 익혀요.', '대파를 올리고 뚜껑을 덮어 2분 더 익혀요.'] },
+    { name: '계란국', time: 10, need: ['계란'], opt: ['대파', '양파'], steps: ['물 3컵에 양파를 넣고 끓여요.', '끓으면 국간장(또는 소금)으로 간하고 계란을 풀어 천천히 둘러 넣어요.', '대파를 넣고 바로 불을 꺼요.'] },
+    { name: '스크램블 에그', snack: true, time: 5, need: ['계란'], opt: ['우유', '치즈', '버터'], steps: ['계란 2개에 우유 2숟가락, 소금 약간을 섞어요.', '버터를 녹인 팬에 붓고 약불에서 천천히 저어요.', '반쯤 익었을 때 불을 끄고 남은 열로 익혀요.'] },
+    { name: '마약계란장', time: 20, need: ['계란'], opt: ['대파'], steps: ['계란을 끓는 물에 7분 삶아 찬물에 식혀 껍질을 까요.', '간장 반 컵, 물 반 컵, 설탕 3숟가락, 다진 대파·마늘을 섞어요.', '계란을 양념에 담가 냉장고에서 반나절 이상 재워요.'] },
+    { name: '소고기 장조림', time: 50, need: ['소고기'], opt: ['계란'], steps: ['소고기를 덩어리째 물에 20분 삶아 결대로 찢어요.', '고기 삶은 물 2컵에 간장 반 컵, 설탕 2숟가락을 넣어요.', '고기와 삶은 계란을 넣고 약불에서 20분 졸여요.'] },
+    { name: '두부부침', time: 15, need: ['두부'], opt: ['대파'], steps: ['두부를 1cm 두께로 썰어 소금을 살짝 뿌리고 물기를 닦아요.', '기름 두른 팬에 앞뒤로 노릇하게 부쳐요.', '간장 2, 고춧가루 반, 다진 대파, 참기름을 섞은 양념장을 곁들여요.'] },
+    { name: '두부김치', time: 20, need: ['두부', '김치'], opt: ['돼지고기', '대파'], steps: ['두부를 끓는 물에 3분 데쳐 썰어요.', '김치와 고기를 설탕 반 숟가락, 고춧가루 약간과 함께 볶아요.', '접시에 두부를 두르고 볶은 김치를 가운데 올려요.'] },
+    { name: '순두부찌개', time: 20, need: ['두부'], opt: ['계란', '돼지고기', '바지락', '대파'], steps: ['기름에 고춧가루 1숟가락과 다진 마늘을 약불로 볶아 고추기름을 내요.', '물 1.5컵, 고기나 바지락을 넣고 끓으면 순두부를 큼직하게 떠 넣어요.', '국간장·소금으로 간하고 계란, 대파를 올려 2분 더 끓여요.'] },
+    { name: '마파두부', time: 20, need: ['두부', '돼지고기'], opt: ['대파', '양파'], steps: ['다진 돼지고기와 대파를 기름에 볶아요.', '물 1컵, 된장 반, 고추장 1, 간장 1, 설탕 반 숟가락을 넣고 끓여요.', '깍둑 썬 두부를 넣고 3분 끓인 뒤 전분물로 걸쭉하게 해요.'] },
+    { name: '소고기 미역국', time: 30, need: ['미역'], opt: ['소고기'], steps: ['불린 미역과 소고기를 참기름에 3분 볶아요.', '물 5컵을 붓고 끓으면 중불에서 15분 끓여요.', '국간장과 다진 마늘로 간하고 5분 더 끓여요.'] },
+    { name: '소고기 무국', time: 30, need: ['무'], opt: ['소고기', '대파'], steps: ['소고기와 나박 썬 무를 참기름에 볶아요.', '물 5컵을 붓고 무가 투명해질 때까지 15분 끓여요.', '국간장·다진 마늘로 간하고 대파를 넣어요.'] },
+    { name: '북엇국', time: 20, need: ['황태'], opt: ['계란', '무', '대파'], steps: ['황태채를 물에 살짝 적셔 참기름에 볶아요.', '물 4컵을 붓고 무를 넣어 10분 끓여요.', '계란을 풀어 넣고 국간장·대파로 마무리해요.'] },
+    { name: '감자국', time: 20, need: ['감자'], opt: ['양파', '대파', '계란'], steps: ['감자를 납작하게 썰어 물 4컵에 넣고 끓여요.', '감자가 반쯤 익으면 양파를 넣고 국간장·소금으로 간해요.', '계란을 풀어 넣고 대파를 올려요.'] },
+    { name: '배추된장국', time: 20, need: ['배추'], opt: ['대파', '두부'], steps: ['물 4컵에 된장 1.5숟가락을 풀어 끓여요.', '배추를 한입 크기로 썰어 넣고 10분 끓여요.', '두부와 대파를 넣고 다진 마늘로 마무리해요.'] },
+    { name: '김치 콩나물국', time: 15, need: ['김치', '콩나물'], opt: ['대파'], steps: ['물 4컵에 김치를 넣고 5분 끓여요.', '콩나물을 넣고 뚜껑을 덮어 5분 끓여요.', '소금·고춧가루로 간하고 대파를 넣어요.'] },
+    { name: '돼지고기 고추장찌개', time: 30, need: ['돼지고기', '감자'], opt: ['애호박', '양파', '두부'], steps: ['돼지고기를 볶다가 고추장 2, 고춧가루 1숟가락을 넣어 볶아요.', '물 3컵과 감자를 넣고 10분 끓여요.', '애호박·양파·두부를 넣고 5분 더 끓여요.'] },
+    { name: '바지락 칼국수', time: 25, need: ['칼국수면'], opt: ['바지락', '애호박', '감자', '대파'], steps: ['물 5컵에 바지락을 넣고 끓여 입이 벌어지면 건져요.', '감자·애호박과 면을 넣고 면이 익을 때까지 끓여요.', '바지락을 다시 넣고 국간장·소금, 대파로 마무리해요.'] },
+    { name: '잔치국수', time: 20, need: ['소면'], opt: ['계란', '애호박', '김', '김치'], steps: ['물 4컵에 국간장 1숟가락으로 국물을 끓여요(멸치 육수면 더 좋아요).', '소면을 3분 삶아 찬물에 헹궈 그릇에 담아요.', '뜨거운 국물을 붓고 볶은 애호박, 계란지단, 김가루를 올려요.'] },
+    { name: '우동', time: 10, need: ['우동면'], opt: ['어묵', '대파', '계란'], steps: ['물 2.5컵에 간장 2숟가락, 설탕 반 숟가락을 넣고 끓여요.', '우동면과 어묵을 넣고 2분 끓여요.', '계란을 넣고 대파를 올려요.'] },
+    { name: '볶음우동', time: 15, need: ['우동면'], opt: ['양배추', '양파', '햄', '버섯'], steps: ['우동면을 뜨거운 물에 풀어 물기를 빼요.', '채소와 햄을 센불에 볶아요.', '면을 넣고 간장 2, 굴소스(없으면 간장) 1, 설탕 반 숟가락으로 볶아요.'] },
+    { name: '토마토 파스타', time: 20, need: ['파스타면', '토마토'], opt: ['양파', '버섯', '베이컨'], steps: ['면을 소금물에 삶아요(면 삶은 물 반 컵은 남겨요).', '다진 마늘·양파를 볶다가 토마토를 썰어 넣고 으깨며 5분 졸여요.', '면과 면수를 넣고 소금·후추로 간해요.'] },
+    { name: '알리오 올리오', time: 15, need: ['파스타면'], opt: ['베이컨', '버섯'], steps: ['면을 소금물에 포장지 시간대로 삶아요.', '기름을 넉넉히 두르고 마늘을 약불에 노릇하게 볶아요.', '면과 면 삶은 물 3숟가락을 넣고 소금·후추로 간해요.'] },
+    { name: '짜장밥', time: 30, need: ['짜장'], opt: ['감자', '양파', '돼지고기', '애호박'], steps: ['고기와 깍둑 썬 감자·양파·애호박을 볶아요.', '물 2컵을 붓고 감자가 익을 때까지 10분 끓여요.', '짜장 가루를 풀어 넣고 걸쭉해지면 밥에 얹어요.'] },
+    { name: '카레라이스', time: 30, need: ['카레'], opt: ['감자', '당근', '양파', '돼지고기', '닭고기'], steps: ['고기와 깍둑 썬 감자·당근·양파를 볶아요.', '물 3컵을 붓고 채소가 익을 때까지 15분 끓여요.', '불을 줄이고 카레 가루를 풀어 저어가며 5분 더 끓여요.'] },
+    { name: '오므라이스', time: 20, need: ['계란'], opt: ['양파', '당근', '햄', '버섯'], steps: ['채소와 햄을 잘게 썰어 볶다가 밥을 넣고 케첩(없으면 간장)으로 볶아요.', '계란 2개를 풀어 약불에서 얇게 부쳐요.', '볶음밥을 올리고 계란으로 감싸 케첩을 뿌려요.'] },
+    { name: '김밥', time: 30, need: ['김'], opt: ['참치캔', '계란', '햄', '당근', '시금치', '오이'], steps: ['밥에 소금·참기름을 넣어 비벼요.', '계란은 지단으로 부치고, 당근은 볶고, 햄은 구워 길게 썰어요.', '김 위에 밥을 얇게 펴고 재료를 올려 단단히 말아요.'] },
+    { name: '참치 주먹밥', time: 10, need: ['참치캔'], opt: ['김', '김치'], steps: ['참치 기름을 빼고 마요네즈 1숟가락과 섞어요.', '밥에 소금·참기름을 넣고 참치를 넣어 동그랗게 뭉쳐요.', '김가루를 묻히거나 김으로 감싸요.'] },
+    { name: '비빔밥', time: 20, need: ['콩나물'], opt: ['시금치', '당근', '애호박', '계란', '소고기'], steps: ['나물과 채소를 각각 볶거나 무쳐 준비해요.', '밥 위에 둘러 담고 계란프라이를 올려요.', '고추장 1숟가락, 참기름을 넣어 비벼요.'] },
+    { name: '소고기 덮밥', time: 15, need: ['소고기', '양파'], opt: ['대파', '계란'], steps: ['물 반 컵에 간장 2, 설탕 1숟가락을 넣고 양파를 끓여요.', '얇은 소고기를 넣고 2분 익혀요.', '계란을 풀어 넣고 반숙일 때 밥 위에 올려요.'] },
+    { name: '닭갈비', time: 30, need: ['닭고기'], opt: ['양배추', '고구마', '떡', '양파', '깻잎'], steps: ['고추장 2, 간장 1, 고춧가루 1, 설탕 1, 다진 마늘 1로 양념해 닭을 20분 재워요.', '팬에 고구마·양배추를 깔고 닭을 올려 볶아요.', '닭이 익으면 떡과 깻잎을 넣고 2분 더 볶아요.'] },
+    { name: '닭가슴살 샐러드', time: 15, need: ['닭고기', '상추'], opt: ['토마토', '오이', '파프리카'], steps: ['닭가슴살을 소금·후추로 간해 앞뒤로 구워 썰어요.', '채소를 한입 크기로 썰어 그릇에 담아요.', '간장 1, 식초 1, 설탕 반, 참기름 1로 드레싱을 만들어 뿌려요.'] },
+    { name: '찜닭', time: 40, need: ['닭고기'], opt: ['감자', '당근', '당면', '양파'], steps: ['닭을 데쳐 헹군 뒤 물 2컵, 간장 5, 설탕 2, 다진 마늘 1과 함께 끓여요.', '감자·당근을 넣고 20분 졸여요.', '불린 당면과 양파를 넣고 5분 더 졸여요.'] },
+    { name: '닭죽', time: 40, need: ['닭고기'], opt: ['당근', '대파'], steps: ['닭을 물 6컵에 20분 삶아 살을 발라요.', '닭 국물에 밥 1공기와 잘게 썬 당근을 넣고 저어가며 끓여요.', '닭살을 넣고 소금으로 간한 뒤 대파를 뿌려요.'] },
+    { name: '돼지고기 김치볶음', time: 20, need: ['돼지고기', '김치'], opt: ['양파', '대파', '두부'], steps: ['돼지고기를 볶아 기름이 나오면 김치를 넣어요.', '설탕 1, 고춧가루 1숟가락을 넣고 5분 볶아요.', '양파·대파를 넣고 볶아 데친 두부와 곁들여요.'] },
+    { name: '수육', time: 60, need: ['돼지고기'], opt: ['대파', '양파', '김치'], steps: ['통삼겹이나 앞다리살을 물에 담그고 된장 1숟가락, 대파, 양파를 넣어요.', '센불로 끓으면 중불에서 45분 삶아요.', '10분 식혀 썰고 김치나 쌈장을 곁들여요.'] },
+    { name: '돈까스 덮밥', time: 20, need: ['돈까스', '계란', '양파'], opt: ['대파'], steps: ['돈까스를 노릇하게 구워(또는 튀겨) 썰어요.', '물 반 컵에 간장 2, 설탕 1숟가락을 넣고 양파를 익혀요.', '돈까스를 올리고 계란을 풀어 넣어 반숙일 때 밥에 얹어요.'] },
+    { name: '고등어조림', time: 30, need: ['고등어'], opt: ['무', '김치', '양파', '대파'], steps: ['냄비에 무를 깔고 고등어를 올려요.', '물 1.5컵, 간장 3, 고춧가루 2, 설탕 1, 다진 마늘 1을 부어요.', '중불에서 20분 졸이고 대파를 올려요.'] },
+    { name: '연어 스테이크', time: 15, need: ['연어'], opt: ['양파', '버터'], steps: ['연어 물기를 닦고 소금·후추를 뿌려요.', '기름 두른 팬에 껍질 쪽부터 4분, 뒤집어 3분 구워요.', '버터를 녹여 끼얹고 구운 양파를 곁들여요.'] },
+    { name: '새우 버터구이', time: 10, need: ['새우'], opt: ['버터', '브로콜리'], steps: ['새우를 손질해 물기를 닦아요.', '버터와 다진 마늘을 녹여 새우를 앞뒤로 구워요.', '소금·후추로 간하고 데친 브로콜리를 곁들여요.'] },
+    { name: '해물파전', time: 20, need: ['대파'], opt: ['오징어', '새우', '바지락'], steps: ['대파를 길게 썰고 해물을 잘게 썰어요.', '부침가루 1컵과 물 1컵을 섞어요.', '팬에 대파를 깔고 반죽과 해물을 올려 앞뒤로 바삭하게 부쳐요.'] },
+    { name: '멸치볶음', time: 10, need: ['멸치'], opt: [], steps: ['마른 팬에 멸치를 볶아 비린내를 날려요.', '기름을 조금 두르고 다진 마늘을 볶다가 간장 1, 설탕 1숟가락을 넣어요.', '물엿(없으면 설탕)을 넣고 버무려 참깨를 뿌려요.'] },
+    { name: '진미채볶음', time: 10, need: ['진미채'], opt: [], steps: ['진미채를 물에 살짝 헹궈 물기를 짜요.', '고추장 1, 설탕 1, 물엿 1, 기름 1숟가락을 약불에 끓여요.', '불을 끄고 진미채를 넣어 버무려요.'] },
+    { name: '감자조림', time: 25, need: ['감자'], opt: ['당근', '양파'], steps: ['감자를 깍둑 썰어 기름에 3분 볶아요.', '물 1컵, 간장 3, 설탕 1숟가락을 넣고 중불에서 졸여요.', '국물이 거의 없어지면 참기름을 둘러요.'] },
+    { name: '감자샐러드', time: 25, need: ['감자'], opt: ['계란', '오이', '당근', '햄'], steps: ['감자와 계란을 삶아 감자는 으깨요.', '오이·당근·햄을 잘게 썰어 섞어요.', '마요네즈 3숟가락, 소금·후추로 버무려요.'] },
+    { name: '고구마구이', snack: true, time: 40, need: ['고구마'], opt: [], steps: ['고구마를 깨끗이 씻어 물기를 닦아요.', '에어프라이어 200도에서 30~40분 구워요(오븐도 같아요).', '젓가락이 쑥 들어가면 완성이에요.'] },
+    { name: '당근볶음', time: 10, need: ['당근'], opt: ['양파'], steps: ['당근을 가늘게 채 썰어요.', '기름에 당근과 양파를 중불로 볶아요.', '소금으로 간하고 숨이 죽으면 깨를 뿌려요.'] },
+    { name: '브로콜리 숙회', time: 5, need: ['브로콜리'], opt: [], steps: ['브로콜리를 송이로 나눠 소금물에 1분 데쳐요.', '찬물에 헹궈 물기를 빼요.', '초고추장(고추장 1, 식초 1, 설탕 반)을 곁들여요.'] },
+    { name: '가지볶음', time: 15, need: ['가지'], opt: ['양파', '대파'], steps: ['가지를 길게 썰어요.', '기름에 다진 마늘과 대파를 볶다가 가지를 넣어 볶아요.', '간장 1, 설탕 반 숟가락으로 간하고 참기름을 둘러요.'] },
+    { name: '가지무침', time: 15, need: ['가지'], opt: [], steps: ['가지를 길게 썰어 전자레인지에 3분 돌리거나 김 오른 찜기에 5분 쪄요.', '식혀서 결대로 찢고 물기를 짜요.', '간장 1, 고춧가루 반, 다진 마늘, 참기름으로 무쳐요.'] },
+    { name: '배추겉절이', time: 20, need: ['배추'], opt: ['대파'], steps: ['배추를 한입 크기로 썰어 소금에 20분 절여 헹궈요.', '고춧가루 2, 액젓(없으면 간장) 1, 설탕 1, 다진 마늘 1을 섞어요.', '배추와 대파를 양념에 버무리고 참깨를 뿌려요.'] },
+    { name: '무생채', time: 15, need: ['무'], opt: [], steps: ['무를 가늘게 채 썰어요.', '고춧가루 1을 먼저 버무려 색을 들여요.', '식초 1, 설탕 1, 소금, 다진 마늘을 넣고 무쳐요.'] },
+    { name: '청경채 볶음', time: 10, need: ['청경채'], opt: ['버섯'], steps: ['청경채 밑동을 잘라 한 장씩 떼요.', '기름에 다진 마늘을 볶다가 청경채와 버섯을 센불에 볶아요.', '굴소스(없으면 간장) 1숟가락으로 간해요.'] },
+    { name: '양배추 쌈', time: 15, need: ['양배추'], opt: ['돼지고기'], steps: ['양배추를 한 장씩 떼어 찜기에 5분 쪄요(전자레인지 3분도 돼요).', '된장 1, 고추장 1, 참기름으로 쌈장을 만들어요.', '고기나 밥을 올려 싸 먹어요.'] },
+    { name: '양배추 계란전', time: 20, need: ['양배추', '계란'], opt: ['베이컨', '오징어'], steps: ['양배추를 채 썰어 계란 2개, 부침가루 3숟가락과 섞어요.', '팬에 도톰하게 펴고 약불에서 앞뒤로 익혀요.', '마요네즈와 케첩(또는 돈까스 소스)을 뿌려요.'] },
+    { name: '잡채', time: 40, need: ['당면'], opt: ['시금치', '당근', '양파', '버섯', '돼지고기', '소고기'], steps: ['당면을 30분 불려 6분 삶아 건져요.', '채소와 고기를 각각 볶아요.', '당면에 간장 3, 설탕 1.5, 참기름 1숟가락을 넣고 볶은 재료와 버무려요.'] },
+    { name: '콩나물 불고기', time: 20, need: ['콩나물', '돼지고기'], opt: ['대파'], steps: ['고기를 고추장 2, 간장 1, 설탕 1, 고춧가루 1로 양념해요.', '팬에 콩나물을 깔고 고기를 올려 뚜껑을 덮고 익혀요.', '콩나물 숨이 죽으면 대파를 넣고 섞어 볶아요.'] },
+    { name: '떡국', time: 20, need: ['떡'], opt: ['계란', '소고기', '대파', '김'], steps: ['소고기를 참기름에 볶다가 물 4컵을 부어 끓여요.', '떡을 넣고 떠오를 때까지 5분 끓여요.', '국간장으로 간하고 계란을 풀어 넣은 뒤 김가루를 올려요.'] },
+    { name: '궁중떡볶이', time: 20, need: ['떡', '소고기'], opt: ['양파', '버섯', '당근'], steps: ['소고기를 간장 1, 설탕 반 숟가락으로 밑간해요.', '고기와 채소를 볶다가 떡을 넣어요.', '간장 2, 설탕 1, 물 3숟가락을 넣고 졸여 참기름을 둘러요.'] },
+    { name: '라볶이', time: 15, need: ['떡', '라면'], opt: ['어묵', '계란', '대파'], steps: ['물 3컵에 고추장 2, 고춧가루 1, 설탕 2를 풀어 끓여요.', '떡과 어묵을 넣고 5분 끓여요.', '라면 사리를 넣고 2분 더 끓인 뒤 삶은 계란과 대파를 올려요.'] },
+    { name: '소시지 야채볶음', time: 15, need: ['햄'], opt: ['양파', '파프리카', '당근'], steps: ['소시지에 칼집을 내고 채소를 한입 크기로 썰어요.', '소시지와 채소를 볶아요.', '케첩 2, 간장 반, 설탕 반 숟가락으로 버무려요.'] },
+    { name: '스팸마요 덮밥', time: 15, need: ['햄', '계란'], opt: ['양파', '김'], steps: ['스팸을 깍둑 썰어 노릇하게 구워요.', '양파를 간장 1, 설탕 반 숟가락에 볶고 계란은 스크램블해요.', '밥 위에 모두 올리고 마요네즈와 김가루를 뿌려요.'] },
+    { name: '베이컨 감자볶음', time: 15, need: ['베이컨', '감자'], opt: ['양파'], steps: ['감자를 채 썰어 찬물에 헹궈요.', '베이컨을 먼저 볶아 기름을 내요.', '감자·양파를 넣고 볶아 소금·후추로 간해요.'] },
+    { name: '마늘빵', snack: true, time: 10, need: ['식빵', '버터'], opt: [], steps: ['버터 2숟가락, 다진 마늘 1, 설탕 1숟가락을 섞어요.', '식빵에 펴 발라요.', '팬이나 에어프라이어 180도에서 5분 바삭하게 구워요.'] },
+    { name: '바나나 팬케이크', snack: true, time: 15, need: ['바나나', '계란'], opt: ['우유'], steps: ['바나나 1개를 으깨 계란 1개와 섞어요.', '약불에 작게 부어 앞뒤로 구워요.', '꿀이나 요거트를 곁들여요.'] },
+    { name: '계란 우유 푸딩', snack: true, time: 25, need: ['계란', '우유'], opt: [], steps: ['계란 2개, 우유 1컵, 설탕 2숟가락을 섞어 체에 걸러요.', '컵에 담아 랩을 씌우고 찜기에서 약불로 15분 쪄요.', '식혀서 냉장고에 넣어 차갑게 먹어요.'] },
+    { name: '콘치즈', snack: true, time: 10, need: ['옥수수', '치즈'], opt: ['버터'], steps: ['옥수수 물기를 빼고 마요네즈 1, 설탕 반 숟가락과 섞어요.', '버터 두른 팬이나 그릇에 담고 치즈를 올려요.', '치즈가 녹을 때까지 굽거나 전자레인지에 2분 돌려요.'] },
+    { name: '카프레제', snack: true, time: 5, need: ['토마토', '치즈'], opt: [], steps: ['토마토와 치즈를 같은 두께로 썰어요.', '번갈아 담고 소금·후추를 뿌려요.', '올리브유(또는 식용유)와 식초를 조금 뿌려요.'] },
+    { name: '오이냉국', time: 10, need: ['오이'], opt: ['미역'], steps: ['오이를 채 썰고 미역은 불려 데쳐요.', '찬물 3컵에 식초 3, 설탕 2, 국간장 1, 소금을 섞어요.', '오이·미역을 넣고 얼음을 띄워요.'] },
+    { name: '미역 오이무침', time: 10, need: ['미역', '오이'], opt: [], steps: ['불린 미역을 데쳐 찬물에 헹궈 썰어요.', '오이를 얇게 썰어요.', '식초 2, 설탕 1, 고추장 반, 다진 마늘로 무쳐요.'] },
+    { name: '상추 겉절이', time: 5, need: ['상추'], opt: ['양파'], steps: ['상추를 한입 크기로 찢어요.', '간장 1, 고춧가루 반, 식초 1, 설탕 반, 참기름 1을 섞어요.', '먹기 직전에 가볍게 버무려요.'] },
+    { name: '참치전', time: 15, need: ['참치캔'], opt: ['양파', '당근', '계란'], steps: ['참치 기름을 빼고 잘게 썬 채소, 계란 1개, 부침가루 2숟가락과 섞어요.', '한 숟가락씩 동글게 떠 팬에 올려요.', '약불에서 앞뒤로 노릇하게 부쳐요.'] },
+    { name: '소고기 야채죽', time: 30, need: ['소고기'], opt: ['당근', '애호박', '버섯'], steps: ['다진 소고기를 참기름에 볶아요.', '잘게 썬 채소와 밥 1공기, 물 4컵을 넣고 저어가며 끓여요.', '걸쭉해지면 국간장이나 소금으로 간해요.'] }
   ];
 
   function norm(s) { return String(s).replace(/\s/g, ''); }
@@ -1287,9 +1559,11 @@ nav.tabs button { min-width: 0; }
   function ingredientsOf(name) {
     var n = norm(name), out = [];
     Object.keys(INGR).forEach(function (k) {
-      var hit = INGR[k].some(function (w) { return n.indexOf(w) >= 0; });
+      var hit = INGR[k].some(function (w) { return typeof w === 'string' ? n.indexOf(w) >= 0 : w.test(n); });
       if (k === '햄' && /햄버거/.test(n)) hit = false;
       if (k === '떡' && /떡갈비/.test(n)) hit = false;
+      if (k === '오징어' && /오징어채/.test(n)) hit = false;
+      if (k === '소면' && /칼국수/.test(n) && !/소면/.test(n)) hit = false;
       if (hit) out.push(k);
     });
     return out;
@@ -1329,7 +1603,45 @@ nav.tabs button { min-width: 0; }
     return list.length ? list[0].r.name : null;
   }
 
-  root.GR = { INGR: INGR, PANTRY: PANTRY, RECIPES: RECIPES, ingredientsOf: ingredientsOf, recommend: recommend, dishFor: dishFor };
+  // 3일 식단: 기한이 급한 재료를 먼저 쓰도록 하루 하나씩 고르고, 같은 주재료가 이어지지 않게
+  function plan(items, today, opts) {
+    opts = opts || {};
+    var nDays = opts.days || 3, skip = opts.skip || {}, keep = opts.keep || [];
+    var cand = recommend(items, today, { allowMissing: 2 });
+    var byName = {}; cand.forEach(function (x) { byName[x.r.name] = x; });
+    var usedIt = {}, mains = {}, out = [];
+    function idOf(it) { return it.id || it.name; }
+    function take(x, d) {
+      x.used.forEach(function (it) { usedIt[idOf(it)] = 1; });
+      mains[x.r.need[0]] = 1;
+      out.push({ day: d, date: G.addDays(today, d), x: x });
+    }
+    for (var d = 0; d < nDays; d++) {
+      if (keep[d] && byName[keep[d]] && !out.some(function (o) { return o.x.r.name === keep[d]; })) { take(byName[keep[d]], d); continue; }
+      var best = null, bs = -1e9;
+      cand.forEach(function (x) {
+        if (x.r.snack) return;   // 간식·아침용은 식단에서 뺌
+        if (out.some(function (o) { return o.x.r.name === x.r.name; })) return;
+        if ((skip[d] || []).indexOf(x.r.name) >= 0) return;
+        var sc = 0;
+        x.used.forEach(function (it) {
+          if (usedIt[idOf(it)]) { sc -= 2; return; }
+          var left = G.diffDays(G.itemDue(it), today);
+          sc += left <= d ? 14 : left <= d + 2 ? 7 : 2;
+        });
+        sc -= x.missing.length * 7 + x.r.time / 15;
+        if (mains[x.r.need[0]]) sc -= 6;
+        if (sc > bs) { bs = sc; best = x; }
+      });
+      if (!best) break;
+      take(best, d);
+    }
+    var missing = [];
+    out.forEach(function (o) { o.x.missing.forEach(function (m) { if (missing.indexOf(m) < 0) missing.push(m); }); });
+    return { days: out, missing: missing };
+  }
+
+  root.GR = { INGR: INGR, PANTRY: PANTRY, RECIPES: RECIPES, ingredientsOf: ingredientsOf, recommend: recommend, dishFor: dishFor, plan: plan };
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
 <script>(function () {
@@ -1385,6 +1697,11 @@ nav.tabs button { min-width: 0; }
     mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>',
     trophy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M9 20h6"/></svg>',
     share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5M5 14v5h14v-5"/></svg>',
+    search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+    wallet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="13" rx="2.5"/><path d="M3.5 9.5h17M15.5 14h2" stroke-linecap="round"/></svg>',
+    text: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18L8.5 6h1L14 18M5.6 14h6.8M15.5 18l2.7-7h.6l2.7 7M16.4 15.6h4"/></svg>',
+    spark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg>',
     heart: '<svg viewBox="0 0 24 24"><path d="M12 20.5s-8-4.9-8-10.4C4 7.3 6 5.3 8.5 5.3c1.5 0 2.8.8 3.5 2 .7-1.2 2-2 3.5-2C18 5.3 20 7.3 20 10.1c0 5.5-8 10.4-8 10.4z" fill="currentColor"/></svg>',
     scale: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M7 20h10M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/></svg>',
     star: '<svg viewBox="0 0 24 24"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z" fill="currentColor"/></svg>',
@@ -1411,6 +1728,7 @@ nav.tabs button { min-width: 0; }
     s.prices = s.prices || [];
     s.fav = s.fav || [];
     s.myp = s.myp || [];
+    s.set.chk = s.set.chk || {};
     s.del = s.del || {};
     if (!Array.isArray(s.set.tabs) || !s.set.tabs.length) s.set.tabs = CAT_TABS.slice();
     // 예전 버전의 보관 위치를 새 탭 분류로
@@ -1533,14 +1851,21 @@ nav.tabs button { min-width: 0; }
       for (var n = 0; n < 3; n++) {
         var f = G.ddayInfo(i, td, n);
         if (!f.due || f.done) break;
-        items.push({ name: i.name + (f.word ? ' ' + f.word : ''), cat: 'dday', due: f.due, alert: f.alert, repeat: f.repeat });
+        var en = { name: i.name + (f.word ? ' ' + f.word : ''), cat: 'dday', due: f.due, alert: f.alert, repeat: f.repeat };
+        if (i.kind === 'sub' && f.word === '결제' && n === 0) { en.sub = true; en.sid = i.id; en.sname = i.name; en.ym = f.due.slice(0, 7); en.asked = !!(i.use && i.use[en.ym] != null); }
+        items.push(en);
         if (!f.repeat) break;
       }
     });
     items = items.concat(activeItems().filter(function (i) { return i.mode !== 'dday'; }).map(function (i) {
       if (i.mode !== 'car') {
         var o0 = { id: i.id, name: i.name, cat: i.cat, due: G.itemDue(i), alert: i.alert };
-        if (i.cat === 'food' && window.GR) { var dish = window.GR.dishFor(i, S.items, td); if (dish) o0.dish = dish; }
+        if (i.cat === 'food' && window.GR) {
+          var pt = planToday(), dish = null;
+          if (pt) { var pr = window.GR.RECIPES.filter(function (r) { return r.name === pt; })[0]; if (pr && window.GR.ingredientsOf(i.name).some(function (k) { return pr.need.indexOf(k) >= 0 || pr.opt.indexOf(k) >= 0; })) dish = pt; }
+          dish = dish || window.GR.dishFor(i, S.items, td);
+          if (dish) o0.dish = dish;
+        }
         return o0;
       }
       var s = stat(i, td);
@@ -1551,7 +1876,7 @@ nav.tabs button { min-width: 0; }
     var hasCar = isOn('car') && S.items.some(function (i) { return i.cat === 'car'; });
     var ll = lastLog();
     try {
-      A.sync(JSON.stringify({ notify: !!S.set.notify, hour: +t[0], minute: +t[1], items: items, kmDate: hasCar && ll ? ll.date : null,
+      A.sync(JSON.stringify({ chk: checkBase(), notify: !!S.set.notify, hour: +t[0], minute: +t[1], items: items, kmDate: hasCar && ll ? ll.date : null,
         seasons: G.SEASONS.filter(function (x) { return isOn(x.cat) && (x.cat !== 'car' || hasCar); }).map(function (x) { return { from: x.from, text: x.text }; }) }));
     } catch (e) {}
   }
@@ -1634,7 +1959,7 @@ nav.tabs button { min-width: 0; }
   function header(cat) {
     var nshop = S.shop.filter(function (x) { return !x.done; }).length;
     return '<header class="top"><div class="title-row"><div><h1>' + TITLES[cat] + '</h1><div class="today">' + SUBS[cat] + '</div></div>' +
-      '<div class="hbtns">' + (cat === 'food' || cat === 'clothes' || cat === 'daily' ? '<button class="icon-btn" data-cmp aria-label="가격 비교">' + IC.scale + '</button>' : '') +
+      '<div class="hbtns"><button class="icon-btn" data-search aria-label="찾기">' + IC.search + '</button>' + (cat === 'food' || cat === 'clothes' || cat === 'daily' ? '<button class="icon-btn" data-cmp aria-label="가격 비교">' + IC.scale + '</button>' : '') +
       (cat === 'dday' ? '' : '<button class="icon-btn" data-shop aria-label="장보기 목록">' + IC.cart + (nshop ? '<span class="bdg">' + nshop + '</span>' : '') + '</button>') +
       '<button class="icon-btn" data-go="settings" aria-label="설정">' + IC.gear + '</button></div></div>' + seasonBanner(cat);
   }
@@ -1701,6 +2026,7 @@ nav.tabs button { min-width: 0; }
     var t = today();
     var all = listOf(cat, t);
     var h = header(cat) + summary(all);
+    if (all.length >= 2) h += checkStrip(cat, t);
     if (cat === 'food') {
       var ms = G.monthStats(S.events, t.slice(0, 7));
       h += '<button class="strip" data-go="stats"><span>이번 달 버린 음식 <b style="color:var(--over)">' + ms.discard + '개' + (ms.wasteWon ? ' · ' + num(ms.wasteWon) + '원' : '') + '</b> · 다 먹은 <b style="color:var(--ok)">' + ms.eaten + '개</b></span>' + IC.right + '</button>';
@@ -1731,9 +2057,9 @@ nav.tabs button { min-width: 0; }
     var top = RLIST.slice(0, 3), open = !!S.set.recOpen;
     var can = RLIST.filter(function (x) { return !x.missing.length; }).length;
     var h = '<div class="rec' + (open ? '' : ' closed') + '"><button class="rec-h" data-rectog aria-expanded="' + open + '"><span class="ri">' + IC.chef + '</span><b>오늘 뭐 해먹지?</b>' +
-      '<span class="rec-n">' + (RLIST.length ? (can ? '바로 가능 ' + can + '개' : '추천 ' + RLIST.length + '개') : '') + '</span><span class="rec-arr">' + IC.down + '</span></button>';
+      '<span class="rec-n">' + (planToday() ? '오늘 ' + esc(planToday()) : RLIST.length ? (can ? '바로 가능 ' + can + '개' : '추천 ' + RLIST.length + '개') : '') + '</span><span class="rec-arr">' + IC.down + '</span></button>';
     if (!open) return h + '</div>';
-    if (RLIST.length) h += '<div class="rec-more"><button class="clink" data-recipes>' + RLIST.length + '개 모두 보기</button></div>';
+    h += '<div class="rec-more"><button class="btn soft" data-plan>' + IC.cal + '3일 식단 짜기</button>' + (RLIST.length ? '<button class="clink" data-recipes>' + RLIST.length + '개 모두 보기</button>' : '') + '</div>';
     if (!top.length) return h + '<p class="hint" style="margin:6px 0 0">지금 있는 음식으로 맞는 요리가 없어요. 계란·두부·김치·고기 같은 재료를 등록하면 추천해 드려요.</p></div>';
     h += '<div class="rec-list">' + top.map(function (x, i) { return recipeCard(x, i); }).join('') + '</div></div>';
     return h;
@@ -1750,7 +2076,7 @@ nav.tabs button { min-width: 0; }
     });
   }
   function openRecipe(i) {
-    var x = RLIST[+i]; if (!x) return;
+    var x = typeof i === 'object' ? i : RLIST[+i]; if (!x) return;
     var r = x.r;
     var h = '<h2>' + esc(r.name) + '<button data-x>닫기</button></h2>';
     h += '<p class="hint" style="margin:-6px 2px 12px">약 ' + r.time + '분 · 기본 양념(' + esc(window.GR.PANTRY) + ')은 있다고 봤어요.</p>';
@@ -2238,11 +2564,13 @@ nav.tabs button { min-width: 0; }
     per();
   }
   function recordPrice(it, date) {
-    var rec = { id: uid(), key: G.compareKey(it.name), name: it.name, cat: it.cat, price: it.price, qty: qtyOf(it), date: date || today() };
-    if (it.store) rec.store = it.store;
-    if (it.amt) { rec.amt = it.amt; rec.unit = it.unit; }
+    var ex = it.id ? S.prices.filter(function (r) { return r.itemId === it.id; })[0] : null;
+    var rec = ex || { id: uid(), itemId: it.id, date: date || today() };
+    rec.key = G.compareKey(it.name); rec.name = it.name; rec.cat = it.cat; rec.price = it.price; rec.qty = qtyOf(it);
+    if (it.store) rec.store = it.store; else delete rec.store;
+    if (it.amt) { rec.amt = it.amt; rec.unit = it.unit; } else { delete rec.amt; delete rec.unit; }
     var c = G.priceCheck(S.prices, rec);
-    S.prices.push(rec);
+    if (!ex) S.prices.push(rec);
     if (S.prices.length > 400) S.prices = S.prices.slice(-400);
     if (!c) return '';
     if (c.cheapest) return '지금까지 중 가장 싸게 샀어요! (' + c.label + ' ' + won(c.per) + '원)';
@@ -2379,6 +2707,7 @@ nav.tabs button { min-width: 0; }
     if (t.qty > 1) it.qty = t.qty;
     it.qty0 = qtyOf(it);
     S.items.push(it); rememberTpl(it);
+    if (it.price) recordPrice(it);
     return it;
   }
   function quickAdd(t) {
@@ -2714,13 +3043,18 @@ nav.tabs button { min-width: 0; }
     return a.length ? a.join(' 또는 ') + '마다' : '주기 없음';
   }
 
-  function kmSheet() {
-    var car = S.car;
+  function kmSheet(o) {
+    var car = S.car; o = o || {};
     openSheet('<h2>주행거리 입력<button data-x>닫기</button></h2>' +
-      '<div class="field"><label for="k-v">계기판 주행거리</label><div class="row"><input class="inp" id="k-v" type="number" inputmode="numeric" value="' + (car.km || '') + '" style="font-size:22px;font-weight:700"><span>km</span></div>' +
+      '<button class="btn soft block" id="k-cam" style="margin-bottom:12px">' + IC.cam + '계기판 찍어서 넣기</button>' +
+      '<div class="field"><label for="k-v">계기판 주행거리</label><div class="row"><input class="inp" id="k-v" type="number" inputmode="numeric" value="' + (o.km || car.km || '') + '" style="font-size:22px;font-weight:700"><span>km</span></div>' +
+      (o.note ? '<p class="hint">' + o.note + '</p>' : '') +
+      (o.alts && o.alts.length ? '<div class="presets" style="margin-top:6px">' + o.alts.map(function (k) { return '<button class="chip" data-alt="' + k + '">' + num(k) + 'km</button>'; }).join('') + '</div>' : '') +
       '<p class="hint">지난 기록: ' + num(car.km) + 'km. 자주 넣을수록 교체 날짜 예상이 정확해져요.</p></div>' +
       '<button class="btn pri block" id="k-go">저장</button>', function (el) {
-      var inp = $('#k-v', el); inp.focus(); inp.select();
+      var inp = $('#k-v', el); if (!o.km) { inp.focus(); inp.select(); }
+      $('#k-cam', el).onclick = function () { startOcr('odo', null); };
+      $$('[data-alt]', el).forEach(function (b) { b.onclick = function () { inp.value = b.dataset.alt; }; });
       $('#k-go', el).onclick = function () {
         var v = +inp.value;
         var prev = (car.log || []).filter(function (l) { return l.date < today(); }).reduce(function (m, l) { return Math.max(m, l.km); }, 0);
@@ -2900,6 +3234,11 @@ nav.tabs button { min-width: 0; }
         (saved ? '<span class="sv">올해 해지로 아낀 돈 ' + num(saved) + '원</span>' : '') + '</div></div>';
     }
     var trials = all.filter(function (x) { return x.s.info && x.s.info.trial && x.s.left <= 7; });
+    all.filter(function (x) { return x.it.kind === 'sub'; }).forEach(function (x) {
+      var u = G.subUsage(x.it, t); if (!u) return;
+      if (u.rec) h += '<div class="subq rec"><b>' + esc(x.it.name) + ' ' + u.unused + '달째 안 쓰셨어요</b><span>해지하면 한 달 ' + num(u.monthly) + '원, 1년이면 ' + num(u.monthly * 12) + '원을 아껴요.</span><div class="row"><button class="btn warn" data-sub="cancel" data-sid="' + x.it.id + '">해지했어요</button><button class="btn" data-sub="keep" data-sid="' + x.it.id + '">계속 쓸래요</button></div></div>';
+      else if (u.ask) h += '<div class="subq"><b>' + esc(x.it.name) + ' 이번 달 썼어요?</b><span>' + (u.left ? '결제 ' + u.left + '일 전' : '오늘 결제') + ' · 2달 연속 안 쓰면 해지를 추천해 드려요</span><div class="row"><button class="btn soft" data-sub="used" data-sid="' + x.it.id + '">썼어요</button><button class="btn" data-sub="unused" data-sid="' + x.it.id + '">안 썼어요</button></div></div>';
+    });
     trials.forEach(function (x) {
       h += '<button class="trial" data-open="' + x.it.id + '"><b>' + esc(x.it.name) + ' 무료 체험 ' + (x.s.left > 0 ? x.s.left + '일 남았어요' : '오늘 끝나요') + '</b><span>계속 안 쓸 거면 ' + (x.s.left > 0 ? fullDate(x.s.info.due) + ' 전에' : '오늘') + ' 해지하세요. 안 하면 결제돼요.</span></button>';
     });
@@ -3041,6 +3380,8 @@ nav.tabs button { min-width: 0; }
       kv.push(['결제일', it.cycle === 'year' ? '매년 ' + md(it.trialEnd || it.start).replace('.', '월 ') + '일' : '매달 ' + (+(it.trialEnd || it.start).slice(8)) + '일']);
       if (f.trial) kv.push(['무료 체험 끝', fullDate(it.trialEnd)]);
       if (it.price) kv.push(['1년이면', num((it.cycle === 'year' ? it.price : it.price * 12)) + '원']);
+      var um = Object.keys(it.use || {}).sort().reverse().slice(0, 4);
+      if (um.length) kv.push(['최근 사용', um.map(function (m) { return (+m.slice(5)) + '월 ' + (it.use[m] ? '씀' : '안 씀'); }).join(' · ')]);
     } else if (it.kind === 'contract') {
       kv.push(['약정', fullDate(it.start) + '부터 ' + it.months + '개월']);
       kv.push(['끝나는 날', fullDate(f.due) + (f.over ? ' (끝남)' : ' · ' + (f.monthsLeft ? f.monthsLeft + '개월 남음' : '한 달 안 남음'))]);
@@ -3073,15 +3414,7 @@ nav.tabs button { min-width: 0; }
             toast('기록했어요 · 다음은 ' + fullDate(stat(it).info.due), 2800);
           }
           else if (a === 'renew') { closeSheet(true); var d = JSON.parse(JSON.stringify(it)); d.start = today(); openDdayForm(d); }
-          else if (a === 'cancel') {
-            ask('"' + it.name + '" 해지했나요?\n목록에서 빼고 아낀 돈으로 기록할게요.', '해지했어요', function () {
-              var won = Math.round(f.monthly || 0);
-              logEvent(it, 'cancel', won ? { price: won } : null);
-              S.items = S.items.filter(function (x) { return x !== it; });
-              persist(); render();
-              toast(won ? '해지 기록했어요 · 한 달 ' + num(won) + '원 아꼈어요' : '해지 기록했어요', 3000);
-            });
-          }
+          else if (a === 'cancel') cancelSub(it);
         };
       });
     });
@@ -3112,10 +3445,10 @@ nav.tabs button { min-width: 0; }
     if (PV) {
       pending = { kind: kind, draft: draft };
       var t = today();
-      var lines = kind === 'date'
+      var lines = kind === 'odo' ? ['ODO ' + num((S.car.km || 50000) + 1240) + ' km', 'TRIP A 312.4 km', '23.5°C', '12:34'] : kind === 'date'
         ? ['서울우유 1000ml', '소비기한 ' + G.addDays(t, 9).replace(/-/g, '.') + ' 까지', '제조 ' + G.addDays(t, -2).replace(/-/g, '.')]
         : ['이마트24 광주상무점', t + ' 19:32', '상품명  수량  금액', '서울우유 1L  1  2,980', '풀무원 두부 300g  1  1,800', '삼겹살 600g  1  15,800', '냉동만두 1kg  1  8,900', '오랄비 칫솔 2입  1  5,900', '면 양말 3족  1  7,000', '페브리즈 섬유탈취제  1  6,900', '합계  49,280'];
-      previewScan(kind, function () { window.onNative({ type: 'ocr', kind: kind, ok: true, lines: lines }); });
+      previewScan(kind === 'odo' ? 'date' : kind, function () { window.onNative({ type: 'ocr', kind: kind, ok: true, lines: lines }); });
       return;
     }
     if (!A || !A.readText) { noNative(); return; }
@@ -3130,6 +3463,7 @@ nav.tabs button { min-width: 0; }
     if (!r || !r.ok) {
       if (r && r.error) toast(r.error, 3200);
       if (p && p.draft && !p.fresh) (p.reopen || (p.draft.mode === 'car' ? openCarForm : openForm))(p.draft);
+      if (p && p.kind === 'odo') kmSheet();
       return;
     }
     if (r.type === 'photo' && p && p.draft) { p.draft.photo = { full: r.full, thumb: r.thumb }; p.draft.photoDel = false; (p.reopen || openForm)(p.draft); return; }
@@ -3137,6 +3471,7 @@ nav.tabs button { min-width: 0; }
     if (r.type === 'ocr' && r.kind === 'date') return onDateText(r.lines || [], p);
     if (r.type === 'ocr' && r.kind === 'receipt') return onReceiptText(r.lines || []);
     if (r.type === 'voice') return onVoice(r.text || '');
+    if (r.type === 'ocr' && r.kind === 'odo') return onOdoText(r.lines || []);
   };
 
   function onBarcode(r, p) {
@@ -3219,10 +3554,10 @@ nav.tabs button { min-width: 0; }
     }
     showFound({ date: t, store: vs[0].store || null, items: items }, '말한 물건 ' + items.length + '개', '들은 말: "' + esc(text) + '" · 맞게 고쳐서 등록하세요.');
   }
-  function showFound(r, title, note) {
+  function showFound(r, title, note, allOn) {
     var t = today();
-    var known = r.items.filter(function (i) { return i.matched; });
-    var other = r.items.filter(function (i) { return !i.matched; });
+    var known = allOn ? r.items : r.items.filter(function (i) { return i.matched; });
+    var other = allOn ? [] : r.items.filter(function (i) { return !i.matched; });
     function row(it, i, on) {
       return '<div class="rc' + (on ? '' : ' off') + '" data-i="' + i + '"><input type="checkbox"' + (on ? ' checked' : '') + '>' +
         '<div class="mid"><div class="row"><input class="inp" value="' + esc(it.name) + '" style="flex:1">' + (it.qty > 1 ? '<span class="qty" style="flex:none">×' + it.qty + '</span>' : '') + (it.price ? '<small style="flex:none;color:var(--sub)">' + num(it.price) + '원</small>' : '') + '</div>' +
@@ -3307,6 +3642,7 @@ nav.tabs button { min-width: 0; }
           (fc.nSub ? '구독 ' + fc.nSub + '개 ' + num(fc.subs) + '원' : '') + (fc.contract ? (fc.nSub ? ' · ' : '') + '약정 ' + num(fc.contract) + '원' : '') + (s.savedWon ? ' · 이달 해지로 ' + num(s.savedWon) + '원 아낌' : '') + '</div></div>';
       })() +
       '</div>';
+    h += budgetPanel(statYm, s);
     var months = [], mx = 1;
     for (var i = 5; i >= 0; i--) { var ym = G.shiftMonth(statYm, -i); var ms = G.monthStats(S.events, ym); months.push(ms); mx = Math.max(mx, ms.discard, ms.replace); }
     h += '<div class="panel"><h3>최근 6개월</h3><div class="trend">' + months.map(function (m) {
@@ -3339,6 +3675,8 @@ nav.tabs button { min-width: 0; }
       var n = c === 'shop' ? S.shop.filter(function (x) { return !x.done; }).length : S.items.filter(function (i) { return i.cat === c; }).length;
       return '<label><input type="checkbox" data-fc="' + c + '"' + (sel.indexOf(c) >= 0 ? ' checked' : '') + '>' + (c === 'shop' ? '장보기 목록' : TITLES[c]) + '<small>' + n + '개</small></label>';
     }).join('') + '</div>';
+    var nb = Object.keys(S.barcodes || {}).length;
+    if (nb) h += '<p class="hint" style="margin:8px 2px 0">바코드로 이름을 넣은 상품 ' + nb + '개도 같이 보내요. 가족이 같은 상품을 찍으면 이름이 바로 나와요.</p>';
     h += '<div class="field" style="margin-top:12px"><label for="fam-name">보내는 사람 <span style="font-weight:400">(선택)</span></label><input class="inp" id="fam-name" maxlength="20" placeholder="예: 엄마" value="' + esc(S.set.famName || '') + '"></div>';
     h += '<button class="btn pri block" id="fam-go">' + IC.share + '카톡 등으로 보내기</button>';
     openSheet(h, function (el) {
@@ -3349,7 +3687,7 @@ nav.tabs button { min-width: 0; }
         var ic = pick.filter(function (c) { return c !== 'shop'; });
         var ids = {};
         var items = S.items.filter(function (i) { if (ic.indexOf(i.cat) >= 0) { ids[i.id] = 1; return true; } return false; });
-        var payload = { v: 1, from: S.set.famName || '', at: Date.now(), cats: pick, items: items, del: S.del,
+        var payload = { v: 1, from: S.set.famName || '', at: Date.now(), cats: pick, items: items, del: S.del, barcodes: S.barcodes,
           events: S.events.filter(function (e) { return ic.indexOf(e.cat) >= 0; }).slice(-1500),
           prices: ic.indexOf('food') >= 0 || ic.indexOf('daily') >= 0 ? S.prices : [] };
         if (pick.indexOf('shop') >= 0) payload.shop = S.shop.filter(function (x) { return !x.done; });
@@ -3375,17 +3713,279 @@ nav.tabs button { min-width: 0; }
     var by = {}; inc.items.forEach(function (i) { by[i.cat] = (by[i.cat] || 0) + 1; });
     var parts = Object.keys(by).map(function (c) { return TITLES[c] + ' ' + by[c] + '개'; });
     if (inc.shop) parts.push('장보기 ' + inc.shop.length + '개');
+    var nbc = Object.keys(inc.barcodes || {}).length; if (nbc) parts.push('상품 이름 ' + nbc + '개');
     ask((inc.from ? inc.from + '님이 ' : '가족이 ') + '보낸 목록이에요.\n' + (parts.join(', ') || '빈 목록') + '\n\n내 목록과 합칠까요? 같은 물건은 더 나중에 고친 쪽으로, 지운 물건은 지운 걸로 맞춰요.', '합치기', function () {
       var m = G.famMerge({ items: S.items, del: S.del, events: S.events, shop: S.shop, prices: S.prices, car: S.car }, inc);
-      S.items = m.items; S.del = m.del; S.events = m.events; S.shop = m.shop; S.prices = m.prices; if (m.car) S.car = m.car;
+      S.items = m.items; S.del = m.del; S.events = m.events; S.shop = m.shop; S.prices = m.prices; if (m.car) S.car = m.car; S.barcodes = m.barcodes;
       SNAP = null; stampChanges();
       persist(); render();
       var st = m.stats, msg = [];
-      if (st.added) msg.push('새로 ' + st.added + '개'); if (st.updated) msg.push('바뀐 것 ' + st.updated + '개'); if (st.removed) msg.push('지운 것 ' + st.removed + '개'); if (st.shop) msg.push('장보기 ' + st.shop + '개');
+      if (st.added) msg.push('새로 ' + st.added + '개'); if (st.updated) msg.push('바뀐 것 ' + st.updated + '개'); if (st.removed) msg.push('지운 것 ' + st.removed + '개'); if (st.shop) msg.push('장보기 ' + st.shop + '개'); if (st.barcodes) msg.push('상품 이름 ' + st.barcodes + '개');
       toast(msg.length ? '합쳤어요 · ' + msg.join(', ') : '이미 같은 내용이에요', 3200);
     });
   }
-  window.onSharedText = function (t) { closeSheet(true); famReceive(String(t || '')); };
+  window.onSharedText = function (t) {
+    closeSheet(true); t = String(t || '');
+    if (t.indexOf('GYOFAM1:') >= 0) { famReceive(t); return; }
+    var r = G.parseOrder(t, today());
+    if (r.items.length) { showFound(r, '공유한 글에서 찾았어요', (r.store ? esc(r.store) + ' · ' : '') + '산 날 ' + fullDate(r.date) + ' · 품목마다 알맞은 탭으로 들어가요. 다르면 고쳐서 등록하세요.', true); return; }
+    if (G.parseVoice(t, today()).length) { onVoice(t); return; }
+    toast('공유한 글에서 물건을 찾지 못했어요. 주문 내역 화면을 캡처해서 사진으로 공유해도 돼요', 3600);
+  };
+  window.onShortcut = function (k) {
+    closeSheet(true);
+    var fc = isOn('food') ? 'food' : tabsOn()[0];
+    if (k === 'voice') { go(fc); startVoice(); }
+    else if (k === 'receipt') { go(fc); startOcr('receipt', null); }
+    else if (k === 'shop') openShop();
+    else if (k === 'check') { go(fc); if (CAT_TABS.indexOf(fc) >= 0 && fc !== 'car' && fc !== 'dday') checkMode(fc); }
+  };
+
+  // ════════ 1분 정리: 카드를 밀어서 실제와 목록 맞추기 ════════
+  var CK = null;
+  function checkBase() {
+    if (!isOn('food')) return null;
+    var food = S.items.filter(function (i) { return i.cat === 'food'; });
+    if (food.length < 2) return null;
+    if (S.set.chk.food) return S.set.chk.food;
+    return food.reduce(function (m, i) { return i.created && i.created < m ? i.created : m; }, today());
+  }
+  function checkOverdue() { var b = checkBase(); return !!b && G.diffDays(today(), b) >= 7; }
+  function checkStrip(cat, t) {
+    if (cat !== 'food' && cat !== 'daily' && cat !== 'clothes') return '';
+    var lc = S.set.chk[cat], ago = lc ? G.diffDays(t, lc) : null;
+    var due = cat === 'food' ? (lc ? ago >= 7 : checkOverdue()) : false;
+    return '<button class="strip ck-strip' + (due ? ' due' : '') + '" data-check="' + cat + '"><span><span class="ck-i">' + IC.check + '</span><b>1분 ' + (cat === 'food' ? '냉장고' : TITLES[cat]) + ' 정리</b> · ' +
+      (ago == null ? '밀어서 실제와 목록 맞추기' : ago === 0 ? '오늘 정리했어요' : ago + '일 전에 정리') + '</span>' + IC.right + '</button>';
+  }
+  function checkMode(cat) {
+    var list = listOf(cat, today()).sort(function (a, b) { return a.s.left - b.s.left; }).map(function (x) { return x.it.id; });
+    if (!list.length) { toast('정리할 물건이 없어요'); return; }
+    CK = { cat: cat, ids: list, i: 0, n: { keep: 0, eaten: 0, discard: 0, replace: 0, gone: 0 }, undo: null };
+    ckRender();
+  }
+  function ckItem() { return CK ? S.items.filter(function (x) { return x.id === CK.ids[CK.i]; })[0] : null; }
+  function ckRender() {
+    var c = CK; if (!c) return;
+    while (c.i < c.ids.length && !ckItem()) c.i++;
+    if (c.i >= c.ids.length) { ckDone(); return; }
+    var it = ckItem(), s = stat(it), food = c.cat === 'food';
+    var meta = [it.loc, it.mode === 'expiry' ? (it.kind || '유통기한') + ' ' + md(it.due) : it.mode === 'cycle' ? (food ? md(G.itemDue(it)) + '까지' : '교체일 ' + md(G.itemDue(it))) : ''].filter(Boolean).join(' · ');
+    var h = '<h2>1분 ' + (food ? '냉장고' : TITLES[c.cat]) + ' 정리 <small class="ck-n">' + (c.i + 1) + ' / ' + c.ids.length + '</small><button data-x>닫기</button></h2>' +
+      '<div class="ck-bar"><i style="width:' + Math.round(c.i / c.ids.length * 100) + '%"></i></div>' +
+      '<div class="ck-wrap"><div class="ck-card" id="ck-card"><span class="ck-tag l">' + (food ? '다 먹음' : '바꿨어요') + '</span><span class="ck-tag r">있어요</span>' +
+      (PH[it.id] ? '<img class="ck-ph" alt="" src="' + PH[it.id] + '">' : '<span class="ico ck-ico ' + it.cat + '">' + IC[it.cat] + '</span>') +
+      '<div class="ck-name">' + esc(it.name) + '</div><span class="dd ' + s.state + '">' + s.label + '</span><div class="ck-meta">' + esc(meta) + '</div>' +
+      '<div class="ck-qty">남은 수량 <span class="step sm"><button data-ckq="-1" aria-label="하나 빼기">−</button><b>' + qtyOf(it) + '</b><button data-ckq="1" aria-label="하나 더하기">+</button></span></div>' +
+      (it.memo ? '<div class="ck-memo">' + esc(it.memo) + '</div>' : '') + '</div></div>' +
+      '<p class="hint center">오른쪽으로 밀면 있어요, 왼쪽으로 밀면 ' + (food ? '다 먹었어요' : '바꿨어요') + '</p>' +
+      '<div class="ck-btns">' + (food
+        ? '<button class="btn soft" data-ck="eaten">다 먹음</button><button class="btn warn" data-ck="discard">버림</button><button class="btn pri" data-ck="keep">있어요</button>'
+        : '<button class="btn soft" data-ck="replace">바꿨어요</button><button class="btn warn" data-ck="gone">없어요</button><button class="btn pri" data-ck="keep">있어요</button>') + '</div>' +
+      '<div class="ck-foot">' + (c.undo ? '<button class="clink" data-ck="undo">되돌리기</button>' : '<span></span>') + '<button class="clink" data-ck="skip">건너뛰기</button></div>';
+    openSheet(h, function (el) {
+      $$('[data-ck]', el).forEach(function (b) { b.onclick = function () { ckAct(b.dataset.ck); }; });
+      $$('[data-ckq]', el).forEach(function (b) {
+        b.onclick = function () {
+          var q = qtyOf(it) + +b.dataset.ckq;
+          if (q < 1) { ckAct(food ? 'eaten' : 'gone'); return; }
+          if (+b.dataset.ckq < 0 && food) logEvent(it, 'eaten');
+          it.qty = Math.min(99, q); if (it.qty === 1) delete it.qty;
+          persist(); ckRender();
+        };
+      });
+      var card = $('#ck-card', el), x0 = null, dx = 0;
+      card.addEventListener('pointerdown', function (e) { if (e.target.closest('button')) return; x0 = e.clientX; dx = 0; card.setPointerCapture(e.pointerId); card.style.transition = 'none'; });
+      card.addEventListener('pointermove', function (e) {
+        if (x0 == null) return;
+        dx = e.clientX - x0;
+        card.style.transform = 'translateX(' + dx + 'px) rotate(' + (dx / 24) + 'deg)';
+        card.classList.toggle('go-r', dx > 60); card.classList.toggle('go-l', dx < -60);
+      });
+      function end() {
+        if (x0 == null) return;
+        x0 = null; card.style.transition = '';
+        if (Math.abs(dx) > 90) { card.style.transform = 'translateX(' + (dx > 0 ? 480 : -480) + 'px) rotate(' + (dx > 0 ? 16 : -16) + 'deg)'; var a = dx > 0 ? 'keep' : (food ? 'eaten' : 'replace'); setTimeout(function () { ckAct(a); }, 160); }
+        else { card.style.transform = ''; card.classList.remove('go-r', 'go-l'); }
+      }
+      card.addEventListener('pointerup', end); card.addEventListener('pointercancel', end);
+    }, ckClose);
+  }
+  function ckAct(a) {
+    var c = CK, it = ckItem(); if (!c) return;
+    if (a === 'undo' && c.undo) {
+      var u = JSON.parse(c.undo.snap);
+      S.items = u.items; S.events = u.events; S.shop = u.shop; c.i = c.undo.i; c.n[c.undo.a]--; c.undo = null;
+      persist(); render(); ckRender(); return;
+    }
+    if (!it) { c.i++; ckRender(); return; }
+    if (a !== 'skip') c.undo = { snap: JSON.stringify({ items: S.items, events: S.events, shop: S.shop }), i: c.i, a: a };
+    var t = today();
+    if (a === 'keep') { it.chk = t; c.n.keep++; }
+    else if (a === 'eaten' || a === 'discard') {
+      var q = qtyOf(it), share = it.price ? Math.round(it.price / (it.qty0 || q)) : 0;
+      var ex = {}; if (q > 1) ex.qty = q; if (a === 'discard' && share) ex.price = share * q;
+      logEvent(it, a, ex);
+      S.items = S.items.filter(function (x) { return x !== it; });
+      if (S.fav.indexOf(it.name) >= 0) addShop(it.name, it.cat, 'fav');
+      c.n[a]++;
+    } else if (a === 'replace') { logEvent(it, 'replace'); it.start = t; it.chk = t; c.n.replace++; }
+    else if (a === 'gone') { S.items = S.items.filter(function (x) { return x !== it; }); if (S.fav.indexOf(it.name) >= 0) addShop(it.name, it.cat, 'fav'); c.n.gone++; }
+    c.i++;
+    persist(); render(); ckRender();
+  }
+  function ckClose() {
+    // 정리하며 뺀 물건의 사진은 끝날 때 지움 (되돌리기를 위해 미뤄 둠)
+    var have = {}; S.items.forEach(function (i) { have[i.id] = 1; });
+    Object.keys(PH).forEach(function (id) { if (!have[id]) photoDel(id); });
+    CK = null; render();
+  }
+  function ckDone() {
+    var c = CK, n = c.n, t = today();
+    S.set.chk[c.cat] = t; persist();
+    var parts = [];
+    if (n.keep) parts.push('있어요 ' + n.keep); if (n.eaten) parts.push('다 먹음 ' + n.eaten); if (n.discard) parts.push('버림 ' + n.discard); if (n.replace) parts.push('바꿈 ' + n.replace); if (n.gone) parts.push('없어서 뺌 ' + n.gone);
+    openSheet('<h2>정리 끝!<button data-x>닫기</button></h2><div class="ck-done"><span class="mascot">' + MASCOT + '</span><b>' + c.ids.length + '개를 확인했어요</b><span>' + (parts.join(' · ') || '바뀐 게 없어요') + '</span><span class="hint">이제 목록이 실제와 같아서 알림·요리 추천이 정확해져요.' + (c.cat === 'food' ? ' 일주일 뒤에 다시 알려드릴게요.' : '') + '</span></div><button class="btn pri block" data-x2>닫기</button>', function (el) {
+      $('[data-x2]', el).onclick = function () { closeSheet(); };
+    }, ckClose);
+  }
+
+  // ════════ 찾기 (초성도) ════════
+  function openSearch() {
+    openSheet('<h2>찾기<button data-x>닫기</button></h2><input class="inp" id="q" type="search" placeholder="이름·메모·산 곳 (ㅇㅇ처럼 초성도 돼요)" autocomplete="off"><div id="q-res" class="q-res"></div>', function (el) {
+      var inp = $('#q', el), box = $('#q-res', el), tm = null;
+      function run() {
+        var q = inp.value.trim(), t = today();
+        if (!q) { box.innerHTML = '<p class="hint">등록한 ' + activeItems().length + '개 중에서 찾아요.</p>'; return; }
+        var hits = activeItems().filter(function (i) { return G.matchSearch(i, q); }).map(function (i) { return { it: i, s: stat(i, t) }; });
+        var shop = S.shop.filter(function (x) { return !x.done && G.matchSearch(x, q); });
+        var h = '';
+        tabsOn().forEach(function (c) {
+          var rows = hits.filter(function (x) { return x.it.cat === c; });
+          if (rows.length) h += '<p class="lbl" style="margin-top:12px">' + TITLES[c] + ' ' + rows.length + '</p>' + rowsHtml(rows, t);
+        });
+        if (shop.length) h += '<p class="lbl" style="margin-top:12px">장보기 목록</p><div class="used">' + shop.map(function (x) { return '<div class="urow"><span>' + esc(x.name) + '</span></div>'; }).join('') + '</div>';
+        box.innerHTML = h || '<p class="hint">"' + esc(q) + '"에 맞는 게 없어요.</p>';
+        $$('[data-open]', box).forEach(function (b) { b.onclick = function () { closeSheet(true); openDetail(b.dataset.open); }; });
+        $$('[data-photo]', box).forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); closeSheet(true); viewPhoto(b.dataset.photo); }; });
+      }
+      inp.oninput = function () { clearTimeout(tm); tm = setTimeout(run, 120); };
+      run(); setTimeout(function () { inp.focus(); }, 60);
+    });
+  }
+
+  // ════════ 장보기 가계부 ════════
+  function budgetPanel(ym, ms) {
+    var sp = G.monthSpend(S.prices, ym), prev = G.monthSpend(S.prices, G.shiftMonth(ym, -1));
+    var h = '<div class="panel budget"><h3>' + IC.wallet + ' 장보기 가계부</h3>';
+    if (!sp.n) return h + '<p class="hint">가격을 넣거나 영수증으로 등록하면 ' + (+ym.slice(5)) + '월 장보기 지출을 가게별로 모아 보여드려요.</p></div>';
+    var d = sp.total - prev.total;
+    h += '<div class="bg-total"><b>' + num(sp.total) + '<small>원</small></b><span>' + sp.n + '번 구매' + (prev.total ? ' · 지난달보다 ' + num(Math.abs(d)) + '원 ' + (d > 0 ? '더 썼어요' : d < 0 ? '덜 썼어요' : '같아요') : '') + '</span></div>';
+    var mx = sp.byStore[0].won || 1;
+    h += sp.byStore.slice(0, 5).map(function (x) { return '<div class="hbar"><span class="l">' + esc(x.store) + '</span><span class="t"><i style="width:' + (x.won / mx * 100) + '%;background:var(--brand)"></i></span><span class="n">' + num(x.won) + '</span></div>'; }).join('');
+    var food = sp.byCat.food, parts = [];
+    if (food) parts.push('음식 ' + num(food) + '원'); if (sp.byCat.daily) parts.push('생필품 ' + num(sp.byCat.daily) + '원'); if (sp.byCat.clothes) parts.push('옷 ' + num(sp.byCat.clothes) + '원');
+    if (food && ms.wasteWon) parts.push('산 음식 중 ' + Math.min(100, Math.round(ms.wasteWon / food * 100)) + '%를 버렸어요');
+    return h + '<p class="hint">' + parts.join(' · ') + '</p><p class="hint">가격을 넣은 것만 계산해요.</p></div>';
+  }
+
+  // ════════ 안 쓰는 구독 ════════
+  function cancelSub(it) {
+    var f = G.ddayInfo(it, today());
+    ask('"' + it.name + '" 해지했나요?\n목록에서 빼고 아낀 돈으로 기록할게요.', '해지했어요', function () {
+      var won = Math.round(f.monthly || 0);
+      logEvent(it, 'cancel', won ? { price: won } : null);
+      S.items = S.items.filter(function (x) { return x !== it; });
+      persist(); render();
+      toast(won ? '해지 기록했어요 · 한 달 ' + num(won) + '원 아꼈어요' : '해지 기록했어요', 3000);
+    });
+  }
+  function subAnswer(id, act) {
+    var it = S.items.filter(function (x) { return x.id === id; })[0]; if (!it) return;
+    var u = G.subUsage(it, today());
+    if (act === 'cancel') { cancelSub(it); return; }
+    if (act === 'keep') { it.keepUntil = G.addDays(today(), 90); persist(); render(); toast('3달 동안은 해지 추천을 하지 않을게요'); return; }
+    it.use = it.use || {}; it.use[u.ym] = act === 'used';
+    persist(); render();
+    var u2 = G.subUsage(it, today());
+    toast(act === 'used' ? '잘 쓰고 계시네요!' : u2.rec ? '2달째 안 쓰셨어요. 해지를 고민해 보세요' : '기억할게요. 2달 연속 안 쓰면 알려드려요', 2800);
+  }
+
+  // ════════ 3일 식단 ════════
+  var PLAN = null;
+  function planToday() {
+    var P = S.plan, t = today();
+    if (!P || !P.start || !P.names) return null;
+    var off = G.diffDays(t, P.start);
+    return off >= 0 && off < P.names.length ? P.names[off] : null;
+  }
+  function openPlan(reroll) {
+    if (!window.GR) return;
+    var t = today(), P = S.plan || {}, keepBy = {}, skipBy = {};
+    if (P.start && P.names) P.names.forEach(function (n, i) { keepBy[G.addDays(P.start, i)] = n; });
+    Object.keys(P.skip || {}).forEach(function (d) { if (d >= t) skipBy[d] = P.skip[d]; });
+    if (reroll) { (skipBy[reroll.date] = skipBy[reroll.date] || []).push(reroll.name); delete keepBy[reroll.date]; }
+    var keep = [0, 1, 2].map(function (d) { return keepBy[G.addDays(t, d)]; });
+    var skip = {}; [0, 1, 2].forEach(function (d) { skip[d] = skipBy[G.addDays(t, d)] || []; });
+    var p = window.GR.plan(S.items, t, { keep: keep, skip: skip });
+    if (reroll && p.days.length < 3 && skipBy[reroll.date]) { skipBy[reroll.date] = []; }
+    S.plan = { start: t, names: p.days.map(function (o) { return o.x.r.name; }), skip: skipBy };
+    persist(); PLAN = p;
+    var DN = ['오늘', '내일', '모레'];
+    var h = '<h2>3일 식단<button data-x>닫기</button></h2><p class="hint" style="margin:-6px 2px 12px">기한이 급한 재료를 먼저 쓰도록 짰어요. 마음에 안 들면 바꾸기를 누르세요.</p>';
+    if (!p.days.length) h += '<div class="empty" style="padding:24px 8px">재료가 부족해서 식단을 짜지 못했어요.<br>계란·두부·고기·채소를 등록하면 짜 드려요.</div>';
+    h += p.days.map(function (o, i) {
+      var x = o.x;
+      var tags = (x.urgent.length ? '<span class="rtag urg">' + esc(x.urgent[0]) + (x.urgent.length > 1 ? ' 외 ' + (x.urgent.length - 1) : '') + ' 먼저 쓰기</span>' : '') +
+        (x.missing.length ? '<span class="rtag miss">' + esc(x.missing.join(', ')) + ' 필요</span>' : '<span class="rtag ok">재료 다 있어요</span>');
+      return '<div class="plan-day"><div class="pd-h"><b>' + DN[o.day] + '</b><span>' + md(o.date) + '</span><button class="clink" data-pre="' + i + '">바꾸기</button></div>' +
+        '<button class="rcard wide" data-pr="' + i + '"><span class="rname">' + esc(x.r.name) + '</span><span class="rmeta">' + x.r.time + '분 · ' + esc(x.have.concat(x.extra).join(', ')) + '</span><span class="rtags">' + tags + '</span></button></div>';
+    }).join('');
+    if (p.missing.length) h += '<button class="btn soft block" data-pshop style="margin-top:6px">' + IC.cart + '모자란 재료 ' + p.missing.length + '개 장보기에 담기 (' + esc(p.missing.join(', ')) + ')</button>';
+    h += '<p class="hint center">' + window.GR.RECIPES.length + '가지 레시피 중에서 골랐어요 · 아침 알림에도 오늘 메뉴를 알려드려요</p>';
+    openSheet(h, function (el) {
+      $$('[data-pr]', el).forEach(function (b) { b.onclick = function () { openRecipe(PLAN.days[+b.dataset.pr].x); }; });
+      $$('[data-pre]', el).forEach(function (b) { b.onclick = function () { var o = PLAN.days[+b.dataset.pre]; openPlan({ date: o.date, name: o.x.r.name }); }; });
+      var ps = $('[data-pshop]', el); if (ps) ps.onclick = function () {
+        var n = 0; PLAN.days.forEach(function (o) { o.x.missing.forEach(function (m) { if (addShop(m, 'food', 'recipe:' + o.x.r.name)) n++; }); });
+        toast(n ? n + '개를 장보기에 담았어요' : '이미 장보기에 있어요'); ps.disabled = true; render();
+      };
+    });
+  }
+
+  // ════════ 계기판 사진 → 주행거리 ════════
+  function onOdoText(lines) {
+    var ll = lastLog(), res = G.parseOdometer(lines, S.car.km, G.kmRate(S.car), ll ? ll.date : null, today());
+    if (!res) { toast('계기판 주행거리 숫자를 찾지 못했어요. 숫자가 화면에 크게 나오게 찍어주세요', 3400); kmSheet(); return; }
+    kmSheet({ km: res.km, alts: res.alts, note: '사진에서 <b>' + num(res.km) + 'km</b>를 읽었어요. 맞으면 저장을 눌러주세요.' + (res.alts.length ? ' 다르면 아래 숫자를 누르거나 고쳐주세요.' : '') });
+  }
+
+  // ════════ 글자 크기 ════════
+  function applyFont() {
+    var z = S.set.font || 1, r = document.documentElement;
+    r.style.setProperty('--z', z);
+    r.style.zoom = z === 1 ? '' : String(z);
+  }
+
+  // ════════ 새로 생긴 기능 ════════
+  var NEWS = { id: 'v8-2026-10', items: [
+    ['check', '1분 냉장고 정리', '카드를 밀어서 실제 냉장고와 목록을 맞춰요. 일주일마다 알려드려요.'],
+    ['cal', '3일 식단 짜기', '급한 재료부터 쓰는 3일 메뉴를 짜고, 모자란 재료는 장보기에 담아요. 레시피 113가지.'],
+    ['wallet', '장보기 가계부', '통계 탭에서 이번 달 장보기 지출을 가게별로 봐요.'],
+    ['repeat', '안 쓰는 구독 찾기', '결제 3일 전에 "썼어요/안 썼어요"를 묻고, 2달 안 쓰면 해지를 추천해요.'],
+    ['search', '찾기', '위쪽 돋보기로 이름·메모·산 곳을 찾아요. ㅇㅇ처럼 초성도 돼요.'],
+    ['share', '공유로 등록 · 바로가기', '주문 내역 글이나 영수증 사진을 공유 → 챙김이. 앱 아이콘을 길게 누르면 바로가기가 나와요.'],
+    ['cam', '계기판 사진으로 주행거리', '주행거리 입력에서 계기판을 찍으면 숫자를 읽어요.'],
+    ['text', '큰 글씨 · 바코드 이름 공유', '설정에서 글자를 크게, 가족 공유 때 바코드 상품 이름도 같이 보내요.']
+  ] };
+  function showNews() {
+    S.set.news = NEWS.id; persist();
+    openSheet('<h2><span>' + IC.spark + ' 새로 생긴 기능</span><button data-x>닫기</button></h2><div class="news">' + NEWS.items.map(function (x) {
+      return '<div class="nw"><span class="ico">' + IC[x[0]] + '</span><span><b>' + esc(x[1]) + '</b><small>' + esc(x[2]) + '</small></span></div>';
+    }).join('') + '</div><button class="btn pri block" data-x2 style="margin-top:12px">확인</button><p class="hint center"><a href="https://dlsdml99-create.github.io/gyoche-check/guide.html">사용 설명서에서 자세히 보기</a></p>', function (el) {
+      $('[data-x2]', el).onclick = function () { closeSheet(true); };
+    });
+  }
 
   // ── 1년 결산 카드 (그림으로 만들어 공유) ──
   function yearCard() {
@@ -3461,7 +4061,10 @@ nav.tabs button { min-width: 0; }
       '<div><span>가족에게 보내기<small>음식·장보기 목록 등을 카톡으로 보내요</small></span><button class="btn" id="s-famsend">보내기</button></div>' +
       '<div><span>가족이 보낸 것 받기<small>받은 메시지를 길게 눌러 공유 → 챙김이를 고르면 바로 합쳐져요</small></span><button class="btn" id="s-famrecv">붙여넣기</button></div></div>';
     h += '<p class="sec-h">자주 쓰는 물품 · 내 품목</p><div class="set"><div><span>' + (S.fav.length ? S.fav.length + '개 · ' + esc(S.fav.slice(0, 3).join(', ')) + (S.fav.length > 3 ? ' 외' : '') : '골라 두면 + 버튼에서 한 번에 등록') + '<small>여러 개를 골라 한 번에 등록할 수 있어요</small></span><button class="btn" id="s-fav">관리</button></div></div>';
-    h += '<p class="sec-h">화면</p><div class="set"><div><span>테마</span><div class="seg" id="s-theme" style="width:210px">' +
+    h += '<p class="sec-h">화면</p><div class="set"><div><span>글자 크기<small>부모님과 같이 쓸 때 크게</small></span><div class="seg" id="s-font" style="width:210px">' +
+      [[1, '보통'], [1.15, '크게'], [1.3, '아주 크게']].map(function (x) { return '<button data-fs="' + x[0] + '" class="' + ((S.set.font || 1) === x[0] ? 'on' : '') + '">' + x[1] + '</button>'; }).join('') + '</div></div>' +
+      '<div><span>새로 생긴 기능<small>이번 업데이트에서 바뀐 것</small></span><button class="btn" id="s-news">보기</button></div></div>';
+    h += '<div class="set"><div><span>테마</span><div class="seg" id="s-theme" style="width:210px">' +
       [['auto', '자동'], ['light', '밝게'], ['dark', '어둡게']].map(function (x) { return '<button data-th="' + x[0] + '" class="' + (S.set.theme === x[0] ? 'on' : '') + '">' + x[1] + '</button>'; }).join('') + '</div></div></div>';
     h += '<p class="sec-h">데이터</p><div class="set">' +
       '<div><span>백업 복사<small>글자로 복사해 카톡 나와의 채팅 등에 보관 (사진 제외)</small></span><button class="btn" id="s-exp">복사</button></div>' +
@@ -3486,6 +4089,8 @@ nav.tabs button { min-width: 0; }
     var sf = $('#s-fav'); if (sf) sf.onclick = favManage;
     $('#s-famsend').onclick = famSend;
     $('#s-famrecv').onclick = function () { famReceive(null); };
+    $$('#s-font [data-fs]').forEach(function (b) { b.onclick = function () { S.set.font = +b.dataset.fs; persist(); applyFont(); render(); }; });
+    var sn = $('#s-news'); if (sn) sn.onclick = showNews;
     $$('#s-theme [data-th]').forEach(function (b) { b.onclick = function () { S.set.theme = b.dataset.th; persist(); applyTheme(); render(); }; });
     $('#s-exp').onclick = function () {
       var txt = 'GYOCHE1:' + JSON.stringify({ items: S.items, events: S.events, barcodes: S.barcodes, car: S.car, shop: S.shop, tpl: S.tpl, prices: S.prices, fav: S.fav, tabs: S.set.tabs, stores: S.set.stores, myp: S.myp });
@@ -3529,6 +4134,10 @@ nav.tabs button { min-width: 0; }
     var more = $('#app [data-recipes]'); if (more) more.onclick = recipeList;
     var rt = $('#app [data-rectog]'); if (rt) rt.onclick = function () { S.set.recOpen = !S.set.recOpen; persist(); render(); };
     var yb = $('#app [data-year]'); if (yb) yb.onclick = yearCard;
+    $$('#app [data-search]').forEach(function (b) { b.onclick = openSearch; });
+    $$('#app [data-check]').forEach(function (b) { b.onclick = function () { checkMode(b.dataset.check); }; });
+    var pl = $('#app [data-plan]'); if (pl) pl.onclick = function () { openPlan(); };
+    $$('#app [data-sub]').forEach(function (b) { b.onclick = function () { subAnswer(b.dataset.sid, b.dataset.sub); }; });
     var cmp = $('#app [data-cmp]'); if (cmp) cmp.onclick = function () { openCompare(); };
     $$('[data-loc]').forEach(function (b) { b.onclick = function () { locF[view] = b.dataset.loc || null; render(); }; });
     $$('[data-st]').forEach(function (b) { b.onclick = function () { stF = stF === b.dataset.st ? null : b.dataset.st; render(); }; });
@@ -3570,8 +4179,8 @@ nav.tabs button { min-width: 0; }
     ];
     S.items.push(
       { id: nid(), name: '넷플릭스', cat: 'dday', mode: 'dday', kind: 'sub', start: a(-27), trialEnd: G.addMonths(a(-27), 1), cycle: 'month', price: 13500, alert: 1 },
-      { id: nid(), name: '유튜브 프리미엄', cat: 'dday', mode: 'dday', kind: 'sub', start: a(-200), cycle: 'month', price: 14900, alert: 1 },
-      { id: nid(), name: '쿠팡 와우', cat: 'dday', mode: 'dday', kind: 'sub', start: a(-80), cycle: 'month', price: 7890, alert: 1 },
+      { id: nid(), name: '유튜브 프리미엄', cat: 'dday', mode: 'dday', kind: 'sub', start: G.addMonths(a(12), -6), cycle: 'month', price: 14900, alert: 1, use: {} },
+      { id: nid(), name: '쿠팡 와우', cat: 'dday', mode: 'dday', kind: 'sub', start: G.addMonths(a(2), -3), cycle: 'month', price: 7890, alert: 1 },
       { id: nid(), name: '휴대폰 약정', cat: 'dday', mode: 'dday', kind: 'contract', start: G.addMonths(a(-20), -23), months: 24, price: 55000, alert: 30 },
       { id: nid(), name: '엄마 생신', cat: 'dday', mode: 'dday', kind: 'anniv', date: G.addDays(a(5), -365 * 58 - 14), yearly: true, price: 100000, alert: 7 },
       { id: nid(), name: '사귄 날', cat: 'dday', mode: 'dday', kind: 'anniv', date: a(-487), yearly: true, count: true, price: 50000, alert: 7 },
@@ -3579,6 +4188,10 @@ nav.tabs button { min-width: 0; }
       { id: nid(), name: '에어컨 청소', cat: 'dday', mode: 'dday', kind: 'repeat', date: G.repeatStart(G.REPEATS[3], t), months: 12, price: 60000, alert: 7 },
       { id: nid(), name: '심장사상충 예방약', cat: 'dday', mode: 'dday', kind: 'repeat', date: a(4), months: 1, alert: 3 }
     );
+    var yt = S.items.filter(function (i) { return i.name === '유튜브 프리미엄'; })[0];
+    yt.use[G.addMonths(t, -1).slice(0, 7)] = false; yt.use[G.addMonths(t, -2).slice(0, 7)] = false;
+    S.set.chk = { food: a(-9) };
+    S.plan = null;
     var mom = S.items.filter(function (i) { return i.name === '엄마 생신'; })[0]; mom.date = (+t.slice(0, 4) - 58) + a(5).slice(4);
     // 수량·산 곳·용량
     var extra = { '서울우유 1L': { store: '이마트', amt: 1000, unit: 'ml' }, '계란 10구': { store: '홈플러스', amt: 10, unit: '개', qty: 2 }, '신라면 5입': { store: '쿠팡', amt: 5, unit: '개' },
@@ -3651,6 +4264,9 @@ nav.tabs button { min-width: 0; }
         else { ev = logEvent(it, 'replace'); S.items = S.items.filter(function (x) { return x !== it; }); }
         if (ev && a.date) ev.date = a.date;
         done++;
+      } else if (a.type === 'use') {
+        var su = S.items.filter(function (x) { return x.id === a.id; })[0];
+        if (su && /^\d{4}-\d{2}$/.test(a.ym)) { su.use = su.use || {}; su.use[a.ym] = !!a.used; done++; }
       } else if (a.type === 'shop') {
         (a.ids || []).forEach(function (id) { var it = S.items.filter(function (x) { return x.id === id; })[0]; if (it && addShop(it.name, it.cat, 'due', it.id)) shop++; });
       }
@@ -3685,6 +4301,7 @@ nav.tabs button { min-width: 0; }
     };
     renderVer();
     applyTheme();
+    applyFont();
     if (window.matchMedia) try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme); } catch (e) {}
     loadThumbs(function () { if (Object.keys(PH).length) render(); });
     if (PV) {
@@ -3701,8 +4318,9 @@ nav.tabs button { min-width: 0; }
       return false;
     };
     window.onOpenFromNotify = function () {
-      var d = dueNow();
+      var d = dueNow().filter(function (x) { return x.it.mode !== 'dday' || x.s.state !== 'ok'; });
       go(d.length ? d[0].it.cat : tabsOn()[0]);
+      if (!d.length && checkOverdue()) checkMode('food');
     };
     document.addEventListener('visibilitychange', function () {
       if (document.hidden) { flushSync(); return; }
@@ -3711,6 +4329,10 @@ nav.tabs button { min-width: 0; }
     window.addEventListener('pagehide', flushSync);
     applyActions();
     autoRunout();
+    if (S.set.news !== NEWS.id) {
+      if (!PV && (S.items.length || S.events.length)) setTimeout(showNews, 900);
+      else if (!PV) { S.set.news = NEWS.id; persist(); }
+    }
     (function () {
       var zc = G.zeroChallenge(S.events, today());
       if (!zc.started || !zc.last || S.set.zcSeen === zc.last) return;

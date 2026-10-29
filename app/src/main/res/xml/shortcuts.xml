@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut android:shortcutId="voice" android:enabled="true" android:icon="@drawable/ic_sc_voice" android:shortcutShortLabel="@string/sc_voice">
+        <intent android:action="android.intent.action.VIEW" android:targetPackage="com.gyoche.check" android:targetClass="com.gyoche.check.MainActivity">
+            <extra android:name="shortcut" android:value="voice" />
+        </intent>
+    </shortcut>
+    <shortcut android:shortcutId="receipt" android:enabled="true" android:icon="@drawable/ic_sc_receipt" android:shortcutShortLabel="@string/sc_receipt">
+        <intent android:action="android.intent.action.VIEW" android:targetPackage="com.gyoche.check" android:targetClass="com.gyoche.check.MainActivity">
+            <extra android:name="shortcut" android:value="receipt" />
+        </intent>
+    </shortcut>
+    <shortcut android:shortcutId="shop" android:enabled="true" android:icon="@drawable/ic_sc_shop" android:shortcutShortLabel="@string/sc_shop">
+        <intent android:action="android.intent.action.VIEW" android:targetPackage="com.gyoche.check" android:targetClass="com.gyoche.check.MainActivity">
+            <extra android:name="shortcut" android:value="shop" />
+        </intent>
+    </shortcut>
+    <shortcut android:shortcutId="check" android:enabled="true" android:icon="@drawable/ic_sc_check" android:shortcutShortLabel="@string/sc_check">
+        <intent android:action="android.intent.action.VIEW" android:targetPackage="com.gyoche.check" android:targetClass="com.gyoche.check.MainActivity">
+            <extra android:name="shortcut" android:value="check" />
+        </intent>
+    </shortcut>
+</shortcuts>

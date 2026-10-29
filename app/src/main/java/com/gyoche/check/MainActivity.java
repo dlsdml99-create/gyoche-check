@@ -106,13 +106,31 @@ public class MainActivity extends Activity {
         takeShared(getIntent());
     }
 
-    // 다른 앱(카톡 등)에서 "공유 → 챙김이"로 보낸 가족 공유 글을 받음. 글자만 받고, 합칠지는 화면에서 물어봄.
+    // 다른 앱에서 "공유 → 챙김이"로 보낸 것을 받음
+    //  - 글: 가족 공유 글이나 주문 내역 → 화면에서 확인하고 등록/합치기
+    //  - 사진: 영수증·주문 내역 캡처 → 글자 인식 후 확인하고 등록
+    //  - 앱 아이콘 바로가기(말로 등록·영수증·장보기·냉장고 정리)
     private void takeShared(Intent i) {
-        if (i == null || !Intent.ACTION_SEND.equals(i.getAction()) || !"text/plain".equals(i.getType())) return;
-        String t = i.getStringExtra(Intent.EXTRA_TEXT);
-        if (t == null || t.length() > 2000000) return;
-        if (!t.contains("GYOFAM1:")) { Toast.makeText(this, "챙김이 가족 공유 내용이 아니에요", Toast.LENGTH_SHORT).show(); return; }
-        js("window.onSharedText&&window.onSharedText(" + JSONObject.quote(t) + ")");
+        if (i == null) return;
+        String sc = i.getStringExtra("shortcut");
+        if (sc != null && sc.matches("voice|receipt|shop|check")) {
+            i.removeExtra("shortcut");
+            js("window.onShortcut&&window.onShortcut(" + JSONObject.quote(sc) + ")");
+            return;
+        }
+        if (!Intent.ACTION_SEND.equals(i.getAction()) || i.getType() == null) return;
+        String type = i.getType();
+        if ("text/plain".equals(type)) {
+            String t = i.getStringExtra(Intent.EXTRA_TEXT);
+            if (t == null || t.length() > 2000000) return;
+            js("window.onSharedText&&window.onSharedText(" + JSONObject.quote(t) + ")");
+        } else if (type.startsWith("image/")) {
+            Uri u = i.getParcelableExtra(Intent.EXTRA_STREAM);
+            if (u == null) return;
+            mode = "receipt";
+            recognize(u, "receipt");
+        }
+        i.setAction(Intent.ACTION_MAIN);   // 화면을 돌려도 다시 처리하지 않게
     }
 
     @Override
@@ -215,7 +233,7 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void readText(String kind) {
-            runOnUiThread(() -> chooseSource("date".equals(kind) ? "date" : "receipt"));
+            runOnUiThread(() -> chooseSource("date".equals(kind) ? "date" : "odo".equals(kind) ? "odo" : "receipt"));
         }
     }
 
@@ -328,7 +346,7 @@ public class MainActivity extends Activity {
     // ── 사진에서 글자 읽기 (영수증 / 유통기한) ──
     private void chooseSource(String kind) {
         mode = kind;
-        String title = "date".equals(kind) ? "유통기한 날짜 찍기" : "photo".equals(kind) ? "물건 사진 넣기" : "영수증 찍기";
+        String title = "date".equals(kind) ? "유통기한 날짜 찍기" : "photo".equals(kind) ? "물건 사진 넣기" : "odo".equals(kind) ? "계기판 주행거리 찍기" : "영수증 찍기";
         new AlertDialog.Builder(this)
             .setTitle(title)
             .setItems(new String[]{"사진 찍기", "앨범에서 고르기"}, (d, which) -> { if (which == 0) openCamera(); else openGallery(); })
@@ -474,7 +492,7 @@ public class MainActivity extends Activity {
     }
 
     private void recognize(Uri u, String kind) {
-        status("date".equals(kind) ? "날짜 읽는 중…" : "영수증 읽는 중…");
+        status("date".equals(kind) ? "날짜 읽는 중…" : "odo".equals(kind) ? "주행거리 읽는 중…" : "영수증 읽는 중…");
         new Thread(() -> {
             Bitmap bmp;
             try { bmp = loadUpright(u); } catch (Exception e) { result(fail(kind, "사진을 열 수 없어요.")); return; }

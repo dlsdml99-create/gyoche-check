@@ -25,7 +25,7 @@ import java.util.Locale;
 public class Reminder {
     static final String PREF = "gyoche", CHANNEL = "daily";
     static final String ACTION = "com.gyoche.check.DAILY";
-    static final String ACT_DONE = "com.gyoche.check.DONE", ACT_SHOP = "com.gyoche.check.SHOP", ACT_SNOOZE = "com.gyoche.check.SNOOZE", ACT_AGAIN = "com.gyoche.check.AGAIN";
+    static final String ACT_DONE = "com.gyoche.check.DONE", ACT_SHOP = "com.gyoche.check.SHOP", ACT_SNOOZE = "com.gyoche.check.SNOOZE", ACT_AGAIN = "com.gyoche.check.AGAIN", ACT_USE = "com.gyoche.check.USE";
 
     // 알림·위젯 버튼에서 누른 일을 쌓아 두었다가 앱을 열 때 화면에 반영한다
     static synchronized void addAction(Context c, JSONObject a) {
@@ -99,6 +99,13 @@ public class Reminder {
                 android.widget.Toast.makeText(c, "3시간 뒤에 다시 알려드릴게요", android.widget.Toast.LENGTH_SHORT).show();
             } else if (ACT_AGAIN.equals(a)) {
                 notifyNow(c, false, false);
+            } else if (ACT_USE.equals(a)) {
+                String id = i.getStringExtra("id"), ym = i.getStringExtra("ym");
+                if (id == null || ym == null) return;
+                boolean used = i.getBooleanExtra("used", true);
+                addAction(c, new JSONObject().put("type", "use").put("id", id).put("ym", ym).put("used", used));
+                if (nm != null) nm.cancel(i.getIntExtra("nid", 0));
+                android.widget.Toast.makeText(c, used ? "썼다고 기록했어요" : "안 쓴 달로 기록했어요. 2달 연속이면 해지를 추천해 드려요", android.widget.Toast.LENGTH_SHORT).show();
             }
         } catch (Exception ignored) {}
         ChaenggimWidget.updateAll(c);
@@ -202,6 +209,19 @@ public class Reminder {
             }
         }
         // 자동차 주행거리를 한 달 넘게 안 넣었으면 함께
+        // 냉장고 1분 정리를 일주일 넘게 안 했으면 함께
+        String chk = d.optString("chk", "");
+        if (!chk.isEmpty() && !"null".equals(chk)) {
+            int ago = daysBetween(chk, today);
+            if (ago != Integer.MAX_VALUE && ago >= 7) {
+                idx.add(new long[]{0, names.size()});
+                names.add("냉장고 1분 정리");
+                notes.add(ago + "일 전 정리");
+                dishes.add("");
+                ids.add("");
+                cats.add("");
+            }
+        }
         String kmDate = d.optString("kmDate", "");
         if (!kmDate.isEmpty() && !"null".equals(kmDate)) {
             int ago = daysBetween(kmDate, today);
@@ -257,18 +277,68 @@ public class Reminder {
 
     static void notifyNow(Context c, boolean force) { notifyNow(c, force, false); }
 
+    // 구독 결제 3일 전: "이번 달 썼어요?" 따로 한 번 묻기 (버튼으로 바로 답)
+    static void askSubs(Context c) {
+        if (!canNotify(c)) return;
+        JSONObject d = data(c);
+        JSONArray items = d.optJSONArray("items");
+        if (items == null) return;
+        android.content.SharedPreferences p = c.getSharedPreferences(PREF, Context.MODE_PRIVATE);
+        String today = ymd(new Date());
+        NotificationManager nm = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (nm == null) return;
+        ensureChannel(nm);
+        int shown = 0;
+        for (int k = 0; k < items.length() && shown < 2; k++) {
+            JSONObject it = items.optJSONObject(k);
+            if (it == null || !it.optBoolean("sub", false) || it.optBoolean("asked", false)) continue;
+            String sid = it.optString("sid", ""), ym = it.optString("ym", "");
+            int left = daysBetween(today, it.optString("due"));
+            if (sid.isEmpty() || ym.isEmpty() || left == Integer.MAX_VALUE || left < 0 || left > 3) continue;
+            String key = "q_" + sid + "_" + ym;
+            if (p.getBoolean(key, false)) continue;
+            p.edit().putBoolean(key, true).apply();
+            int nid = 100 + Math.abs(sid.hashCode() % 800);
+            String name = it.optString("sname", "구독");
+            Intent open = new Intent(c, MainActivity.class).putExtra("fromNotify", true)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            Notification.Builder b = Build.VERSION.SDK_INT >= 26 ? new Notification.Builder(c, CHANNEL) : new Notification.Builder(c);
+            android.graphics.drawable.Icon ic = android.graphics.drawable.Icon.createWithResource(c, R.drawable.ic_notify);
+            b.setSmallIcon(R.drawable.ic_notify).setColor(0xFF2E7D5B)
+                .setContentTitle(name + " 이번 달 썼어요?")
+                .setContentText((left == 0 ? "오늘 결제" : "결제 " + left + "일 전") + " · 안 쓰는 구독을 찾아 드려요")
+                .setAutoCancel(true)
+                .setContentIntent(PendingIntent.getActivity(c, 2, open, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE))
+                .addAction(new Notification.Action.Builder(ic, "썼어요", useIntent(c, nid * 2, sid, ym, true, nid)).build())
+                .addAction(new Notification.Action.Builder(ic, "안 썼어요", useIntent(c, nid * 2 + 1, sid, ym, false, nid)).build());
+            nm.notify(nid, b.build());
+            shown++;
+        }
+    }
+
+    static void ensureChannel(NotificationManager nm) {
+        if (Build.VERSION.SDK_INT >= 26) {
+            NotificationChannel ch = new NotificationChannel(CHANNEL, "챙김이 아침 알림", NotificationManager.IMPORTANCE_DEFAULT);
+            ch.setDescription("확인할 물건이 있는 날 아침에 한 번 알려요");
+            nm.createNotificationChannel(ch);
+        }
+    }
+
+    static PendingIntent useIntent(Context c, int code, String sid, String ym, boolean used, int nid) {
+        Intent i = new Intent(c, ReminderReceiver.class).setAction(ACT_USE).putExtra("tok", token(c))
+            .putExtra("id", sid).putExtra("ym", ym).putExtra("used", used).putExtra("nid", nid);
+        return PendingIntent.getBroadcast(c, code, i, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+    }
+
     static void notifyNow(Context c, boolean force, boolean quiet) {
+        if (!quiet) { try { askSubs(c); } catch (Exception ignored) {} }
         Summary r = summary(c);
         String today = ymd(new Date());
         if (r.count == 0 && r.season == null && !force) return;
         if (!canNotify(c)) return;
 
         NotificationManager nm = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= 26) {
-            NotificationChannel ch = new NotificationChannel(CHANNEL, "챙김이 아침 알림", NotificationManager.IMPORTANCE_DEFAULT);
-            ch.setDescription("확인할 물건이 있는 날 아침에 한 번 알려요");
-            nm.createNotificationChannel(ch);
-        }
+        ensureChannel(nm);
         String title = r.title, text = r.text, big = r.big;
         if (r.count == 0) {
             if (r.season != null) { title = "챙김이 계절 알림"; text = r.season; big = r.season; }

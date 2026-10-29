@@ -1,1 +1,1 @@
-<resources><string name="app_name">챙김이</string><string name="widget_desc">오늘 챙길 물건을 바탕화면에서 바로 봐요</string></resources>
+<resources><string name="app_name">챙김이</string><string name="widget_desc">오늘 챙길 물건을 바탕화면에서 바로 봐요</string><string name="sc_voice">말로 등록</string><string name="sc_receipt">영수증 찍기</string><string name="sc_shop">장보기 목록</string><string name="sc_check">냉장고 정리</string></resources>
