@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>챙김이 사용 설명서</title>
+<meta name="description" content="챙김이 앱 탭별·기능별 사용 방법">
+<meta property="og:title" content="챙김이 사용 설명서">
+<meta property="og:description" content="음식·옷·생필품·자동차·통계 탭별 사용 방법">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* 레이아웃: 위에 앱 두 장(받기 버튼 + 폰으로 찍는 QR), 아래로 앱별 설명 → 설치 방법 → 안전 정보 → 자주 묻는 질문 */
+:root {
+  --bg: #F3F4F1; --surface: #FFFFFF; --ink: #1B211E; --sub: #5E6762; --line: #DFE3DD;
+  --nb: #2F5BFF; --nb-soft: #E6ECFF; --cg: #2E7D5B; --cg-soft: #E1F0E8; --warn: #A15C00; --warn-soft: #FFF2D9;
+  --f-display: "Do Hyeon", "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --f-body: "IBM Plex Sans KR", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  --shadow: 0 1px 2px rgba(20,30,25,.06), 0 6px 20px rgba(20,30,25,.06);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121614; --surface: #1C211E; --ink: #EEF1EE; --sub: #A3ABA6; --line: #2E3532;
+  --nb: #7D97FF; --nb-soft: #1E2645; --cg: #5DBB8E; --cg-soft: #1A3127; --warn: #F2B65A; --warn-soft: #33270F;
+  --shadow: 0 1px 2px rgba(0,0,0,.4); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121614; --surface: #1C211E; --ink: #EEF1EE; --sub: #A3ABA6; --line: #2E3532;
+  --nb: #7D97FF; --nb-soft: #1E2645; --cg: #5DBB8E; --cg-soft: #1A3127; --warn: #F2B65A; --warn-soft: #33270F;
+  --shadow: 0 1px 2px rgba(0,0,0,.4); color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.65 var(--f-body); margin: 0; }
+.wrap { max-width: 920px; margin: 0 auto; padding-block: 40px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 48px; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 400; letter-spacing: -0.2px; text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(36px, 7vw, 54px); }
+h2 { font-size: 30px; }
+h3 { font-size: 22px; }
+p { margin: 0; }
+a { color: inherit; }
+.lead { color: var(--sub); max-width: 58ch; margin-top: 12px; }
+.eyebrow { font-size: 13px; letter-spacing: .08em; color: var(--sub); font-weight: 700; margin-bottom: 10px; }
+
+/* 앱 카드 */
+.apps { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.app { background: var(--surface); border-radius: 22px; padding: 22px; box-shadow: var(--shadow); display: grid; gap: 16px; align-content: start; min-width: 0; }
+.app-top { display: flex; gap: 16px; align-items: center; }
+.app-top svg.icon { width: 76px; height: 76px; flex: none; border-radius: 20px; }
+.app-name { font-family: var(--f-display); font-size: 32px; line-height: 1.1; }
+.app-tag { color: var(--sub); font-size: 15px; margin-top: 2px; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px; }
+.fact { font-size: 13px; padding: 3px 10px; border-radius: 999px; background: var(--bg); color: var(--sub); font-variant-numeric: tabular-nums; }
+.get { display: flex; gap: 14px; align-items: center; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 18px; border-radius: 14px; font-weight: 700; text-decoration: none; font-size: 16px; }
+.btn svg { width: 20px; height: 20px; flex: none; }
+.btn.nb { background: var(--nb); color: #fff; }
+.btn.cg { background: var(--cg); color: #fff; }
+:root[data-theme="dark"] .btn.nb, :root[data-theme="dark"] .btn.cg { color: #0E1210; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.nb, :root:not([data-theme="light"]) .btn.cg { color: #0E1210; } }
+.btn:focus-visible, a:focus-visible, summary:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.get .stack { display: grid; gap: 6px; flex: 1; min-width: 0; }
+.get .stack .btn { width: 100%; }
+.small-link { font-size: 14px; color: var(--sub); }
+.qr { flex: none; display: grid; justify-items: center; gap: 4px; font-size: 11.5px; color: var(--sub); text-align: center; width: 104px; }
+.qr .code { width: 96px; height: 96px; background: #fff; border-radius: 10px; padding: 6px; }
+.qr .code svg { width: 100%; height: 100%; display: block; }
+
+/* 설명 */
+.detail { display: grid; grid-template-columns: 1fr; gap: 18px; }
+.detail-head { display: flex; gap: 14px; align-items: center; }
+.detail-head svg.icon { width: 44px; height: 44px; border-radius: 12px; flex: none; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.box { background: var(--surface); border-radius: 18px; padding: 20px; box-shadow: var(--shadow); min-width: 0; }
+.box h3 { font-size: 19px; margin-bottom: 10px; font-family: var(--f-body); font-weight: 700; }
+ul.feat { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+ul.feat li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; }
+ul.feat li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; margin: 9px 0 0 6px; background: var(--dot, var(--ink)); }
+.nbx { --dot: var(--nb); } .cgx { --dot: var(--cg); }
+ul.feat b { font-weight: 700; }
+ol.steps { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 12px; }
+ol.steps li { counter-increment: s; display: grid; grid-template-columns: 32px 1fr; gap: 10px; align-items: start; }
+ol.steps li::before { content: counter(s); width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--bg); display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+.tabs-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 12px; }
+.tabchip { font-size: 13.5px; padding: 4px 11px; border-radius: 999px; background: var(--cg-soft); color: var(--cg); font-weight: 700; }
+
+/* 설치 */
+.note { background: var(--warn-soft); color: var(--ink); border-radius: 14px; padding: 14px 16px; font-size: 15px; }
+.note b { color: var(--warn); }
+
+/* 안전 표 */
+.table-wrap { overflow-x: auto; background: var(--surface); border-radius: 18px; box-shadow: var(--shadow); }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 15px; }
+th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 13px; color: var(--sub); font-weight: 700; letter-spacing: .02em; }
+tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 700; white-space: nowrap; }
+.ok { color: var(--cg); font-weight: 700; }
+.mono { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 13px; color: var(--sub); word-break: break-all; }
+
+details { background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); padding: 4px 18px; }
+details + details { margin-top: 8px; }
+summary { cursor: pointer; font-weight: 700; padding: 12px 0; list-style-position: outside; }
+details p { padding: 0 0 14px; color: var(--sub); }
+footer { color: var(--sub); font-size: 14px; border-top: 1px solid var(--line); padding-top: 20px; }
+@media (max-width: 420px) { .qr { display: none; } }
+@media (prefers-reduced-motion: no-preference) { .btn { transition: transform .12s; } .btn:active { transform: scale(.98); } }
+</style>
+<style>
+[hidden]{display:none!important}
+.wrap.guide { max-width: 980px; gap: 44px; padding-block: 24px 64px; }
+.ghero { display: flex; gap: 18px; align-items: center; background: var(--surface); border-radius: 24px; padding: 22px; box-shadow: var(--shadow); flex-wrap: wrap; }
+.ghero svg.icon { width: 84px; height: 84px; border-radius: 22px; flex: none; }
+.ghero h1 { font-size: clamp(30px, 6vw, 44px); }
+.ghero .lead { margin-top: 6px; }
+.ghero .acts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.btn.ghost { background: var(--bg); color: var(--ink); border: 1px solid var(--line); }
+.toc { display: flex; flex-wrap: wrap; gap: 6px; }
+.toc a { text-decoration: none; font-size: 14px; font-weight: 700; padding: 7px 12px; border-radius: 999px; background: var(--surface); box-shadow: var(--shadow); }
+.g { display: grid; gap: 14px; scroll-margin-top: 12px; }
+.g h2 { display: flex; align-items: center; gap: 10px; }
+.g h2 .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--c); flex: none; }
+.g .lead { margin: 0; }
+.gbody { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 18px; align-items: start; }
+.figs { display: grid; gap: 14px; position: sticky; top: 12px; }
+.txt { display: grid; gap: 14px; min-width: 0; }
+.shot { margin: 0; display: grid; gap: 6px; justify-items: center; }
+.shot img { width: 100%; max-width: 280px; height: auto; border-radius: 22px; border: 6px solid var(--ink); box-shadow: var(--shadow); background: var(--surface); }
+.shot figcaption { font-size: 13px; color: var(--sub); }
+.feat li span b, .steps li span b { color: var(--ink); }
+.g .feat li::before { background: var(--c); }
+@media (max-width: 720px) {
+  .gbody { grid-template-columns: 1fr; }
+  .figs { position: static; grid-auto-flow: column; grid-auto-columns: 62%; overflow-x: auto; padding-bottom: 6px; scroll-snap-type: x mandatory; }
+  .figs .shot { scroll-snap-align: start; }
+  .figs:has(.shot:only-child) { grid-auto-columns: 78%; justify-content: center; }
+}
+details { background: var(--surface); }
+</style>
+</head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="ic-cg" viewBox="0 0 108 108">
+      <rect width="108" height="108" fill="#2E7D5B"/>
+      <g transform="translate(54 54) scale(1.16) translate(-54 -52)">
+        <path fill="#FFFFFF" d="M30,64 C30,47 41,38 54,38 C67,38 78,47 78,64 C78,77 67,83 54,83 C41,83 30,77 30,64 Z"/>
+        <path fill="#1E2421" d="M43,59a3.4,3.4 0 1,0 6.8,0a3.4,3.4 0 1,0 -6.8,0 M58.2,59a3.4,3.4 0 1,0 6.8,0a3.4,3.4 0 1,0 -6.8,0"/>
+        <path fill="#FF9E8A" d="M36.5,67a4,2.6 0 1,0 8,0a4,2.6 0 1,0 -8,0 M63.5,67a4,2.6 0 1,0 8,0a4,2.6 0 1,0 -8,0"/>
+        <path fill="none" stroke="#1E2421" stroke-width="2.6" stroke-linecap="round" d="M49,67.5 Q54,72 59,67.5"/>
+        <path fill="none" stroke="#FFD45C" stroke-width="4" stroke-linecap="round" d="M51.5,34 L53,39.5"/>
+        <path fill="none" stroke="#FFD45C" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" d="M44.5,27 L51.5,34 L64,20.5"/>
+      </g>
+    </symbol>
+    <symbol id="ic-nb" viewBox="0 0 108 108">
+      <rect width="108" height="108" fill="#2F5BFF"/>
+      <g transform="rotate(-38 55 54)">
+        <path fill="#D98E3A" stroke="#8E4F16" stroke-width="2.5" d="M47,28 a8,8 0 0 1 16,0 v52 a8,8 0 0 1 -16,0 z"/>
+        <path stroke="#F7D58E" stroke-width="3" stroke-linecap="round" d="M51,41 L59,33 M51,58 L59,50 M51,75 L59,67"/>
+      </g>
+      <path fill="#D98E3A" stroke="#8E4F16" stroke-width="2.5" d="M24,32 a8,8 0 0 1 16,0 v44 a8,8 0 0 1 -16,0 z"/>
+      <path stroke="#F7D58E" stroke-width="3" stroke-linecap="round" d="M28,43 L36,35 M28,58 L36,50 M28,73 L36,65"/>
+      <path fill="#D98E3A" stroke="#8E4F16" stroke-width="2.5" d="M68,32 a8,8 0 0 1 16,0 v44 a8,8 0 0 1 -16,0 z"/>
+      <path stroke="#F7D58E" stroke-width="3" stroke-linecap="round" d="M72,43 L80,35 M72,58 L80,50 M72,73 L80,65"/>
+    </symbol>
+    <symbol id="ic-down" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></symbol>
+  </defs>
+</svg>
+
+<main class="wrap guide">
+  <header class="ghero">
+    <svg class="icon" role="img" aria-label="챙김이 아이콘"><use href="#ic-cg"/></svg>
+    <div style="flex:1;min-width:220px"><h1>챙김이 사용 설명서</h1>
+      <p class="lead">유통기한과 교체 주기를 대신 기억했다가 알려주는 앱이에요. 탭별로, 기능별로 쓰는 법을 정리했어요.</p>
+      <div class="acts"><a class="btn cg" href="./"><svg><use href="#ic-down"/></svg>앱 다운로드</a></div>
+    </div>
+  </header>
+  <nav class="toc" aria-label="목차">
+    <a href="#start">처음 시작</a><a href="#food">음식</a><a href="#clothes">옷</a><a href="#daily">생필품</a><a href="#car">자동차</a><a href="#dday">D-day</a><a href="#stats">통계</a><a href="#common">공통 기능</a><a href="#faq">자주 묻는 질문</a>
+  </nav>
+  <section class="g" id="start" style="--c:var(--cg)">
+  <h2><span class="dot"></span>처음 시작하기</h2>
+  <p class="lead">설치하고 처음 물건을 등록하기까지 1분이면 돼요.</p>
+  <div class="gbody"><div class="figs"><figure class="shot"><img src="guide/01_food.jpg" alt="음식 탭 첫 화면" loading="lazy" width="360"><figcaption>음식 탭 첫 화면</figcaption></figure></div><div class="txt"><div class="box"><h3>시작 순서</h3><ol class="steps"><li><span>다운로드 페이지에서 앱을 설치해요.</span></li><li><span>아래 탭에서 <b>음식 · 옷 · 생필품 · 자동차 · D-day</b> 중 하나를 고르고 오른쪽 아래 <b>+</b> 버튼을 눌러요.</span></li><li><span>안 쓰는 탭은 <b>설정 → 쓸 탭 고르기</b>에서 꺼 두면 화면이 간단해져요.</span></li><li><span>처음 등록할 때 <b>알림 허용</b> 창이 뜨면 허용을 눌러요. 그래야 아침 알림이 와요.</span></li></ol></div><div class="box"><h3>화면 보는 법</h3><ul class="feat"><li><span><b>위쪽 숫자 3칸</b> · 기한 지남(빨강) · 곧 바꿀 것(노랑) · 여유(초록). 누르면 그것만 모아 봐요.</span></li><li><span><b>D-3 / D+2</b> · 기한까지 3일 남음 / 2일 지남. 자동차는 <b>1,000km</b>처럼 남은 거리로도 보여요.</span></li><li><span><b>막대</b> · 교체 주기가 얼마나 지났는지. 꽉 찰수록 바꿀 때가 가까워요.</span></li><li><span><b>오른쪽 위 ⚖ · 🛒 · ⚙</b> · 가격 비교, 장보기 목록, 설정이에요.</span></li><li><span><b>왼쪽 아래 v1.N</b> · 지금 버전. "최신"이면 그대로, "새 버전 있음"이면 눌러서 업데이트해요.</span></li><li><span><b>아래 탭의 빨간 숫자</b> · 그 탭에서 오늘 챙길 물건 수예요.</span></li></ul></div></div></div>
+</section>
+  <section class="g" id="food" style="--c:var(--food, #E07A3F)">
+  <h2><span class="dot"></span>음식 탭</h2>
+  <p class="lead">냉장고 속 음식의 유통기한·소비기한을 챙겨요. 버리기 전에 먹을 수 있게 도와줘요.</p>
+  <div class="gbody"><div class="figs"><figure class="shot"><img src="guide/02_addmenu.jpg" alt="+ 버튼: 자주 쓰는 물품과 등록 방법" loading="lazy" width="360"><figcaption>+ 버튼: 자주 쓰는 물품과 등록 방법</figcaption></figure><figure class="shot"><img src="guide/20_homemade.jpg" alt="직접 만든 음식 · 며칠 안에 먹기" loading="lazy" width="360"><figcaption>직접 만든 음식 · 며칠 안에 먹기</figcaption></figure><figure class="shot"><img src="guide/17_voice.jpg" alt="말로 등록한 결과" loading="lazy" width="360"><figcaption>말로 등록한 결과</figcaption></figure><figure class="shot"><img src="guide/03_form.jpg" alt="등록 화면" loading="lazy" width="360"><figcaption>등록 화면</figcaption></figure><figure class="shot"><img src="guide/16_price_detail.jpg" alt="수량·산 곳·단가" loading="lazy" width="360"><figcaption>수량·산 곳·단가</figcaption></figure><figure class="shot"><img src="guide/15_compare.jpg" alt="가격 비교" loading="lazy" width="360"><figcaption>가격 비교</figcaption></figure><figure class="shot"><img src="guide/04_recipe.jpg" alt="오늘 뭐 해먹지? 레시피" loading="lazy" width="360"><figcaption>오늘 뭐 해먹지? 레시피</figcaption></figure></div><div class="txt"><div class="box"><h3>등록하는 4가지 방법</h3><ul class="feat"><li><span><b>영수증 찍기</b> · 장 본 영수증을 찍으면 산 음식이 한 번에 목록으로 나와요. 체크한 것만 등록돼요. 기한은 품목별 대략값이라 포장지 날짜와 다르면 고쳐주세요.</span></li><li><span><b>바코드 찍기</b> · 상품 바코드로 이름을 채워요. 이름이 안 나오는 상품은 한 번만 적어두면 다음부터 자동이에요.</span></li><li><span><b>날짜 찍기</b> · 등록 화면에서 포장지의 유통기한 부분을 찍으면 날짜를 읽어 넣어요.</span></li><li><span><b>말로 등록</b> · "우유 두 개 이마트에서 오천 원 그리고 두부 하나"처럼 말하면 이름·수량·가게·가격이 채워져요. 여러 개를 말하면 목록으로 나와요. 폰의 음성 인식 화면을 빌려 써서 챙김이는 마이크 권한이 없어요.</span></li><li><span><b>직접 입력 · 빠른 재등록</b> · 자주 쓰는 품목(우유, 두부…)을 누르거나, 전에 등록한 물건은 "+ 서울우유"처럼 한 번에 다시 등록해요.</span></li><li><span><b>★ 자주 쓰는 물품</b> · 물건을 누르고 "자주 쓰는 물품에 넣기"를 하면, + 버튼에서 여러 개를 골라 <b>한 번에</b> 등록할 수 있어요. 장 본 날 우유·계란·두부를 버튼 두 번으로 끝내요.</span></li></ul></div><div class="box"><h3>직접 만든 음식 · 며칠 안에 먹기</h3><ul class="feat"><li><span><b>+ → 직접 만든 음식·남은 음식</b>을 누르고 동그랑땡·전·국·찌개·볶음 반찬 같은 걸 고르면 <b>냉장 며칠 안에 먹을지</b>가 들어가요. 예: 동그랑땡 3일(냉동하면 약 1개월), 국·찌개 2일, 멸치볶음 7일.</span></li><li><span>"며칠 안에 먹을까요"의 <b>1·2·3·4·5·7일</b> 버튼으로 바로 바꿀 수 있어요.</span></li><li><span>레시피를 보고 만들었으면 레시피 화면의 <b>남은 ○○ 냉장고에 넣기</b>로 한 번에 등록돼요.</span></li><li><span>대략적인 기준이에요. 냄새·색·상태를 꼭 확인해 주세요.</span></li></ul></div><div class="box"><h3>수량 · 산 곳 · 어디가 더 쌀까</h3><ul class="feat"><li><span><b>수량</b> · 이름 옆 <b>− 2 +</b>로 개수를 넣어요. 여러 개면 "1개 먹었어요"를 누를 때마다 하나씩 줄어요.</span></li><li><span><b>가격·구매처</b>(선택) · 등록 화면 아래를 펼쳐 낸 돈과 산 곳을 넣어요. 영수증으로 등록하면 가게 이름과 가격이 자동으로 들어가요.</span></li><li><span><b>용량은 자동</b> · 이름에 "1L, 600g, 10구, 5입"처럼 적혀 있으면 용량을 알아서 읽어요. 그래서 <b>100ml당 · 100g당 · 1개당</b> 가격이 바로 나와요.</span></li><li><span>등록할 때 "지난번 쿠팡에서 7% 더 싸게 샀었어요"처럼 바로 알려주고, 물건 자세히 보기에 <b>최저가 가게</b>가 보여요.</span></li><li><span><b>⚖ 가격 비교</b> · 마트에서 두 상품의 가격과 용량만 넣으면 어느 게 몇 % 싼지 계산해요. 아래에는 내가 산 기록이 품목별·가게별로 정리돼 있어요.</span></li></ul></div><div class="box"><h3>다 먹었을 때 · 버릴 때</h3><ul class="feat"><li><span>음식을 누르고 <b>다 먹었어요</b> 또는 <b>버렸어요</b>를 눌러요. 목록에서 빠지고 통계에 쌓여요.</span></li><li><span><b>가격</b>을 넣어두면 버렸을 때 "이번 달 5,480원어치 버렸어요"처럼 금액으로 보여요.</span></li><li><span><b>냉동실로 옮기기</b> · 곧 상할 음식을 얼리면 기한을 늘려줘요(고기 약 3개월, 빵 약 1개월). 우유·두부처럼 얼리면 맛이 변하는 건 미리 알려줘요.</span></li><li><span>보관 위치(냉장 · 냉동 · 실온) 버튼으로 나눠 볼 수 있어요.</span></li></ul></div><div class="box"><h3>오늘 뭐 해먹지?</h3><ul class="feat"><li><span>평소에는 한 줄로 <b>접혀</b> 있어요. 궁금할 때 눌러서 펼치고, 다시 누르면 접혀요.</span></li><li><span>가진 음식으로 만들 수 있는 요리를 <b>41가지 레시피</b> 중에서 골라줘요. 기한이 급한 재료를 쓰는 요리가 먼저 나와요.</span></li><li><span>요리를 누르면 재료와 만드는 법이 나와요. 모자란 재료는 <b>장보기에 담기</b>로 바로 담아요.</span></li><li><span>다 만든 뒤 <b>다 쓴 재료</b>를 체크하면 목록에서 정리돼요.</span></li><li><span>간장·소금·고추장 같은 기본 양념은 있다고 보고 골라요.</span></li></ul></div></div></div>
+</section>
+  <section class="g" id="clothes" style="--c:var(--clothes, #5B7FD6)">
+  <h2><span class="dot"></span>옷 탭</h2>
+  <p class="lead">속옷·양말·신발처럼 낡는 걸 잘 모르는 옷의 교체 시기를 챙겨요.</p>
+  <div class="gbody"><div class="figs"><figure class="shot"><img src="guide/07_clothes.jpg" alt="옷 탭" loading="lazy" width="360"><figcaption>옷 탭</figcaption></figure></div><div class="txt"><div class="box"><h3>쓰는 법</h3><ul class="feat"><li><span><b>+</b>를 누르고 품목(속옷, 양말, 브래지어, 운동화, 잠옷, 슬리퍼, 깔창)을 고르면 기본 주기가 들어가요. 예: 속옷·양말 6개월, 운동화 1년.</span></li><li><span><b>사용 시작일</b>을 넣으면 다음 교체일이 계산돼요.</span></li><li><span>새 걸로 바꾼 날 물건을 누르고 <b>오늘 새 걸로 바꿨어요</b>를 누르면 다음 교체일이 다시 계산돼요.</span></li><li><span>속옷·양말 · 신발 · 기타로 나눠 볼 수 있어요.</span></li></ul></div></div></div>
+</section>
+  <section class="g" id="daily" style="--c:var(--daily, #2E9E9E)">
+  <h2><span class="dot"></span>생필품 탭</h2>
+  <p class="lead">칫솔·수세미·수건·필터처럼 매일 쓰는 소모품을 쓰는 곳별로 챙겨요.</p>
+  <div class="gbody"><div class="figs"><figure class="shot"><img src="guide/08_learn.jpg" alt="생필품 자세히 보기와 주기 제안" loading="lazy" width="360"><figcaption>생필품 자세히 보기와 주기 제안</figcaption></figure></div><div class="txt"><div class="box"><h3>쓰는 법</h3><ul class="feat"><li><span><b>약·구급</b> · 해열진통제·소화제·감기약·연고·밴드의 유통기한을 챙겨요. 집에 있는 상비약 확인할 때 좋아요.</span></li><li><span>욕실(칫솔 3개월, 치약, 수건, 면도날, 샤워볼) · 주방(수세미 1개월, 행주, 도마, 정수기 필터) · 침실(베개·이불 커버, 베개) · 기타(공기청정기 필터)로 나눠 봐요.</span></li><li><span>바코드·영수증으로도 등록할 수 있어요.</span></li><li><span>바꾼 날 <b>오늘 새 걸로 바꿨어요</b>를 누르면 통계에 쌓이고 다음 날짜가 계산돼요.</span></li><li><span><b>내 주기 학습</b> · 실제로 바꾼 기록이 쌓이면 "보통 75일마다 바꾸셨어요"처럼 내 생활에 맞는 주기를 제안해요. 버튼 하나로 바꿀 수 있어요.</span></li></ul></div></div></div>
+</section>
+  <section class="g" id="car" style="--c:var(--car, #7A5BD6)">
+  <h2><span class="dot"></span>자동차 탭</h2>
+  <p class="lead">엔진오일·필터·타이어를 <b>주행거리(km)와 기간 중 먼저 오는 쪽</b>으로 챙겨요.</p>
+  <div class="gbody"><div class="figs"><figure class="shot"><img src="guide/18_car_sug.jpg" alt="자동차 탭 · 보험·세금 날짜 추천" loading="lazy" width="360"><figcaption>자동차 탭 · 보험·세금 날짜 추천</figcaption></figure><figure class="shot"><img src="guide/10_cardetail.jpg" alt="부품 자세히 보기" loading="lazy" width="360"><figcaption>부품 자세히 보기</figcaption></figure></div><div class="txt"><div class="box"><h3>처음 설정</h3><ol class="steps"><li><span><b>내 차 등록</b>을 누르고 차 이름과 계기판 주행거리를 넣어요.</span></li><li><span>관리할 부품을 고르고 마지막으로 바꾼 날짜와 km를 넣어요. 모르면 그대로 두면 오늘부터 계산해요.</span></li><li><span>가끔 <b>주행거리 입력</b>으로 계기판 숫자를 넣어주세요. 2주 이상 쌓이면 "11월 19일쯤 교체"처럼 날짜도 예상해요.</span></li></ol></div><div class="box"><h3>교체할 때</h3><ul class="feat"><li><span>부품을 누르고 <b>교체했어요</b>를 눌러 날짜·km와 <b>정비 비용·정비소</b>를 적어요. 차 카드에 올해 정비비 합계가 보여요.</span></li><li><span>기본 주기는 일반적인 권장값이에요(엔진오일 7,000km 또는 6개월 등). <b>수정</b>에서 차량 설명서에 맞게 바꿔주세요.</span></li><li><span>주행거리를 한 달 넘게 안 넣으면 아침 알림으로 알려줘요.</span></li><li><span><b>보험·자동차세·정기검사</b> · 차를 등록하면 위쪽에 "챙길까요?" 카드가 떠요. 고르기를 누르고 날짜만 확인하면 D-day 탭에서 미리 알려줘요.</span></li></ul></div></div></div>
+</section>
+  <section class="g" id="dday" style="--c:var(--dday, #CC4F7A)">
+  <h2><span class="dot"></span>D-day 탭 (구독 · 약정 · 기념일)</h2>
+  <p class="lead">매달 나가는 돈과 놓치면 아까운 날짜를 <b>D-day와 금액</b>으로 챙겨요.</p>
+  <div class="gbody"><div class="figs"><figure class="shot"><img src="guide/13_dday.jpg" alt="D-day 탭" loading="lazy" width="360"><figcaption>D-day 탭</figcaption></figure><figure class="shot"><img src="guide/14_dday_form.jpg" alt="구독 추가 (무료 체험)" loading="lazy" width="360"><figcaption>구독 추가 (무료 체험)</figcaption></figure></div><div class="txt"><div class="box"><h3>구독</h3><ul class="feat"><li><span><b>+ → 구독 추가</b>에서 넷플릭스·유튜브 프리미엄·쿠팡 와우 같은 이름을 누르고 금액만 넣으면 끝이에요.</span></li><li><span><b>무료 체험 중이에요</b>를 켜면 끝나는 날(가입 후 1개월)이 자동으로 들어가요. 끝나기 3일 전부터 "지금 해지하세요"라고 알려줘요.</span></li><li><span>결제일은 매달 저절로 다음 달로 넘어가요. 결제 알림은 하루 전·3일 전·안 받기 중에 골라요.</span></li><li><span>해지했으면 <b>해지했어요</b>를 눌러요. 목록에서 빠지고 "한 달 13,500원 아꼈어요"처럼 아낀 돈이 쌓여요.</span></li></ul></div><div class="box"><h3>보증기간 · 반복 점검</h3><ul class="feat"><li><span><b>보증기간</b> · 냉장고·세탁기 같은 가전을 산 날과 보증기간(1년 등)을 넣고 <b>영수증·보증서 사진</b>을 같이 저장해요. 고장 나면 이 화면을 서비스센터에 보여주세요.</span></li><li><span><b>반복 점검·납부</b> · 자동차(보험 갱신, 자동차세 6월·12월, 정기검사) · 집 관리(에어컨 청소, 보일러 점검, 화재경보기 배터리 등) · 반려동물(심장사상충 약, 구충제, 예방접종) 중에서 누르면 다음 날짜가 들어가요.</span></li><li><span>했으면 <b>했어요</b>를 눌러요. 다음 날짜로 넘어가고 기록이 남아요. 보험료·세금을 적어두면 한 달 고정 지출에 같이 계산돼요.</span></li></ul></div><div class="box"><h3>약정 · 기념일</h3><ul class="feat"><li><span><b>약정</b> · 휴대폰·인터넷 약정 시작일과 기간(24개월 등)을 넣으면 끝나는 날과 남은 개월이 보여요. 한 달 전부터 "요금제를 점검해 보세요"라고 알려줘요.</span></li><li><span><b>기념일</b> · 생일·결혼기념일처럼 매년 돌아오는 날과 <b>준비할 금액</b>(선물 예산, 용돈, 축의금)을 함께 적어요.</span></li><li><span><b>날짜 세기</b>를 켜면 "오늘 488일째", 다음 100일 단위 날과 주년을 알려줘요.</span></li><li><span>맨 위에는 구독과 약정을 합친 <b>한 달 고정 지출</b>이 보여요.</span></li></ul></div></div></div>
+</section>
+  <section class="g" id="stats" style="--c:var(--ink)">
+  <h2><span class="dot"></span>통계 탭</h2>
+  <p class="lead">한 달 동안 버린 음식, 다 먹은 음식, 교체한 물건을 모아 봐요.</p>
+  <div class="gbody"><div class="figs"><figure class="shot"><img src="guide/11_stats.jpg" alt="통계 탭 · 0원 도전" loading="lazy" width="360"><figcaption>통계 탭 · 0원 도전</figcaption></figure><figure class="shot"><img src="guide/19_year.jpg" alt="1년 결산 카드" loading="lazy" width="360"><figcaption>1년 결산 카드</figcaption></figure></div><div class="txt"><div class="box"><h3>볼 수 있는 것</h3><ul class="feat"><li><span><b>버린 음식 · 교체한 물건 · 다 먹은 음식</b> 개수와 지난달 비교</span></li><li><span><b>음식 버린 비율</b> · 다 먹은 것 + 버린 것 중 버린 것의 비율</span></li><li><span><b>버린 음식 금액</b>, <b>자동차 정비비</b>, <b>구독·약정 한 달 지출</b>과 해지로 아낀 돈</span></li><li><span><b>음식 0원 도전</b> · 음식을 하나도 안 버린 달을 "연속 3개월 성공"처럼 세어 줘요. 달이 바뀌면 성공을 알려줘요.</span></li><li><span><b>1년 결산 카드</b> · 통계 아래 버튼을 누르면 올해 다 먹은 음식, 버린 금액, 아낀 돈을 그림 한 장으로 만들어 카톡으로 보낼 수 있어요.</span></li><li><span><b>최근 6개월</b> 그래프, 탭별 개수, 자주 버린 음식, 그 달의 기록 목록</span></li><li><span>위쪽 화살표로 지난달도 볼 수 있어요.</span></li></ul></div></div></div>
+</section>
+  <section class="g" id="common" style="--c:var(--cg)">
+  <h2><span class="dot"></span>어느 탭에서나 쓰는 기능</h2>
+  <p class="lead">알림, 장보기, 사진, 위젯처럼 모든 탭에서 같이 쓰는 기능이에요.</p>
+  <div class="gbody"><div class="figs"><figure class="shot"><img src="guide/06_shop.jpg" alt="장보기 목록" loading="lazy" width="360"><figcaption>장보기 목록</figcaption></figure><figure class="shot"><img src="guide/21_family.jpg" alt="가족에게 보내기" loading="lazy" width="360"><figcaption>가족에게 보내기</figcaption></figure><figure class="shot"><img src="guide/12_settings.jpg" alt="설정" loading="lazy" width="360"><figcaption>설정</figcaption></figure></div><div class="txt"><div class="box"><h3>알림 · 위젯</h3><ul class="feat"><li><span><b>알림에서 바로 처리</b> · 알림 아래 버튼으로 "우유 다 먹음", "장보기에 담기", "3시간 뒤 다시"를 바로 눌러요. 앱을 열면 기록에 반영돼요. 홈 화면 위젯에도 같은 버튼이 있어요.</span></li><li><span><b>아침 알림</b> · 정한 시각(기본 9시)에 챙길 물건이 있는 날만 한 번 묶어서 와요. 곧 상할 음식이 있으면 "두부조림 어때요?" 같은 요리도 알려줘요.</span></li><li><span><b>계절 알림</b> · 장마 전 와이퍼, 환절기 이불 세탁, 겨울 전 배터리 점검 같은 때맞춤 안내가 탭 위쪽과 알림으로 와요.</span></li><li><span><b>홈 화면 위젯</b> · 바탕화면을 길게 누르고 위젯에서 챙김이를 고르면 앱을 열지 않아도 오늘 챙길 물건이 보여요.</span></li><li><span><b>설정 → 알림 시각</b>에서 시간을 바꾸고, <b>알림 미리보기</b>로 바로 확인할 수 있어요.</span></li></ul></div><div class="box"><h3>메모 · 내 품목</h3><ul class="feat"><li><span><b>메모</b> · 등록·수정 화면 아래에 "냉장고 둘째 칸", "엄마가 보내준 것", "해지는 앱 설정에서"처럼 적어두면 목록과 자세히 보기에 보여요.</span></li><li><span><b>내 품목</b> · 등록 화면의 <b>+ 지금 입력한 걸 내 품목으로</b>를 누르면 ★ 표시와 함께 "자주 쓰는 품목"에 들어가요. 설정 → 자주 쓰는 물품 · 내 품목 → <b>직접 추가</b>로도 만들 수 있어요.</span></li></ul></div><div class="box"><h3>가족과 함께 쓰기</h3><ul class="feat"><li><span><b>설정 → 가족에게 보내기</b>에서 음식·장보기 목록 등 보낼 것을 고르고 카톡으로 보내요.</span></li><li><span>받은 가족은 그 메시지를 <b>길게 눌러 공유 → 챙김이</b>를 고르면 "합칠까요?"가 떠요. 합치기를 누르면 같은 목록이 돼요.</span></li><li><span>서로 주고받으면 <b>바뀐 것만</b> 맞춰져요. 같은 물건은 더 나중에 고친 쪽으로, 지운 물건은 지운 걸로 합쳐요. 사진은 보내지 않아요.</span></li><li><span>서버 없이 카톡으로 주고받는 방식이라, 바뀔 때마다 저절로 맞춰지지는 않아요. 장 보기 전이나 정리한 뒤에 한 번씩 보내 주세요.</span></li></ul></div><div class="box"><h3>장보기 · 사진 · 수정</h3><ul class="feat"><li><span><b>다 떨어질 날 예측</b> · 같은 물건을 몇 번 사면 "보통 10일마다 사요"를 알아내서, 떨어지기 전에 장보기에 저절로 담아요.</span></li><li><span><b>🛒 장보기 목록</b> · 내 가격 기록에서 <b>가장 싸게 산 가게별</b>로 묶어 보여줘요. 바꿀 때 된 물건과 요리에 모자란 재료를 담아요. 산 것을 체크하면 바로 등록 화면이 열려요. <b>목록 복사</b>로 카톡에 보낼 수 있어요.</span></li><li><span><b>사진</b> · 등록·수정 화면에서 사진을 넣으면 목록 아이콘 자리에 사진이 떠요. 누르면 크게 보여요.</span></li><li><span><b>수정하기</b> · 물건을 누르고 수정을 누르면 이름·날짜·주기를 바꾸거나 다른 탭(음식 · 옷 · 생필품 · 자동차)으로 옮길 수 있어요.</span></li></ul></div><div class="box"><h3>설정</h3><ul class="feat"><li><span><b>쓸 탭 고르기</b> · 필요한 탭만 켜요. 끈 탭은 아래 메뉴와 알림에서 빠지고, 등록한 내용은 그대로 남아요.</span></li><li><span><b>자주 쓰는 물품 관리</b> · 자주 사는 물건을 고르거나 빼요. 많이 산 순서로 추천도 해줘요.</span></li><li><span><b>테마</b> · 자동 · 밝게 · 어둡게(다크 모드)</span></li><li><span><b>백업 복사 / 붙여넣기</b> · 폰을 바꿀 때 내용을 글자로 복사해 카톡 나와의 채팅 등에 보관했다가 새 폰에서 붙여넣어요. 사진은 포함되지 않아요.</span></li></ul></div></div></div>
+</section>
+  <section class="g" id="faq" style="--c:var(--sub)">
+  <h2><span class="dot"></span>자주 묻는 질문</h2>
+  <details><summary>영수증·바코드 인식이 처음에 안 돼요</summary><p>앱 용량을 줄이려고 글자·바코드 인식 기능은 폰의 Google Play 서비스에서 처음 한 번 내려받아요. 설치 후 와이파이에 연결된 상태로 1~2분 기다린 뒤 다시 해 보세요.</p></details>
+  <details><summary>알림이 안 와요</summary><p>폰 설정 → 애플리케이션 → 챙김이 → 알림이 켜져 있는지 확인해 주세요. 배터리 절약 모드에서 앱이 "절전"으로 되어 있으면 알림이 늦을 수 있어요. 앱 설정의 <b>알림 미리보기</b>로 바로 시험할 수 있어요.</p></details>
+  <details><summary>바코드로 상품 이름이 안 나와요</summary><p>공개 상품 정보에 없는 국내 상품이 많아요. 이름을 한 번 적어 등록하면 같은 바코드는 다음부터 자동으로 채워져요.</p></details>
+  <details><summary>영수증을 잘 못 읽어요</summary><p>밝은 곳에서 영수증을 평평하게 펴고, 품목 부분이 화면을 꽉 채우게 가까이 찍어주세요. 구겨지거나 흐린 영수증은 틀리게 읽을 수 있어서 등록 전에 한 번 확인해 주세요.</p></details>
+  <details><summary>가족 공유하면 내 정보가 어디에 저장되나요?</summary><p>챙김이 서버는 없어요. 고른 목록을 글자로 만들어 카톡 같은 메신저로 보내는 것뿐이라, 보낸 메시지에만 남아요. 받는 쪽도 "합치기"를 눌러야만 들어가요.</p></details>
+  <details><summary>내 정보가 어디로 가나요?</summary><p>등록한 물건·사진·기록은 <b>내 폰 안에만</b> 저장돼요. 인터넷으로는 바코드 숫자(상품 이름 찾기)와 새 버전 확인만 해요. 광고나 추적도 없어요.</p></details>
+  <details><summary>업데이트는 어떻게 하나요?</summary><p>새 버전이 나오면 앱을 켤 때 "새 버전이 있어요" 창이 떠요. 왼쪽 아래 버전 표시를 눌러도 돼요. 받은 파일을 설치하면 저장한 내용은 그대로 남아요.</p></details>
+  <details><summary>앱을 지우면 어떻게 되나요?</summary><p>저장한 내용도 같이 지워져요. 지우기 전에 설정 → 백업 복사로 내용을 보관해 두세요.</p></details>
+</section>
+  <footer>이 설명서는 챙김이 v1.__N__ 기준이에요 · 만든 사람 <a href="https://github.com/dlsdml99-create">dlsdml99-create</a></footer>
+</main>
+</body></html>
