@@ -471,6 +471,30 @@ small.alt { display: block; font-size: 12.5px; font-weight: 600; color: var(--su
 .cmprow .ccur { height: 40px; border-radius: 10px; background: var(--seg); font-weight: 700; font-size: 14px; color: var(--ink); }
 .set .rate { display: inline-flex; align-items: center; gap: 6px; flex: none; font-size: 14px; color: var(--sub); }
 .set .rate .inp { width: 92px; padding: 9px 10px; text-align: right; }
+/* v1.10 날짜 고르기 */
+input.dp-hid { display: none !important; }
+.dp { display: inline-flex; gap: 3px; flex: none; min-width: 0; }
+.dp button { flex: none; padding: 5px 6px; border-radius: 8px; background: var(--seg); color: var(--ink); font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+.dp.big { display: flex; width: 100%; gap: 6px; }
+.dp.big button { padding: 12px 10px; border-radius: 12px; font-size: 16px; border: 1px solid var(--line); background: var(--card); }
+.dp.big button[data-k=y] { flex: 1.15; } .dp.big button[data-k=m] { flex: .9; } .dp.big button[data-k=d] { flex: 1.3; text-align: center; }
+.dp.empty button { color: var(--sub); font-weight: 500; }
+.dpdim { position: fixed; inset: 0; z-index: 300; background: rgba(0,0,0,.38); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.dpbox { width: 100%; max-width: 360px; background: var(--card); border-radius: 18px; padding: 14px; box-shadow: 0 10px 40px rgba(0,0,0,.25); }
+.dptabs { display: flex; gap: 6px; margin-bottom: 10px; }
+.dptabs button { flex: 1; padding: 10px 4px; border-radius: 10px; background: var(--seg); color: var(--sub); font-size: 16px; font-weight: 700; }
+.dptabs button.on { background: var(--brand); color: #fff; }
+.dpgrid { display: grid; gap: 6px; max-height: calc(52vh / var(--z, 1)); overflow-y: auto; }
+.dpgrid.y { grid-template-columns: repeat(4, 1fr); }
+.dpgrid.m { grid-template-columns: repeat(4, 1fr); }
+.dpgrid.d { grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.dpgrid button { padding: 11px 0; border-radius: 10px; font-size: 15px; color: var(--ink); background: var(--bg); }
+.dpgrid button.now { box-shadow: inset 0 0 0 1.5px var(--brand); }
+.dpgrid button.on { background: var(--brand); color: #fff; font-weight: 700; }
+.dpgrid .wd { text-align: center; font-size: 12px; color: var(--sub); padding: 2px 0; }
+.dpgrid .wd.sun { color: var(--over); } .dpgrid .wd.sat { color: #4A7BD0; }
+.dpfoot { display: flex; justify-content: space-between; margin-top: 10px; }
+.dpfoot button { padding: 10px 14px; border-radius: 10px; font-size: 15px; font-weight: 600; color: var(--brand); }
 </style></head>
 <body><main id="app"></main>
 <script>// 교체 체크 — 화면과 상관없는 계산·인식 규칙 (node로 테스트 가능)
@@ -595,40 +619,76 @@ small.alt { display: block; font-size: 12.5px; font-weight: 600; color: var(--su
 
   // ── 날짜 글자 읽기 ──
   // 줄들에서 날짜를 모두 찾는다: [{date, line, idx}]
-  var RE_FULL = /(20\d{2}|\d{2})\s*[.\-\/년]\s*(\d{1,2})\s*[.\-\/월]\s*(\d{1,2})/g;
+  var RE_FULL = /(20\d{2}|\d{2})\s*[.\-\/년]\s*(\d{1,2})\s*[.\-\/월]\s*(\d{1,2})(?!\d)/g;
   var RE_8 = /(?:^|[^\d])(20\d{2})(\d{2})(\d{2})(?!\d)/g;
   var RE_MD = /(?:^|[^\d.])(\d{1,2})\s*[.\/월]\s*(\d{1,2})\s*(?:일)?\s*까지/g;
 
   function fixOcr(s) {
-    // 숫자 사이에 끼어든 O, o, l, I 같은 글자를 숫자로
-    return String(s)
-      .replace(/(?<=[\d.\-\/])[Oo](?=[\d.\-\/\s]|$)|[Oo](?=\d)/g, '0')
-      .replace(/(?<=\d)[lI|](?=[\d.\-\/])|(?<=[.\-\/])[lI|](?=\d)/g, '1');
+    // 숫자 사이에 끼어든 O, o, l, I 같은 글자를 숫자로 (II처럼 여러 개 붙어도)
+    var t = String(s), prev;
+    do {
+      prev = t;
+      t = t.replace(/(?<=[\d.\-\/])[Oo](?=[\d.\-\/\s]|$)|[Oo](?=\d)/g, '0')
+        .replace(/(?<=[\d.\-\/])[lI|](?=[\d.\-\/lI|]|$)|(?<=[.\-\/])[lI|](?=\d)|[lI|](?=\d)(?<=\s[lI|])/g, '1');
+    } while (t !== prev);
+    return t;
   }
+  // 포장지용: 점 찍힌 인쇄 글자에서 자주 틀리는 글자까지 (숫자가 많은 덩어리 안에서만)
+  function fixOcrLoose(s) {
+    return fixOcr(s).replace(/[0-9OoIl|SBZD.\-\/:,·]{6,}/g, function (w) {
+      if ((w.match(/\d/g) || []).length < 4) return w;
+      return w.replace(/[Oo D]/g, '0').replace(/[Il|]/g, '1').replace(/S/g, '5').replace(/B/g, '8').replace(/Z/g, '2');
+    });
+  }
+  var MON = { JAN: 1, FEB: 2, MAR: 3, APR: 4, MAY: 5, JUN: 6, JUL: 7, AUG: 8, SEP: 9, OCT: 10, NOV: 11, DEC: 12 };
+  var RE_SEP = /(20\d{2}|\d{2})\s*[,:·․‧]\s*(\d{1,2})\s*[,:·․‧]\s*(\d{1,2})(?!\d)/g;          // 2026,11,03 · 2026:11:03
+  var RE_SP = /(?:^|[^\d])(20\d{2}|\d{2})\s+(\d{2})\s+(\d{2})(?!\d)/g;                      // 2026 11 03 · 26 11 03
+  var RE_6 = /(?:^|[^\d])(\d{2})(\d{2})(\d{2})(?![\d])/g;                                  // 261103
+  var RE_Y4 = /(?:^|[^\d])(20\d{2})\s*[.\-\/]\s*(\d{2})(\d{2})(?!\d)/g;                     // 2026.1103
+  var RE_DMY = /(?:^|[^\d])(\d{1,2})\s*[.\-\/]\s*(\d{1,2})\s*[.\-\/]\s*(20\d{2})(?!\d)/g;    // 03/11/2026
+  var RE_MON = /(?:(\d{1,2})\s*([A-Z]{3})[A-Z]*\.?\s*(20\d{2}|\d{2})|(20\d{2})\s*([A-Z]{3})[A-Z]*\.?\s*(\d{1,2})|([A-Z]{3})[A-Z]*\.?\s*(\d{1,2}),?\s*(20\d{2}))/gi;
 
-  function findDates(lines, today) {
+  function findDates(lines, today, loose) {
     var out = [];
     var ty = parseYmd(today).getFullYear();
     lines.forEach(function (raw, idx) {
-      var line = fixOcr(raw);
+      var line = loose ? fixOcrLoose(raw) : fixOcr(raw);
       var used = [];
       var m;
+      function add(d, at, len, noYear) { if (!d) return; out.push(noYear ? { date: d, line: raw, idx: idx, noYear: true } : { date: d, line: raw, idx: idx }); used.push([at, at + len]); }
+      function free(at) { return !used.some(function (u) { return at >= u[0] && at < u[1]; }); }
       RE_FULL.lastIndex = 0;
       while ((m = RE_FULL.exec(line))) {
         var y = +m[1]; if (y < 100) y += 2000;
-        var d = validYmd(y, +m[2], +m[3]);
-        if (d) { out.push({ date: d, line: raw, idx: idx }); used.push([m.index, m.index + m[0].length]); }
+        add(validYmd(y, +m[2], +m[3]), m.index, m[0].length);
       }
       RE_8.lastIndex = 0;
-      while ((m = RE_8.exec(line))) {
-        d = validYmd(+m[1], +m[2], +m[3]);
-        if (d) out.push({ date: d, line: raw, idx: idx });
+      while ((m = RE_8.exec(line))) add(validYmd(+m[1], +m[2], +m[3]), m.index, m[0].length);
+      if (loose) {
+        [RE_SEP, RE_Y4, RE_SP].forEach(function (re) {
+          re.lastIndex = 0;
+          while ((m = re.exec(line))) { if (!free(m.index + 1)) continue; var yy = +m[1]; if (yy < 100) yy += 2000; add(validYmd(yy, +m[2], +m[3]), m.index, m[0].length); }
+        });
+        RE_DMY.lastIndex = 0;
+        while ((m = RE_DMY.exec(line))) {
+          if (!free(m.index + 1)) continue;
+          var a = +m[1], b = +m[2];
+          add(a > 12 || b <= 12 ? validYmd(+m[3], b, a) || validYmd(+m[3], a, b) : validYmd(+m[3], a, b), m.index, m[0].length);
+        }
+        RE_MON.lastIndex = 0;
+        while ((m = RE_MON.exec(line))) {
+          var mo = MON[String(m[2] || m[5] || m[7]).toUpperCase()]; if (!mo) continue;
+          var y2 = +(m[3] || m[4] || m[9]); if (y2 < 100) y2 += 2000;
+          add(validYmd(y2, mo, +(m[1] || m[6] || m[8])), m.index, m[0].length);
+        }
+        RE_6.lastIndex = 0;
+        while ((m = RE_6.exec(line))) { if (!free(m.index + 1)) continue; add(validYmd(2000 + +m[1], +m[2], +m[3]), m.index, m[0].length); }
       }
       RE_MD.lastIndex = 0;
       while ((m = RE_MD.exec(line))) {
         var at = m.index;
-        if (used.some(function (u) { return at >= u[0] && at < u[1]; })) continue;
-        d = validYmd(ty, +m[1], +m[2]);
+        if (!free(at)) continue;
+        var d = validYmd(ty, +m[1], +m[2]);
         if (d && diffDays(d, today) < -60) d = validYmd(ty + 1, +m[1], +m[2]);
         if (d) out.push({ date: d, line: raw, idx: idx, noYear: true });
       }
@@ -641,10 +701,13 @@ small.alt { display: block; font-size: 12.5px; font-weight: 600; color: var(--su
 
   // 포장지 사진의 글자에서 유통기한/소비기한 날짜 하나를 고른다
   function parseExpiry(lines, today) {
-    var all = findDates(lines, today).filter(function (c) {
-      var g = diffDays(c.date, today);
-      return g >= -60 && g <= 365 * 3;
-    });
+    function ok(c) { var g = diffDays(c.date, today); return g >= -60 && g <= 365 * 3; }
+    var all = findDates(lines, today, true).filter(ok);
+    if (!all.length) {
+      // 날짜가 두 줄로 나뉘어 읽힌 경우 ("2026.11." / "03") → 이웃한 줄을 붙여서 다시
+      var joined = lines.map(function (l, i) { return i + 1 < lines.length ? l + ' ' + lines[i + 1] : l; });
+      all = findDates(joined, today, true).filter(ok).map(function (c) { c.line = joined[c.idx]; return c; });
+    }
     if (!all.length) return null;
     function near(c, re) {
       if (re.test(c.line)) return true;
@@ -1934,6 +1997,78 @@ small.alt { display: block; font-size: 12.5px; font-weight: 600; color: var(--su
     if (!b) { b = document.createElement('div'); b.className = 'busy'; document.body.appendChild(b); }
     b.innerHTML = '<div><span class="spin"></span>' + esc(msg) + '</div>';
   }
+
+  // ── 날짜 고르기: 년·월·일을 각각 눌러서 고름 (폰 기본 달력 대신) ──
+  var VALD = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+  var DPW = ['일', '월', '화', '수', '목', '금', '토'];
+  function enhanceDates(root) {
+    $$('input[type=date]:not([data-dp])', root).forEach(function (inp) {
+      inp.setAttribute('data-dp', '1');
+      var w = document.createElement('span');
+      var big = inp.classList.contains('inp');
+      w.className = 'dp' + (big ? ' big' : '');
+      w.innerHTML = '<button type="button" data-k="y"></button><button type="button" data-k="m"></button><button type="button" data-k="d"></button>';
+      inp.parentNode.insertBefore(w, inp.nextSibling);
+      inp.classList.add('dp-hid');
+      var bs = $$('button', w);
+      function label() {
+        var v = VALD.get.call(inp), p = /^\d{4}-\d{2}-\d{2}$/.test(v) ? v.split('-') : null;
+        bs[0].textContent = p ? p[0] + '년' : '년'; bs[1].textContent = p ? +p[1] + '월' : '월';
+        bs[2].textContent = p ? +p[2] + '일' + (big ? ' (' + DPW[G.parseYmd(v).getDay()] + ')' : '') : '일';
+        w.classList.toggle('empty', !p);
+        bs[0].setAttribute('aria-label', '년 고르기 ' + bs[0].textContent); bs[1].setAttribute('aria-label', '월 고르기 ' + bs[1].textContent); bs[2].setAttribute('aria-label', '일 고르기 ' + bs[2].textContent);
+      }
+      // 코드에서 값을 바꿔도 글자가 따라오게
+      Object.defineProperty(inp, 'value', { configurable: true, get: function () { return VALD.get.call(inp); }, set: function (v) { VALD.set.call(inp, v); label(); } });
+      bs.forEach(function (b) { b.onclick = function (e) { e.preventDefault(); e.stopPropagation(); dpOpen(inp, b.dataset.k, label); }; });
+      label();
+    });
+  }
+  function dpOpen(inp, k, label) {
+    var old = $('.dpdim'); if (old) old.remove();
+    var v = inp.value, fresh = !/^\d{4}-\d{2}-\d{2}$/.test(v);
+    var c = G.parseYmd(fresh ? today() : v), y = c.getFullYear(), m = c.getMonth() + 1, d = c.getDate();
+    var ty = +today().slice(0, 4);
+    var dim = document.createElement('div'); dim.className = 'dpdim';
+    document.body.appendChild(dim);
+    function dim2(yy, mm) { return new Date(yy, mm, 0).getDate(); }
+    function apply(close) {
+      d = Math.min(d, dim2(y, m));
+      inp.value = y + '-' + G.pad(m) + '-' + G.pad(d);
+      inp.dispatchEvent(new Event('input', { bubbles: true })); inp.dispatchEvent(new Event('change', { bubbles: true }));
+      label();
+      if (close) dim.remove(); else draw();
+    }
+    function draw() {
+      var h = '<div class="dpbox" role="dialog" aria-label="날짜 고르기"><div class="dptabs">' +
+        [['y', y + '년'], ['m', m + '월'], ['d', Math.min(d, dim2(y, m)) + '일']].map(function (x) { return '<button data-t="' + x[0] + '" class="' + (k === x[0] ? 'on' : '') + '">' + x[1] + '</button>'; }).join('') + '</div><div class="dpgrid ' + k + '">';
+      if (k === 'y') { for (var i = ty + 15; i >= ty - 100; i--) h += '<button data-v="' + i + '" class="' + (i === y ? 'on' : '') + (i === ty ? ' now' : '') + '">' + i + '</button>'; }
+      else if (k === 'm') { for (var j = 1; j <= 12; j++) h += '<button data-v="' + j + '" class="' + (j === m ? 'on' : '') + '">' + j + '월</button>'; }
+      else {
+        h += DPW.map(function (w, i) { return '<span class="wd' + (i === 0 ? ' sun' : i === 6 ? ' sat' : '') + '">' + w + '</span>'; }).join('');
+        var first = new Date(y, m - 1, 1).getDay(), n = dim2(y, m), td = today();
+        for (var e = 0; e < first; e++) h += '<span></span>';
+        for (var q = 1; q <= n; q++) { var ds = y + '-' + G.pad(m) + '-' + G.pad(q); h += '<button data-v="' + q + '" class="' + (q === d ? 'on' : '') + (ds === td ? ' now' : '') + '">' + q + '</button>'; }
+      }
+      h += '</div><div class="dpfoot"><button data-today>오늘</button><button data-close>닫기</button></div></div>';
+      dim.innerHTML = h;
+      $$('[data-t]', dim).forEach(function (b) { b.onclick = function () { k = b.dataset.t; draw(); }; });
+      $$('.dpgrid [data-v]', dim).forEach(function (b) {
+        b.onclick = function () {
+          var n = +b.dataset.v;
+          if (k === 'y') { y = n; k = fresh ? 'm' : k; } else if (k === 'm') { m = n; k = fresh ? 'd' : k; } else d = n;
+          var done = !fresh || b.closest('.dpgrid').classList.contains('d');
+          apply(done);
+        };
+      });
+      $('[data-today]', dim).onclick = function () { var t = G.parseYmd(today()); y = t.getFullYear(); m = t.getMonth() + 1; d = t.getDate(); apply(true); };
+      $('[data-close]', dim).onclick = function () { dim.remove(); };
+      var on = $('.dpgrid.y .on', dim); if (on) on.scrollIntoView({ block: 'center' });
+    }
+    dim.addEventListener('click', function (e) { if (e.target === dim) dim.remove(); });
+    draw();
+  }
+  try { new MutationObserver(function () { if (document.querySelector('input[type=date]:not([data-dp])')) enhanceDates(document); }).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
 
   // ── 시트 ──
   var sheetClose = null;
@@ -3621,7 +3756,8 @@ small.alt { display: block; font-size: 12.5px; font-weight: 600; color: var(--su
       d.dateNote = '사진에서 <b>' + esc(r.line.trim()) + '</b> 을(를) 읽었어요. 맞는지 확인해 주세요.';
       toast(r.kind + ' ' + fullDate(r.date) + ' 읽었어요');
     } else {
-      d.dateNote = '사진에서 날짜를 찾지 못했어요. 날짜 부분만 가까이 찍어 보세요.';
+      var seen = lines.map(function (l) { return String(l).trim(); }).filter(Boolean).slice(0, 3).join(' / ');
+      d.dateNote = '사진에서 날짜를 찾지 못했어요. ' + (seen ? '읽은 글자: <b>' + esc(seen.slice(0, 60)) + '</b> · ' : '') + '날짜 부분만 가까이 찍거나, 아래 년·월·일을 눌러 골라 주세요.';
       toast('날짜를 찾지 못했어요', 2600);
     }
     openForm(d);
@@ -4086,11 +4222,10 @@ small.alt { display: block; font-size: 12.5px; font-weight: 600; color: var(--su
   }
 
   // ════════ 새로 생긴 기능 ════════
-  var NEWS = { id: 'v9-2026-10', items: [
-    ['wallet', '달러도 계산해요', '금액 칸 옆 원/$를 눌러 달러로 넣어요. 해외 구독·직구 가격도 원으로 바꿔 합계와 단가 비교에 넣어요.'],
-    ['gear', '설정 → 돈 · 화폐', '기본 화폐(원/달러)와 달러 환율을 직접 정해요. 기본 환율은 1달러 1,336원(10월 29일)이에요.'],
-    ['scale', '화폐 같이 보기', '켜면 "13,500원 ($10.10)"처럼 다른 화폐도 같이, 끄면 고른 화폐만 보여요.'],
-    ['mic', '말로 달러 넣기', '"커피 4.5달러", "샴푸 십 불"처럼 말해도 알아들어요.']
+  var NEWS = { id: 'v10-2026-11', items: [
+    ['cal', '날짜를 년·월·일 따로 고르기', '날짜 칸의 "년"을 누르면 년도만, "월"을 누르면 1~12월만, "일"을 누르면 그달 달력이 떠요.'],
+    ['cam', '포장지 날짜를 더 잘 읽어요', '261103, 2026 11 03, 2026:11:03, NOV 03 2026처럼 찍힌 날짜와 두 줄로 나뉜 날짜도 읽어요.'],
+    ['wallet', '달러도 계산 (v1.9)', '금액 칸 옆 원/$, 설정 → 돈 · 화폐에서 환율과 화폐 같이 보기를 정해요.']
   ] };
   function showNews() {
     S.set.news = NEWS.id; persist();
@@ -4448,6 +4583,7 @@ small.alt { display: block; font-size: 12.5px; font-weight: 600; color: var(--su
     var due = dueNow();
     view = prevView = due.length ? due[0].it.cat : tabsOn()[0];
     window.onBackKey = function () {
+      if ($('.dpdim')) { $('.dpdim').remove(); return true; }
       if ($('.dim')) { closeSheet(); return true; }
       if (view === 'settings') { go(prevView); return true; }
       return false;
