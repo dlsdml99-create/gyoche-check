@@ -258,6 +258,9 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px s
 .urow span:nth-child(2) { flex: 1; min-width: 0; }
 
 /* 왼쪽 아래 버전 */
+.dp.need { border-radius: 12px; outline: 2.5px solid var(--bad, #d64545); outline-offset: 3px; animation: dpshake .45s 2; }
+@keyframes dpshake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+@media (prefers-reduced-motion: reduce) { .dp.need { animation: none; } }
 .ver { position: fixed; left: max(10px, env(safe-area-inset-left, 0px)); bottom: calc(64px + env(safe-area-inset-bottom, 0px)); z-index: 14; font-size: 11px; color: var(--sub); background: var(--veil); border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; }
 .ver b { font-weight: 700; color: var(--ink); }
 .ver .ok { color: var(--ok); font-weight: 700; } .ver .new { color: var(--soon); font-weight: 700; }
@@ -506,6 +509,12 @@ input.dp-hid { display: none !important; }
   function ymd(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
   function parseYmd(s) { var p = String(s).split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
   function addDays(s, n) { var d = parseYmd(s); d.setDate(d.getDate() + n); return ymd(d); }
+  // 주기를 달력 기준으로: 30일 단위는 개월, 365일 단위는 년으로 더한다 (6개월 = 180일이 아니라 같은 날짜)
+  function addCycle(s, n) {
+    if (n >= 28 && n % 365 === 0) return addMonths(s, n / 365 * 12);
+    if (n >= 28 && n % 30 === 0) return addMonths(s, n / 30);
+    return addDays(s, n);
+  }
   function diffDays(a, b) { return Math.round((parseYmd(a) - parseYmd(b)) / 864e5); } // a - b
   function validYmd(y, m, d) {
     if (m < 1 || m > 12 || d < 1 || d > 31) return null;
@@ -770,7 +779,7 @@ input.dp-hid { display: none !important; }
       if (g) {
         it.cat = g.cat; it.mode = g.mode; it.loc = g.loc;
         if (g.mode === 'expiry') { it.due = addDays(buy, g.est); it.est = g.est; }
-        else { it.start = buy; it.days = g.days; it.due = addDays(buy, g.days); }
+        else { it.start = buy; it.days = g.days; it.due = addCycle(buy, g.days); }
       } else {
         it.cat = 'food'; it.mode = 'expiry'; it.loc = '냉장'; it.est = 7; it.due = addDays(buy, 7);
       }
@@ -790,7 +799,7 @@ input.dp-hid { display: none !important; }
   function itemDue(it, car, today) {
     if (it.mode === 'car') return carStatus(it, car || {}, today || ymd(new Date())).due;
     if (it.mode === 'dday') return ddayInfo(it, today || ymd(new Date())).due;
-    return it.mode === 'cycle' ? addDays(it.start, it.days) : it.due;
+    return it.mode === 'cycle' ? addCycle(it.start, it.days) : it.due;
   }
 
   // ── 자동차 ──
@@ -807,7 +816,7 @@ input.dp-hid { display: none !important; }
   function carStatus(it, car, today) {
     var curKm = car && car.km != null ? +car.km : null;
     var kmLeft = it.intKm && curKm != null && it.lastKm != null ? it.lastKm + it.intKm - curKm : null;
-    var dateDue = it.intDays ? addDays(it.lastDate, it.intDays) : null;
+    var dateDue = it.intDays ? addCycle(it.lastDate, it.intDays) : null;
     var rate = kmRate(car);
     var kmDue = kmLeft != null && rate ? addDays(today, Math.floor(kmLeft / rate)) : null;
     var due = dateDue && kmDue ? (dateDue < kmDue ? dateDue : kmDue) : (dateDue || kmDue);
@@ -1364,7 +1373,7 @@ input.dp-hid { display: none !important; }
       var am = parseAmount(name); if (am) { it.amt = am.amt; it.unit = am.unit; }
       if (g) {
         it.cat = g.cat; it.mode = g.mode; it.loc = g.loc;
-        if (g.mode === 'expiry') { it.due = addDays(buy, g.est); it.est = g.est; } else { it.start = buy; it.days = g.days; it.due = addDays(buy, g.days); }
+        if (g.mode === 'expiry') { it.due = addDays(buy, g.est); it.est = g.est; } else { it.start = buy; it.days = g.days; it.due = addCycle(buy, g.days); }
       } else { it.cat = 'food'; it.mode = 'expiry'; it.loc = '냉장'; it.est = 7; it.due = addDays(buy, 7); }
       items.push(it); last = it;
     });
@@ -1456,7 +1465,7 @@ input.dp-hid { display: none !important; }
     REPEATS: REPEATS, repeatStart: repeatStart, runout: runout, zeroChallenge: zeroChallenge, yearStats: yearStats, parseVoice: parseVoice, sinoNum: sinoNum,
     parseAmount: parseAmount, unitPrice: unitPrice, compareKey: compareKey, priceCheck: priceCheck,
     SUBS: SUBS, ANNIVS: ANNIVS, addMonths: addMonths, nextRepeat: nextRepeat, ddayInfo: ddayInfo, fixedCost: fixedCost,
-    pad: pad, ymd: ymd, parseYmd: parseYmd, addDays: addDays, diffDays: diffDays,
+    pad: pad, ymd: ymd, parseYmd: parseYmd, addDays: addDays, addCycle: addCycle, diffDays: diffDays,
     CATS: CATS, LOCS: LOCS, PRESETS: PRESETS, fmtKm: fmtKm, kmRate: kmRate, carStatus: carStatus, presetByName: presetByName, guess: guess,
     findDates: findDates, parseExpiry: parseExpiry, parseReceipt: parseReceipt, cleanName: cleanName,
     itemDue: itemDue, status: status, dueToday: dueToday, monthStats: monthStats, shiftMonth: shiftMonth,
@@ -2001,6 +2010,16 @@ input.dp-hid { display: none !important; }
   // ── 날짜 고르기: 년·월·일을 각각 눌러서 고름 (폰 기본 달력 대신) ──
   var VALD = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
   var DPW = ['일', '월', '화', '수', '목', '금', '토'];
+  // 날짜가 비어 있으면: 날짜 칸으로 스크롤하고 빨간 테두리로 표시한 뒤, 비어 있는 칸(년→월→일)을 바로 연다
+  function needDate(msg) {
+    var w = $$('.sheet .dp.empty').filter(function (x) { return x.offsetParent; })[0] || $$('.sheet .dp').filter(function (x) { return x.offsetParent; })[0];
+    toast(msg || '날짜를 넣어주세요.');
+    if (!w) return;
+    try { w.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { w.scrollIntoView(); }
+    w.classList.remove('need'); void w.offsetWidth; w.classList.add('need');
+    setTimeout(function () { w.classList.remove('need'); }, 2600);
+    setTimeout(function () { var b = $('button[data-k="y"]', w); if (b && !$('.dpdim')) b.click(); }, 500);
+  }
   function enhanceDates(root) {
     $$('input[type=date]:not([data-dp])', root).forEach(function (inp) {
       inp.setAttribute('data-dp', '1');
@@ -2615,7 +2634,7 @@ input.dp-hid { display: none !important; }
       function nextHint() {
         var nx = $('#f-next', el); if (!nx) return;
         sync();
-        nx.innerHTML = d.start ? (d.cat === 'food' ? '이 날까지 먹기: ' : '다음 교체일: ') + '<b>' + fullDate(G.addDays(d.start, d.days)) + '</b>' : '';
+        nx.innerHTML = d.start ? (d.cat === 'food' ? '이 날까지 먹기: ' : '다음 교체일: ') + '<b>' + fullDate(G.addCycle(d.start, d.days)) + '</b>' : '';
       }
       nextHint();
       ['#f-start', '#f-num', '#f-unit'].forEach(function (s) { var x = $(s, el); if (x) x.oninput = x.onchange = nextHint; });
@@ -2896,7 +2915,7 @@ input.dp-hid { display: none !important; }
 
   function saveDraft(d) {
     if (!d.name) { toast('이름을 넣어주세요.'); return; }
-    if (d.mode === 'expiry' && !d.due) { toast('날짜를 넣어주세요.'); return; }
+    if (d.mode === 'expiry' && !d.due) { needDate('날짜를 넣어주세요. 날짜 칸을 열어 둘게요.'); return; }
     if (d.mode === 'cycle' && (!d.start || !d.days)) { toast('시작일과 주기를 넣어주세요.'); return; }
     var it = d.id ? S.items.filter(function (x) { return x.id === d.id; })[0] : null;
     if (!it) { it = { id: uid(), created: today() }; S.items.push(it); }
@@ -3591,7 +3610,7 @@ input.dp-hid { display: none !important; }
       $('[data-save]', el).onclick = function () {
         sync();
         if (!d.name) { toast('이름을 넣어주세요'); return; }
-        if (k === 'anniv' || k === 'repeat' ? !d.date : !d.start) { toast('날짜를 넣어주세요'); return; }
+        if (k === 'anniv' || k === 'repeat' ? !d.date : !d.start) { needDate('날짜를 넣어주세요. 날짜 칸을 열어 둘게요.'); return; }
         if (k === 'sub' && d.trialEnd && d.trialEnd < d.start) { toast('무료 체험 끝나는 날이 가입한 날보다 빨라요'); return; }
         var it = d.id ? S.items.filter(function (x) { return x.id === d.id; })[0] : null;
         if (!it) { it = { id: uid(), created: today() }; S.items.push(it); }
@@ -3789,7 +3808,7 @@ input.dp-hid { display: none !important; }
       it.cat = g ? g.cat : (CAT_TABS.indexOf(view) >= 0 && view !== 'car' && view !== 'dday' ? view : 'food');
       it.mode = g ? g.mode : (it.cat === 'food' ? 'expiry' : 'cycle');
       it.loc = g ? g.loc : G.LOCS[it.cat][0];
-      if (it.mode === 'cycle') { it.start = t; it.days = g && g.days ? g.days : (it.cat === 'food' ? 3 : 90); it.due = G.addDays(t, it.days); }
+      if (it.mode === 'cycle') { it.start = t; it.days = g && g.days ? g.days : (it.cat === 'food' ? 3 : 90); it.due = G.addCycle(t, it.days); }
       else { it.est = g && g.est || 7; it.due = v.due || G.addDays(t, it.est); }
       var am = G.parseAmount(v.name); if (am) { it.amt = am.amt; it.unit = am.unit; }
       return it;
@@ -4605,7 +4624,7 @@ input.dp-hid { display: none !important; }
 })();
 </script>
 <!--APPINFO--><script>
-window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 기기에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때와, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄)만 써요."};
+window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.01", "items": ["날짜 없이 등록하면 날짜 칸으로 바로 데려가 빨갛게 표시하고, 년도 고르기를 열어 줘요", "6개월·1년 같은 교체 주기를 달력 기준으로 계산해요 (11월 1일 + 6개월 = 5월 1일)"]}, {"v": "v1.12", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 기기에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때와, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄)만 써요."};
 window.APP_INFO.online=!!(window.Android&&window.Android.version);
 window.APP_INFO.version=function(){try{return window.Android.version()}catch(e){return '1.10'}};
 </script>
