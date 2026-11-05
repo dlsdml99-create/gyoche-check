@@ -40,14 +40,10 @@ jobs:
           fi
           export KEY_PASS="${SIGNING%%:*}"
           echo "${SIGNING#*:}" | base64 -d > app/gyoche.jks
-          if gradle assembleRelease --no-daemon; then
-            cp app/build/outputs/apk/release/app-release.apk gyoche-check.apk
-          else
-            echo "::warning::release build failed, using debug build"
-            gradle assembleDebug --no-daemon
-            cp app/build/outputs/apk/debug/app-debug.apk gyoche-check.apk
-          fi
-          rm -f app/gyoche.jks
+          # 보안: 배포용(release) 빌드만 올림. 실패하면 디버그 빌드(내부를 들여다볼 수 있음)로 대신하지 않고 멈춤
+          trap 'rm -f app/gyoche.jks' EXIT
+          gradle assembleRelease --no-daemon
+          cp app/build/outputs/apk/release/app-release.apk gyoche-check.apk
           ls -la gyoche-check.apk
       - name: Publish APK
         env:
@@ -60,6 +56,7 @@ jobs:
           gh release create "v${{ github.run_number }}" gyoche-check.apk --latest --title "챙김이 v1.${{ github.run_number }}" --notes-file notes.md
       - name: Build download page
         run: |
+          python3 .github/webapp.py "${{ github.run_number }}"
           sed -i "s/__N__/${{ github.run_number }}/g; s/__MB__/$(du -m gyoche-check.apk | cut -f1)/g" site/index.html site/guide.html
       - uses: actions/upload-pages-artifact@v5
         with:

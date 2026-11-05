@@ -83,6 +83,9 @@ public class MainActivity extends Activity {
         // 앱 화면(assets)만 열고, 폰의 다른 파일·콘텐츠는 화면에서 못 읽게
         s.setAllowFileAccess(false);
         s.setAllowContentAccess(false);
+        s.setAllowFileAccessFromFileURLs(false);
+        s.setAllowUniversalAccessFromFileURLs(false);
+        WebView.setWebContentsDebuggingEnabled(false);
         web.addJavascriptInterface(new Bridge(), "Android");
         web.setWebViewClient(new WebViewClient() {
             @Override
@@ -96,7 +99,8 @@ public class MainActivity extends Activity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) {
                 Uri u = req.getUrl();
-                if ("file".equals(u.getScheme())) return false;
+                // 앱 안 화면(assets)만 이 창에서 열고, 다른 파일 주소는 막음. 바깥 링크는 브라우저로
+                if ("file".equals(u.getScheme())) return !String.valueOf(u.getPath()).startsWith("/android_asset/");
                 try { startActivity(new Intent(Intent.ACTION_VIEW, u)); } catch (Exception ignored) {}
                 return true;
             }
