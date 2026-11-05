@@ -270,6 +270,9 @@ public class Reminder {
         r.text = sb.toString();
         if (r.dish != null) big.append("\n\n🍳 ").append(r.dish);
         if (r.season != null) big.append("\n\n🍃 ").append(r.season);
+        // 오늘 옷 추천 (앱에서 입은 옷을 기록하는 사람만, 챙길 게 있어 알림이 갈 때 한 줄)
+        String outfit = d.optString("outfit", "");
+        if (r.count > 0 && !outfit.isEmpty()) big.append("\n\n👕 ").append(outfit);
         r.big = big.toString();
         r.widget = w.length() > 0 ? w.toString() : "기한이 다가오면 여기에 보여드려요";
         return r;

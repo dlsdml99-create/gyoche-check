@@ -557,6 +557,28 @@ input.dp-hid { display: none !important; }
 .wtile .ws.rep { color: var(--soon); font-weight: 700; }
 .wtile .ck { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%; background: var(--brand); color: #fff; display: none; place-items: center; font-size: 13px; font-weight: 700; }
 .wtile.on .ck { display: grid; }
+.wx { display: flex; align-items: center; gap: 8px; background: var(--brand-soft); color: var(--ink); border-radius: 12px; padding: 9px 12px; font-size: 13.5px; margin: 0 0 12px; }
+.wx b { color: var(--brand); }
+.wx svg { width: 18px; height: 18px; flex: none; color: var(--brand); }
+.wtile.off { opacity: .55; }
+.ofits { display: flex; gap: 6px; overflow-x: auto; margin: 0 -4px 12px; padding: 0 4px 2px; }
+.ofit { flex: none; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 4px 6px 4px 4px; font-size: 13px; }
+.ofit .oi { display: flex; }
+.ofit .oi img, .ofit .oi i { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; margin-right: -6px; box-shadow: 0 0 0 2px var(--card); background: var(--bg); display: grid; place-items: center; }
+.ofit .oi i svg { width: 13px; height: 13px; color: var(--clothes); }
+.ofit .on2 { padding-left: 8px; max-width: 130px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ofit .ox { width: 22px; height: 22px; border-radius: 50%; color: var(--sub); font-size: 15px; line-height: 1; }
+.tidy { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--soon-soft); color: var(--ink); border-radius: 12px; padding: 10px 12px; font-size: 13.5px; margin-top: 10px; text-align: left; }
+.tidy svg { color: var(--soon); flex: none; }
+.tidyrow { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.tidyrow:last-child { border-bottom: 0; }
+.tidyrow .ti { width: 46px; height: 46px; border-radius: 10px; overflow: hidden; background: var(--bg); flex: none; display: grid; place-items: center; }
+.tidyrow .ti img { width: 100%; height: 100%; object-fit: cover; }
+.tidyrow .ti svg { width: 22px; height: 22px; color: var(--clothes); }
+.tidyrow .tm { flex: 1; min-width: 0; }
+.tidyrow .tm b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tidyrow .tm small { color: var(--sub); font-size: 12.5px; }
+.tidyrow .btn { padding: 7px 10px; font-size: 13px; }
 </style></head>
 <body><main id="app"></main>
 <script>// 교체 체크 — 화면과 상관없는 계산·인식 규칙 (node로 테스트 가능)
@@ -910,6 +932,7 @@ input.dp-hid { display: none !important; }
   }
 
   function status(it, today, car) {
+    if (it.noCycle) return { left: 99999, state: 'ok', label: '옷장' };
     if (it.mode === 'car') return carStatus(it, car || {}, today);
     if (it.mode === 'dday') {
       var f = ddayInfo(it, today);
@@ -1907,6 +1930,7 @@ input.dp-hid { display: none !important; }
     // 오늘 입은 옷: { 'YYYY-MM-DD': [물건 id] } 모양만 받음 (백업 파일이 망가져도 안전하게)
     var wr = s.wear && typeof s.wear === 'object' && !Array.isArray(s.wear) ? s.wear : {};
     s.wear = {};
+    s.outfits = Array.isArray(s.outfits) ? s.outfits.filter(function (o) { return o && typeof o.id === 'string' && typeof o.name === 'string' && Array.isArray(o.ids); }).map(function (o) { return { id: o.id, name: o.name, ids: o.ids.filter(function (x) { return typeof x === 'string'; }) }; }) : [];
     Object.keys(wr).forEach(function (k) { if (/^\d{4}-\d{2}-\d{2}$/.test(k) && Array.isArray(wr[k])) { var a = wr[k].filter(function (x) { return typeof x === 'string'; }); if (a.length) s.wear[k] = a; } });
     if (!Array.isArray(s.set.tabs) || !s.set.tabs.length) s.set.tabs = CAT_TABS.slice();
     // 예전 버전의 보관 위치를 새 탭 분류로
@@ -2035,7 +2059,7 @@ input.dp-hid { display: none !important; }
         if (!f.repeat) break;
       }
     });
-    items = items.concat(activeItems().filter(function (i) { return i.mode !== 'dday'; }).map(function (i) {
+    items = items.concat(activeItems().filter(function (i) { return i.mode !== 'dday' && !i.noCycle; }).map(function (i) {
       if (i.mode !== 'car') {
         var o0 = { id: i.id, name: i.name, cat: i.cat, due: G.itemDue(i), alert: i.alert };
         if (i.cat === 'food' && window.GR) {
@@ -2055,6 +2079,7 @@ input.dp-hid { display: none !important; }
     var ll = lastLog();
     try {
       A.sync(JSON.stringify({ chk: checkBase(), notify: !!S.set.notify, hour: +t[0], minute: +t[1], items: items, kmDate: hasCar && ll ? ll.date : null,
+        outfit: isOn('clothes') ? outfitHint() : '',
         seasons: G.SEASONS.filter(function (x) { return isOn(x.cat) && (x.cat !== 'car' || hasCar); }).map(function (x) { return { from: x.from, text: x.text }; }) }));
     } catch (e) {}
   }
@@ -2251,6 +2276,9 @@ input.dp-hid { display: none !important; }
       pct = Math.max(0, Math.min(100, s.frac * 100));
     } else if (it.mode === 'dday') {
       meta = ddayMeta(it, s.info);
+    } else if (it.noCycle) {
+      var lw = lastWorn(it.id, G.addDays(t, 1));
+      meta = it.loc + ' · ' + (lw ? '마지막으로 ' + (G.diffDays(t, lw) === 0 ? '오늘' : G.diffDays(t, lw) + '일 전') + ' 입었어요' : '아직 입은 기록 없어요');
     } else if (it.mode === 'cycle') {
       meta = it.cat === 'food' ? md(G.itemDue(it)) + '까지 먹기 · 만든 지 ' + Math.max(0, G.diffDays(t, it.start)) + '일' : '교체일 ' + md(G.itemDue(it)) + ' · ' + cycleText(it.days) + ' 주기';
       pct = Math.max(0, Math.min(100, G.diffDays(t, it.start) / it.days * 100));
@@ -2524,7 +2552,7 @@ input.dp-hid { display: none !important; }
     else if (a === 'barcode') startBarcode(newDraft(cat), true);
     else if (a === 'receipt') startOcr('receipt', null);
     else if (a === 'voice') startVoice();
-    else if (a === 'wphoto') { var dw = newDraft('clothes'); dw.loc = '상의'; dw.days = 730; dw.alert = 0; pickPhotoFor(dw, openForm); }
+    else if (a === 'wphoto') { var dw = newDraft('clothes'); dw.loc = '상의'; dw.days = 730; dw.alert = 0; dw.noCycle = true; pickPhotoFor(dw, openForm); }
     else if (a === 'made') { var dm = newDraft('food'); dm.mode = 'cycle'; dm.days = 3; dm.alert = 1; openForm(dm); }
   }
 
@@ -2532,6 +2560,8 @@ input.dp-hid { display: none !important; }
   function newDraft(cat) {
     cat = cat || 'food';
     var d = { cat: cat, mode: cat === 'food' ? 'expiry' : 'cycle', kind: '유통기한', name: '', due: '', start: today(), days: 90, loc: G.LOCS[cat][0], alert: cat === 'food' ? 3 : 7 };
+    // 옷은 상의부터: 옷장으로만 관리(교체 주기 끔)가 기본
+    if (cat === 'clothes' && WEAR_LOCS.indexOf(d.loc) >= 0) { d.noCycle = true; d.days = 730; d.alert = 0; }
     return d;
   }
   function applyPreset(d, p) {
@@ -2686,7 +2716,10 @@ input.dp-hid { display: none !important; }
         [1, 2, 3, 4, 5, 7].map(function (n) { return '<button data-dd="' + n + '" class="' + (+d.days === n ? 'on' : '') + '">' + n + '일</button>'; }).join('') + '</div>' +
         '<input type="hidden" id="f-num" value="' + (d.days || 3) + '"><input type="hidden" id="f-unit" value="1">' +
         '<p class="hint" id="f-next"></p><p class="hint" id="f-hmh">' + hmHint(hm) + '</p></div>';
+    } else if (wearLoc && d.noCycle) {
+      h += seasonField(d) + '<div class="field"><span class="lbl">교체 주기</span><div class="seg" id="f-nc"><button data-nc="0">챙기기</button><button data-nc="1" class="on">끄기 (옷장으로만)</button></div></div>';
     } else {
+      if (wearLoc) h += seasonField(d) + '<div class="field"><span class="lbl">교체 주기</span><div class="seg" id="f-nc"><button data-nc="0" class="on">챙기기</button><button data-nc="1">끄기 (옷장으로만)</button></div></div>';
       var sl = d.startLabel || '사용 시작일';
       h += '<div class="field"><label for="f-start">' + esc(sl) + '</label><input class="inp" type="date" id="f-start" value="' + esc(d.start || today()) + '"></div>';
       h += '<div class="field"><span class="lbl">' + (d.cat === 'food' ? '며칠 안에 먹을까요' : '교체 주기') + '</span><div class="row"><input class="inp" type="number" inputmode="numeric" min="1" id="f-num" value="' + Math.round((d.days || 90) / u) + '" style="flex:1">' +
@@ -2695,7 +2728,7 @@ input.dp-hid { display: none !important; }
     }
     h += '<div class="field"><span class="lbl">' + (d.cat === 'food' ? '보관' : d.cat === 'clothes' ? '분류' : '쓰는 곳') + '</span><div class="presets" id="f-loc">' +
       G.LOCS[d.cat].map(function (l) { return '<button class="chip' + (d.loc === l ? ' on' : '') + '" data-l="' + l + '">' + l + '</button>'; }).join('') + '</div></div>';
-    h += '<div class="field"><label for="f-alert">미리 알림</label><select class="inp" id="f-alert">' +
+    if (!(wearLoc && d.noCycle)) h += '<div class="field"><label for="f-alert">미리 알림</label><select class="inp" id="f-alert">' +
       [0, 1, 2, 3, 5, 7, 14, 30].map(function (n) { return '<option value="' + n + '"' + (+d.alert === n ? ' selected' : '') + '>' + (n ? n + '일 전부터' : '당일에만') + '</option>'; }).join('') + '</select></div>';
     h += priceSection(d);
     h += memoField(d);
@@ -2707,7 +2740,7 @@ input.dp-hid { display: none !important; }
         if ($('#f-due', el)) d.due = $('#f-due', el).value;
         if ($('#f-start', el)) d.start = $('#f-start', el).value;
         if ($('#f-num', el)) d.days = Math.max(1, +$('#f-num', el).value || 1) * +$('#f-unit', el).value;
-        d.alert = +$('#f-alert', el).value;
+        if ($('#f-alert', el)) d.alert = +$('#f-alert', el).value;
         syncPrice(el, d);
         syncMemo(el, d);
       }
@@ -2758,7 +2791,7 @@ input.dp-hid { display: none !important; }
         b.onclick = function () {
           var was = WEAR_LOCS.indexOf(d.loc) >= 0, now = WEAR_LOCS.indexOf(b.dataset.l) >= 0;
           d.loc = b.dataset.l;
-          if (d.cat === 'clothes' && was !== now) { sync(); if (now && !edit && !d.preset && (d.days || 90) < 365) d.days = 730; openForm(d); return; }
+          if (d.cat === 'clothes' && was !== now) { sync(); if (now && !edit) { if (!d.preset && (d.days || 90) < 365) d.days = 730; if (d.noCycle == null) d.noCycle = true; } if (!now) delete d.noCycle; openForm(d); return; }
           $$('#f-loc button', el).forEach(function (x) { x.classList.toggle('on', x === b); });
         };
       });
@@ -2767,6 +2800,9 @@ input.dp-hid { display: none !important; }
         b.onclick = function () { sync(); if (b.dataset.scan === 'barcode') startBarcode(d, false); else startOcr('date', d); };
       });
       bindPhoto(el, d, sync, openForm);
+      $$('#f-nc [data-nc]', el).forEach(function (b) { b.onclick = function () { sync(); d.noCycle = b.dataset.nc === '1'; if (!d.noCycle && !d.days) d.days = 730; openForm(d); }; });
+      $$('#f-sea [data-sea]', el).forEach(function (b) { b.onclick = function () { d.season = b.dataset.sea; d.seaTouched = true; $$('#f-sea button', el).forEach(function (x) { x.classList.toggle('on', x === b); }); }; });
+      if (wearLoc) $('#f-name', el).addEventListener('input', function () { if (d.seaTouched) return; var g = seasonGuess($('#f-name', el).value); d.season = g; $$('#f-sea button', el).forEach(function (x) { x.classList.toggle('on', x.dataset.sea === g); }); });
       bindPrice(el, d);
       $$('[data-qty]', el).forEach(function (b) { b.onclick = function () { d.qty = Math.max(1, Math.min(99, qtyOf(d) + +b.dataset.qty)); $('#f-qty', el).textContent = d.qty; }; });
       $$('[data-q]', el).forEach(function (b) { b.onclick = function () { quickAdd(S.tpl[b.dataset.q]); }; });
@@ -3011,6 +3047,10 @@ input.dp-hid { display: none !important; }
     it.name = d.name; it.cat = d.cat; it.mode = d.mode; it.loc = d.loc; it.alert = d.alert;
     if (d.mode === 'expiry') { it.due = d.due; it.kind = d.kind; delete it.start; delete it.days; }
     else { it.start = d.start; it.days = d.days; delete it.due; delete it.kind; }
+    if (it.cat === 'clothes' && WEAR_LOCS.indexOf(it.loc) >= 0) {
+      if (d.noCycle) it.noCycle = true; else delete it.noCycle;
+      it.season = d.season || seasonGuess(it.name);
+    } else { delete it.noCycle; delete it.season; }
     var oldP = { price: it.price, cur: it.cur, store: it.store, amt: it.amt, qty: it.qty };
     if (d.price) it.price = d.price; else delete it.price;
     setCur(it, d.price, d.cur);
@@ -3191,6 +3231,7 @@ input.dp-hid { display: none !important; }
   // ── ⋮ 간단 수정: 이름·날짜·메모·냉동실로 옮기기 ──
   function quickDate(it) {
     if (it.mode === 'expiry') return { key: 'due', label: it.kind || '유통기한', kinds: true };
+    if (it.noCycle) return null;
     if (it.mode === 'cycle') return { key: 'start', label: it.cat === 'food' ? '만든 날·연 날' : '사용 시작일' };
     if (it.mode === 'car') return { key: 'lastDate', label: '마지막으로 바꾼 날' };
     if (it.mode === 'dday') {
@@ -3337,12 +3378,15 @@ input.dp-hid { display: none !important; }
     if (top.length) sum += '<div><span>자주 입은 옷</span><span>' + top.map(function (id) { return esc(nameOf(id)) + ' ' + monthIds[id] + '번'; }).join(' · ') + '</span></div>';
     if (recDays) sum += '<div><span>이달 안 입은 옷</span><span>' + (none.length ? esc(none.slice(0, 3).map(function (x) { return x.name; }).join(' · ')) + (none.length > 3 ? ' 외 ' + (none.length - 3) + '벌' : '') : '없어요 · 골고루 입었어요') + '</span></div>';
     h += '<div class="wsum">' + sum + '</div>';
+    var td = tidyList();
+    if (td.length) h += '<button class="tidy" data-tidy><span>' + TIDY_DAYS / 30 + '달 넘게 안 입은 옷 <b>' + td.length + '벌</b> · 정리할까요?</span>' + IC.right + '</button>';
     h += '<button class="btn pri block" data-wday="' + t + '" style="margin-top:10px">' + (wornOn(t).length ? '오늘 입은 옷 바꾸기' : '오늘 입은 옷 고르기') + '</button>';
     return h;
   }
   // 날짜별 고르기 화면
   function openWear(d, picked) {
     var t = today();
+    if (d === t) fetchWx(function () { if ($('.sheet .wx') && !picked) openWear(d, wornOn(d).slice()); });
     var items = wearItems();
     if (!items.length) { doAct('wphoto'); return; }
     var sel = picked || wornOn(d).slice();
@@ -3359,17 +3403,26 @@ input.dp-hid { display: none !important; }
       h += '<button class="chip' + (x === d ? ' on' : '') + '" data-wd="' + x + '">' + (x === t ? '오늘' : x === G.addDays(t, -1) ? '어제' : DPW[G.parseYmd(x).getDay()] + ' ' + (+x.slice(8))) + (wornOn(x).length ? ' ✓' : '') + '</button>';
     }
     h += '</div>';
-    h += '<div class="qe-acts"><button class="btn soft" data-wa="auto">안 겹치게 골라주기</button>' + (sel.length ? '<button class="btn" data-wa="clear">모두 빼기</button>' : '') + '</div>';
+    var sea = d === t ? todaySeason() : { key: monthSeason(d), src: 'month' };
+    h += '<div class="wx">' + IC.leaf + '<span>' + (sea.src === 'wx' ? '오늘 ' + esc(sea.city) + ' <b>' + sea.min + '~' + sea.max + '°C</b> · ' : (d === t ? '오늘은 ' : '이날은 ') + '계절로 보면 ') + '<b>' + SEASON_W[sea.key] + '</b> 옷을 먼저 보여드려요</span></div>';
+    var ofs = (S.outfits || []).filter(function (o) { return o.ids.some(function (id) { return items.some(function (x) { return x.id === id; }); }); });
+    if (ofs.length) h += '<p class="lbl">내 코디 <span style="font-weight:400">· 누르면 한 번에 골라져요</span></p><div class="ofits">' + ofs.map(function (o) {
+      var ids = o.ids.filter(function (id) { return items.some(function (x) { return x.id === id; }); });
+      return '<span class="ofit"><button class="oi" data-of="' + o.id + '" aria-label="' + esc(o.name) + ' 고르기">' + ids.slice(0, 3).map(function (id) { return PH[id] ? '<img alt="" src="' + PH[id] + '">' : '<i>' + IC.clothes + '</i>'; }).join('') + '</button><button class="on2" data-of="' + o.id + '">' + esc(o.name) + '</button><button class="ox" data-ofdel="' + o.id + '" aria-label="' + esc(o.name) + ' 코디 지우기">×</button></span>';
+    }).join('') + '</div>';
+    h += '<div class="qe-acts"><button class="btn soft" data-wa="auto">안 겹치게 골라주기</button>' + (sel.length >= 2 ? '<button class="btn" data-wa="ofsave">코디로 저장</button>' : '') + (sel.length ? '<button class="btn" data-wa="clear">모두 빼기</button>' : '') + '</div>';
     WEAR_LOCS.forEach(function (loc) {
       var list = items.filter(function (x) { return x.loc === loc; }).map(function (x) { return { it: x, f: info(x) }; });
       if (!list.length) return;
       // 오래 안 입은 옷부터
-      list.sort(function (a, b) { var ga = a.f.gap == null ? 9999 : a.f.gap, gb = b.f.gap == null ? 9999 : b.f.gap; return gb - ga || a.it.name.localeCompare(b.it.name); });
+      list.sort(function (a, b) { var ga = a.f.gap == null ? 9999 : a.f.gap, gb = b.f.gap == null ? 9999 : b.f.gap; return seaRank(a.it, sea.key) - seaRank(b.it, sea.key) || gb - ga || a.it.name.localeCompare(b.it.name); });
       h += '<p class="lbl">' + loc + ' <span style="font-weight:400">' + list.length + '벌</span></p><div class="wgrid">';
       h += list.map(function (x) {
         var on = sel.indexOf(x.it.id) >= 0, f = x.f;
         var sub = f.l == null ? '아직 안 입었어요' : f.rep ? (/^(오늘|어제)$/.test(dayWord(f.l)) ? dayWord(f.l) : dayWord(f.l) + '에') + ' 입었어요' : f.gap + '일 전에 입음';
-        return '<button class="wtile' + (on ? ' on' : '') + '" data-wid="' + x.it.id + '" aria-pressed="' + on + '"><span class="ck">✓</span><span class="wi">' + (PH[x.it.id] ? '<img alt="" decoding="async" src="' + PH[x.it.id] + '">' : IC.clothes) + '</span>' +
+        var offSea = seaRank(x.it, sea.key) >= 3;
+        if (offSea && f.l == null) sub = SEASON_W[x.it.season] + ' 옷';
+        return '<button class="wtile' + (on ? ' on' : '') + (offSea ? ' off' : '') + '" data-wid="' + x.it.id + '" aria-pressed="' + on + '"><span class="ck">✓</span><span class="wi">' + (PH[x.it.id] ? '<img alt="" decoding="async" src="' + PH[x.it.id] + '">' : IC.clothes) + '</span>' +
           '<span class="wn">' + esc(x.it.name) + '</span><span class="ws' + (f.rep ? ' rep' : '') + '">' + sub + '</span></button>';
       }).join('');
       h += '</div>';
@@ -3380,6 +3433,8 @@ input.dp-hid { display: none !important; }
     h += '<button class="btn pri block" data-wa="save">저장</button>';
     openSheet(h, function (el) {
       $$('[data-wd]', el).forEach(function (b) { b.onclick = function () { openWear(b.dataset.wd); }; });
+      $$('[data-of]', el).forEach(function (b) { b.onclick = function () { var o = S.outfits.filter(function (x) { return x.id === b.dataset.of; })[0]; if (o) openWear(d, o.ids.filter(function (id) { return items.some(function (x) { return x.id === id; }); })); }; });
+      $$('[data-ofdel]', el).forEach(function (b) { b.onclick = function () { S.outfits = S.outfits.filter(function (x) { return x.id !== b.dataset.ofdel; }); persist(); openWear(d, sel); toast('코디를 지웠어요'); }; });
       $$('[data-wid]', el).forEach(function (b) {
         b.onclick = function () {
           var id = b.dataset.wid, i = sel.indexOf(id);
@@ -3391,14 +3446,23 @@ input.dp-hid { display: none !important; }
         b.onclick = function () {
           var a = b.dataset.wa;
           if (a === 'clear') { openWear(d, []); return; }
-          if (a === 'add') { closeSheet(true); var dw = newDraft('clothes'); dw.loc = miss[0]; dw.days = 730; dw.alert = 0; pickPhotoFor(dw, openForm); return; }
+          if (a === 'ofsave') {
+            var nm = sel.map(nameOf).join(' + ');
+            S.outfits = (S.outfits || []).filter(function (o) { return o.ids.slice().sort().join() !== sel.slice().sort().join(); });
+            S.outfits.unshift({ id: uid(), name: nm.length > 30 ? nm.slice(0, 29) + '…' : nm, ids: sel.slice() });
+            S.outfits = S.outfits.slice(0, 12);
+            persist(); openWear(d, sel); toast('코디로 저장했어요 · 다음부터 한 번에 골라요'); return;
+          }
+          if (a === 'add') { closeSheet(true); var dw = newDraft('clothes'); dw.loc = miss[0]; dw.days = 730; dw.alert = 0; dw.noCycle = true; pickPhotoFor(dw, openForm); return; }
           if (a === 'auto') {
             var pick = [], why = [];
             WEAR_LOCS.forEach(function (loc) {
-              var c = items.filter(function (x) { return x.loc === loc; }).map(function (x) { var f = info(x); return { it: x, g: f.gap == null ? 9999 : f.gap }; });
+              var c = items.filter(function (x) { return x.loc === loc; }).map(function (x) { var f = info(x); return { it: x, g: f.gap == null ? 9999 : f.gap, r: seaRank(x, sea.key) }; });
               if (!c.length) return;
-              c.sort(function (p, q) { return q.g - p.g; });
-              var best = c.filter(function (x) { return x.g === c[0].g; });
+              // 날씨에 맞는 옷 중에서, 일주일 안 입은 옷 → 가장 오래 안 입은 옷
+              var fit = c.filter(function (x) { return x.r < 3; }); if (fit.length) c = fit;
+              c.sort(function (p, q) { return (p.g >= 7 ? 0 : 1) - (q.g >= 7 ? 0 : 1) || p.r - q.r || q.g - p.g; });
+              var best = c.filter(function (x) { return x.g === c[0].g && x.r === c[0].r; });
               var b0 = best[Math.floor(Math.random() * best.length)];
               pick.push(b0.it.id);
               if (b0.g < 7) why.push(loc);
@@ -3415,6 +3479,93 @@ input.dp-hid { display: none !important; }
         };
       });
     });
+  }
+  // ── 날씨·계절 (날씨는 설정에서 켠 사람만, 지역 좌표만 보냄) ──
+  var SEASON_W = { all: '사계절', summer: '여름', mid: '봄·가을', winter: '겨울' };
+  function seasonGuess(n) {
+    n = String(n || '');
+    if (/패딩|코트|니트|스웨터|기모|털|목폴라|터틀넥|플리스|후리스|울|무스탕|히트텍/.test(n)) return 'winter';
+    if (/반팔|반바지|민소매|나시|린넨|숏|쇼츠|여름|시어서커/.test(n)) return 'summer';
+    if (/가디건|맨투맨|후드|자켓|재킷|트렌치|셔츠|블라우스|면바지|슬랙스|긴팔/.test(n)) return 'mid';
+    return 'all';
+  }
+  function monthSeason(d) { var m = +d.slice(5, 7); return m >= 6 && m <= 8 ? 'summer' : m === 12 || m <= 2 ? 'winter' : 'mid'; }
+  function tempSeason(min, max) { var a = (min + max) / 2; return a >= 22 ? 'summer' : a < 9 ? 'winter' : 'mid'; }
+  var CITIES = [['서울', 37.57, 126.98], ['인천', 37.46, 126.71], ['수원', 37.26, 127.03], ['춘천', 37.88, 127.73], ['강릉', 37.75, 128.88], ['대전', 36.35, 127.38], ['세종', 36.48, 127.29], ['청주', 36.64, 127.49], ['전주', 35.82, 127.15], ['광주', 35.16, 126.85], ['대구', 35.87, 128.6], ['포항', 36.02, 129.34], ['울산', 35.54, 129.31], ['부산', 35.18, 129.08], ['창원', 35.23, 128.68], ['여수', 34.76, 127.66], ['제주', 33.5, 126.53]];
+  function todaySeason() {
+    var t = today(), w = S.set.wx;
+    if (S.set.wxCity && w && w.d === t && w.city === S.set.wxCity) return { key: tempSeason(w.min, w.max), src: 'wx', min: w.min, max: w.max, city: w.city };
+    return { key: monthSeason(t), src: 'month' };
+  }
+  var wxBusy = false;
+  function fetchWx(cb) {
+    var c = CITIES.filter(function (x) { return x[0] === S.set.wxCity; })[0], t = today();
+    if (!c || PV || wxBusy || (S.set.wx && S.set.wx.d === t && S.set.wx.city === c[0]) || !window.fetch) return;
+    wxBusy = true;
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=' + c[1] + '&longitude=' + c[2] + '&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSeoul&forecast_days=1')
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        wxBusy = false;
+        var mx = j && j.daily && j.daily.temperature_2m_max && +j.daily.temperature_2m_max[0], mn = j && j.daily && j.daily.temperature_2m_min && +j.daily.temperature_2m_min[0];
+        if (!isFinite(mx) || !isFinite(mn)) return;
+        S.set.wx = { d: t, city: c[0], max: Math.round(mx), min: Math.round(mn) };
+        persist(); if (cb) cb();
+      }).catch(function () { wxBusy = false; });
+  }
+  // 0 딱 맞음 · 1 사계절 · 2 비슷 · 3 안 맞음
+  function seaRank(it, key) {
+    var s = it.season || 'all';
+    if (s === key) return 0;
+    if (s === 'all') return 1;
+    if (s === 'mid' || key === 'mid') return 2;
+    return 3;
+  }
+  function seasonField(d) {
+    if (!d.season) d.season = seasonGuess(d.name);
+    return '<div class="field"><span class="lbl">언제 입어요 <span style="font-weight:400">· 날씨에 맞는 옷을 먼저 골라 드려요</span></span><div class="seg" id="f-sea">' +
+      ['all', 'summer', 'mid', 'winter'].map(function (k) { return '<button data-sea="' + k + '" class="' + (d.season === k ? 'on' : '') + '">' + SEASON_W[k] + '</button>'; }).join('') + '</div></div>';
+  }
+  // 아침 알림에 넣을 오늘 옷 추천 (기록을 쓰는 사람만)
+  function outfitHint() {
+    var t = today(), items = wearItems();
+    if (!items.length || !Object.keys(S.wear).length || wornOn(t).length) return '';
+    var key = todaySeason().key, pick = [];
+    WEAR_LOCS.forEach(function (loc) {
+      var c = items.filter(function (x) { return x.loc === loc && seaRank(x, key) < 3; });
+      if (!c.length) return;
+      c.sort(function (a, b) { var la = lastWorn(a.id, t), lb = lastWorn(b.id, t); return (la || '') < (lb || '') ? -1 : (la || '') > (lb || '') ? 1 : 0; });
+      pick.push(c[0].name);
+    });
+    return pick.length ? '오늘은 ' + pick.join(' + ') + ' 어때요? (오래 안 입은 옷)' : '';
+  }
+
+  // ── 안 입는 옷 정리 ──
+  var TIDY_DAYS = 60;
+  function tidyList() {
+    var t = today(), ks = Object.keys(S.wear).sort();
+    if (!ks.length || G.diffDays(t, ks[0]) < TIDY_DAYS) return [];
+    var cut = G.addDays(t, -TIDY_DAYS);
+    return wearItems().filter(function (x) {
+      if (x.keepUntil && x.keepUntil > t) return false;
+      if ((x.created || x.start || t) > cut) return false;
+      var l = lastWorn(x.id, G.addDays(t, 1));
+      return !l || l < cut;
+    });
+  }
+  function openTidy() {
+    var t = today(), list = tidyList();
+    if (!list.length) { render(); return; }
+    var h = '<h2>안 입는 옷 정리<button data-x>닫기</button></h2><p class="hint" style="margin-top:-6px">' + TIDY_DAYS / 30 + '달 넘게 안 입은 옷이에요. 정리하면 목록과 입은 옷 고르기에서 빠져요.</p><div>';
+    h += list.map(function (x) {
+      var l = lastWorn(x.id, G.addDays(t, 1));
+      return '<div class="tidyrow"><span class="ti">' + wThumb(x.id) + '</span><span class="tm"><b>' + esc(x.name) + '</b><small>' + x.loc + ' · ' + (l ? G.diffDays(t, l) + '일 전에 마지막으로 입음' : '입은 기록 없음') + '</small></span><button class="btn" data-keep="' + x.id + '">더 둘게요</button><button class="btn warn" data-gone="' + x.id + '">정리</button></div>';
+    }).join('') + '</div>';
+    h += '<button class="btn block" data-tcopy style="margin-top:12px">기부·중고 판매용 목록 복사</button>';
+    openSheet(h, function (el) {
+      $$('[data-keep]', el).forEach(function (b) { b.onclick = function () { var x = S.items.filter(function (i) { return i.id === b.dataset.keep; })[0]; if (x) { x.keepUntil = G.addDays(t, 90); persist(); } toast('세 달 뒤에 다시 물어볼게요'); openTidy(); }; });
+      $$('[data-gone]', el).forEach(function (b) { b.onclick = function () { var x = S.items.filter(function (i) { return i.id === b.dataset.gone; })[0]; if (x) { S.items = S.items.filter(function (i) { return i !== x; }); photoDel(x.id); persist(); toast(eul(x.name) + ' 정리했어요'); } openTidy(); }; });
+      $('[data-tcopy]', el).onclick = function () { showText('정리할 옷 목록', list.map(function (x) { return '- ' + x.name + ' (' + x.loc + ')'; }).join('\n')); };
+    }, function () { render(); });
   }
   // 옷 상세: 최근에 입은 날
   function wornRow(it) {
@@ -3438,7 +3589,7 @@ input.dp-hid { display: none !important; }
     h += '<div class="hero"><span class="dd ' + s.state + '">' + s.label + '</span><div class="when">' + when + ' · ' + fullDate(due) + '</div></div>';
     h += memoBox(it);
     h += '<div class="kv"><div><span>탭</span>' + G.CATS[it.cat] + (it.loc ? ' · ' + esc(it.loc) : '') + '</div>' +
-      (it.mode === 'cycle' ? '<div><span>' + (it.cat === 'food' ? '만든 날' : '사용 시작') + '</span>' + fullDate(it.start) + '</div><div><span>' + (it.cat === 'food' ? '먹을 기간' : '교체 주기') + '</span>' + cycleText(it.days) + '</div>'
+      (it.noCycle ? '<div><span>교체 주기</span>끔 (옷장으로만 관리)</div><div><span>날씨</span>' + SEASON_W[it.season || 'all'] + '</div>' : it.mode === 'cycle' ? '<div><span>' + (it.cat === 'food' ? '만든 날' : '사용 시작') + '</span>' + fullDate(it.start) + '</div><div><span>' + (it.cat === 'food' ? '먹을 기간' : '교체 주기') + '</span>' + cycleText(it.days) + '</div>' + (WEAR_LOCS.indexOf(it.loc) >= 0 && it.cat === 'clothes' ? '<div><span>날씨</span>' + SEASON_W[it.season || 'all'] + '</div>' : '')
         : '<div><span>' + esc(it.kind || '유통기한') + '</span>' + fullDate(it.due) + '</div>') +
       '<div><span>수량</span><span class="step sm"><button data-a="q-" aria-label="수량 하나 빼기">−</button><b>' + qtyOf(it) + '</b><button data-a="q+" aria-label="수량 하나 더하기">+</button></span></div>' +
       (it.store ? '<div><span>산 곳</span>' + esc(it.store) + '</div>' : '') +
@@ -3451,7 +3602,7 @@ input.dp-hid { display: none !important; }
       })() +
       (function () { var tp = S.tpl[it.name], r = tp && G.runout(tp.hist, today()); return r ? '<div><span>사는 주기</span><span style="text-align:right">보통 ' + r.avg + '일마다 사요</span></div>' : ''; })() +
       wornRow(it) +
-      '<div><span>미리 알림</span>' + (it.alert ? it.alert + '일 전부터' : '당일') + '</div></div>';
+      (it.noCycle ? '' : '<div><span>미리 알림</span>' + (it.alert ? it.alert + '일 전부터' : '당일') + '</div>') + '</div>';
     var lc = G.learnCycle(it, histOf(it));
     if (lc) h += '<div class="tipcard"><b>보통 ' + lc.avg + '일마다 바꾸셨어요</b><span>지금 주기는 ' + cycleText(it.days) + '예요. 실제로 바꾼 ' + lc.n + '번의 평균에 맞출까요?</span><button class="btn soft" data-a="learn">' + lc.avg + '일로 바꾸기</button></div>';
     h += '<div class="actions">';
@@ -3459,6 +3610,8 @@ input.dp-hid { display: none !important; }
       h += qtyOf(it) > 1 ? '<button class="btn soft" data-a="eaten">1개 먹었어요</button><button class="btn warn" data-a="discard">1개 버렸어요</button>'
         : '<button class="btn soft" data-a="eaten">다 먹었어요</button><button class="btn warn" data-a="discard">버렸어요</button>';
       if (it.loc !== '냉동') h += '<button class="btn full" data-a="freeze">' + IC.snow + '냉동실로 옮기기 (기한 늘리기)</button>';
+    } else if (it.noCycle) {
+      h += '<button class="btn pri full" data-a="wear">' + (wornOn(today()).indexOf(it.id) >= 0 ? '오늘 입은 옷에서 빼기' : '오늘 입었어요') + '</button>';
     } else if (it.mode === 'cycle') {
       h += '<button class="btn pri full" data-a="replace">오늘 새 걸로 바꿨어요</button>';
     } else {
@@ -3478,6 +3631,7 @@ input.dp-hid { display: none !important; }
           var a = b.dataset.a;
           if (a === 'edit') { closeSheet(true); openForm(JSON.parse(JSON.stringify(it))); return; }
           if (a === 'shop') { addShop(it.name, it.cat, 'item', it.id); toast('장보기 목록에 담았어요'); render(); return; }
+          if (a === 'wear') { toggleWear(today(), it.id); closeSheet(true); render(); toast(wornOn(today()).indexOf(it.id) >= 0 ? '오늘 입은 옷에 넣었어요' : '오늘 입은 옷에서 뺐어요'); return; }
           if (a === 'learn') { it.days = lc.avg; persist(); closeSheet(true); render(); toast('주기를 ' + lc.avg + '일로 바꿨어요 · 다음 교체 ' + fullDate(G.itemDue(it))); return; }
           if (a === 'freeze') { freezeItem(it); return; }
           if (a === 'q-' || a === 'q+') { it.qty = Math.max(1, Math.min(99, qtyOf(it) + (a === 'q+' ? 1 : -1))); if (it.qty === 1) delete it.qty; persist(); render(); openDetail(it.id); return; }
@@ -4641,7 +4795,8 @@ input.dp-hid { display: none !important; }
   var NEWS = { id: 'v16-2026-11', items: [
     ['pen', '수정 버튼이 이름 옆으로', '물건을 누르면 이름 바로 옆에 수정이 있어요. 고쳐서 저장하면 그 전 기록은 안 보여요.'],
     ['dots', '⋮ 간단 수정', '목록 오른쪽 ⋮로 이름·유통/소비기한·메모를 바로 고치고, 음식은 냉동실로 옮겨요.'],
-    ['clothes', '오늘 입은 옷 달력', '옷 탭에 상의·하의를 사진으로 등록하고, 달력으로 보면서 지난주와 안 겹치게 입어요.']
+    ['clothes', '오늘 입은 옷 달력', '상의·하의를 사진으로 등록하고, 달력으로 보면서 지난주와 안 겹치게 입어요.'],
+    ['leaf', '날씨 보고 옷 추천 · 코디 저장', '설정에서 지역을 고르면 기온에 맞는 옷부터, 자주 입는 조합은 코디로 한 번에.']
   ] };
   function showNews() {
     S.set.news = NEWS.id; persist();
@@ -4718,6 +4873,7 @@ input.dp-hid { display: none !important; }
       '</div>';
     var due = dueNow();
     h += '<div class="set"><div><span>오늘 알림 내용<small>' + (due.length ? due.slice(0, 4).map(function (x) { return esc(x.it.name) + '(' + x.s.label + ')'; }).join(', ') + (due.length > 4 ? ' 외 ' + (due.length - 4) + '개' : '') : '오늘은 챙길 물건이 없어요') + '</small></span></div></div>';
+    if (isOn('clothes')) h += '<p class="sec-h">옷 · 날씨</p><div class="set"><div><span>날씨 보고 옷 추천<small>' + (S.set.wxCity ? '오늘 기온에 맞는 옷을 먼저 골라 드려요. 고른 지역 위치만 날씨 서비스(Open-Meteo)에 보내요' : '끄면 달(계절)로 골라 드려요. 켜면 고른 지역 위치만 날씨 서비스(Open-Meteo)에 보내요') + '</small></span><select class="inp" id="s-wx" style="width:110px"><option value="">끄기</option>' + CITIES.map(function (c) { return '<option' + (S.set.wxCity === c[0] ? ' selected' : '') + '>' + c[0] + '</option>'; }).join('') + '</select></div></div>';
     h += '<p class="sec-h">쓸 탭 고르기</p><div class="set tabsel">' + ALL_TABS.map(function (c) {
       var n = S.items.filter(function (i) { return i.cat === c; }).length;
       return '<div><span class="tl"><span class="ico ' + c + '">' + IC[c] + '</span><span>' + TITLES[c] + '<small>' + SUBS[c] + (n ? ' · ' + n + '개' : '') + '</small></span></span><label class="sw"><input type="checkbox" data-tab="' + c + '"' + (isOn(c) ? ' checked' : '') + '><i></i></label></div>';
@@ -4749,6 +4905,7 @@ input.dp-hid { display: none !important; }
 
   function bindSettings() {
     var n = $('#s-noti'); if (n) n.onchange = function () { S.set.notify = n.checked; if (n.checked) { S.set.asked = false; askNotifyOnce(); } persist(); toast(n.checked ? '매일 ' + S.set.time + '에 알려드려요' : '알림을 껐어요'); };
+    var wxs = $('#s-wx'); if (wxs) wxs.onchange = function () { S.set.wxCity = wxs.value || null; delete S.set.wx; persist(); render(); if (S.set.wxCity) { fetchWx(function () { var w = S.set.wx; if (w) toast('오늘 ' + w.city + ' ' + w.min + '~' + w.max + '°C · ' + SEASON_W[tempSeason(w.min, w.max)] + ' 옷을 먼저 골라 드려요', 3000); }); } else toast('날씨 대신 계절로 골라 드려요'); };
     var tm = $('#s-time'); if (tm) tm.onchange = function () { if (!tm.value) return; S.set.time = tm.value; persist(); toast('매일 ' + tm.value + '에 알려드려요'); };
     var ts = $('#s-test'); if (ts) ts.onclick = function () { syncNative(); A.testNotify(); };
     $$('[data-tab]').forEach(function (c) {
@@ -4804,7 +4961,7 @@ input.dp-hid { display: none !important; }
     };
     $('#s-reset').onclick = function () {
       ask('등록한 물건, 자동차 기록, 가격 기록, 통계를 모두 지울까요?\n되돌릴 수 없어요.', '모두 지우기', function () {
-        Object.keys(PH).forEach(photoDel); S.items = []; S.events = []; S.barcodes = {}; S.car = { name: '내 차', km: null, log: [] }; S.prices = []; S.fav = []; S.tpl = {}; S.shop = []; S.del = {}; S.wear = {}; SNAP = {}; persist(); render(); toast('모두 지웠어요');
+        Object.keys(PH).forEach(photoDel); S.items = []; S.events = []; S.barcodes = {}; S.car = { name: '내 차', km: null, log: [] }; S.prices = []; S.fav = []; S.tpl = {}; S.shop = []; S.del = {}; S.wear = {}; S.outfits = []; SNAP = {}; persist(); render(); toast('모두 지웠어요');
       });
     };
   }
@@ -4817,6 +4974,7 @@ input.dp-hid { display: none !important; }
     $$('#app [data-photo]').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); viewPhoto(b.dataset.photo); }; });
     $$('#app [data-more]').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); quickEdit(b.dataset.more); }; });
     $$('#app [data-wday]').forEach(function (b) { b.onclick = function () { openWear(b.dataset.wday); }; });
+    var tdy = $('#app [data-tidy]'); if (tdy) tdy.onclick = openTidy;
     var wt = $('#app [data-wtog]'); if (wt) wt.onclick = function () { S.set.wearOpen = !S.set.wearOpen; if (!S.set.wearOpen) wearYm = null; persist(); render(); };
     $$('#app [data-wym]').forEach(function (b) { b.onclick = function () { var ym = wearYm || today().slice(0, 7), y = +ym.slice(0, 4), m = +ym.slice(5, 7) + +b.dataset.wym; if (m < 1) { m = 12; y--; } if (m > 12) { m = 1; y++; } wearYm = y + '-' + (m < 10 ? '0' : '') + m; render(); }; });
     $$('#app [data-rc]').forEach(function (b) { b.onclick = function () { openRecipe(b.dataset.rc); }; });
@@ -4855,11 +5013,12 @@ input.dp-hid { display: none !important; }
       { id: nid(), name: '흰 양말 5켤레', cat: 'clothes', mode: 'cycle', start: a(-172), days: 180, loc: '속옷·양말', alert: 7 },
       { id: nid(), name: '속옷', cat: 'clothes', mode: 'cycle', start: a(-60), days: 180, loc: '속옷·양말', alert: 7 },
       { id: nid(), name: '러닝화', cat: 'clothes', mode: 'cycle', start: a(-300), days: 365, loc: '신발', alert: 7 },
-      { id: 'demow1', name: '흰 티셔츠', cat: 'clothes', mode: 'cycle', start: a(-200), days: 730, loc: '상의', alert: 0 },
-      { id: 'demow2', name: '네이비 니트', cat: 'clothes', mode: 'cycle', start: a(-400), days: 1095, loc: '상의', alert: 0 },
-      { id: 'demow3', name: '체크 셔츠', cat: 'clothes', mode: 'cycle', start: a(-90), days: 730, loc: '상의', alert: 0 },
-      { id: 'demow4', name: '청바지', cat: 'clothes', mode: 'cycle', start: a(-500), days: 1095, loc: '하의', alert: 0 },
-      { id: 'demow5', name: '베이지 면바지', cat: 'clothes', mode: 'cycle', start: a(-120), days: 730, loc: '하의', alert: 0 },
+      { id: 'demow1', name: '흰 티셔츠', cat: 'clothes', mode: 'cycle', start: a(-200), days: 730, loc: '상의', alert: 0, noCycle: true, season: 'all' },
+      { id: 'demow2', name: '네이비 니트', cat: 'clothes', mode: 'cycle', start: a(-400), days: 1095, loc: '상의', alert: 0, noCycle: true, season: 'winter' },
+      { id: 'demow3', name: '체크 셔츠', cat: 'clothes', mode: 'cycle', start: a(-90), days: 730, loc: '상의', alert: 0, noCycle: true, season: 'mid' },
+      { id: 'demow4', name: '청바지', cat: 'clothes', mode: 'cycle', start: a(-500), days: 1095, loc: '하의', alert: 0, noCycle: true, season: 'all' },
+      { id: 'demow5', name: '베이지 면바지', cat: 'clothes', mode: 'cycle', start: a(-120), days: 730, loc: '하의', alert: 0, noCycle: true, season: 'mid' },
+      { id: 'demow6', name: '린넨 반팔 셔츠', cat: 'clothes', mode: 'cycle', start: a(-300), days: 730, loc: '상의', alert: 0, noCycle: true, season: 'summer' },
       { id: nid(), name: '칫솔', cat: 'daily', mode: 'cycle', start: a(-86), days: 90, loc: '욕실', alert: 7 },
       { id: nid(), name: '수건', cat: 'daily', mode: 'cycle', start: a(-120), days: 365, loc: '욕실', alert: 7 },
       { id: nid(), name: '수세미', cat: 'daily', mode: 'cycle', start: a(-33), days: 30, loc: '주방', alert: 7 },
@@ -4887,7 +5046,8 @@ input.dp-hid { display: none !important; }
     yt.use[G.addMonths(t, -1).slice(0, 7)] = false; yt.use[G.addMonths(t, -2).slice(0, 7)] = false;
     S.set.chk = { food: a(-9) };
     S.plan = null;
-    S.wear = {}; [[1, 'demow1', 'demow4'], [2, 'demow2', 'demow5'], [3, 'demow2', 'demow4'], [5, 'demow1', 'demow4'], [6, 'demow2', 'demow5'], [8, 'demow1', 'demow4'], [9, 'demow2', 'demow4'], [11, 'demow3', 'demow5'], [12, 'demow1', 'demow4'], [13, 'demow2', 'demow5'], [15, 'demow3', 'demow4'], [16, 'demow1', 'demow5'], [19, 'demow2', 'demow4'], [20, 'demow1', 'demow5'], [22, 'demow3', 'demow4']].forEach(function (w) { S.wear[a(-w[0])] = [w[1], w[2]]; });
+    S.outfits = [{ id: 'demoo1', name: '흰 티셔츠 + 청바지', ids: ['demow1', 'demow4'] }];
+    S.wear = {}; [[70, 'demow6', 'demow5'], [1, 'demow1', 'demow4'], [2, 'demow2', 'demow5'], [3, 'demow2', 'demow4'], [5, 'demow1', 'demow4'], [6, 'demow2', 'demow5'], [8, 'demow1', 'demow4'], [9, 'demow2', 'demow4'], [11, 'demow3', 'demow5'], [12, 'demow1', 'demow4'], [13, 'demow2', 'demow5'], [15, 'demow3', 'demow4'], [16, 'demow1', 'demow5'], [19, 'demow2', 'demow4'], [20, 'demow1', 'demow5'], [22, 'demow3', 'demow4']].forEach(function (w) { S.wear[a(-w[0])] = [w[1], w[2]]; });
     var mom = S.items.filter(function (i) { return i.name === '엄마 생신'; })[0]; mom.date = (+t.slice(0, 4) - 58) + a(5).slice(4);
     // 수량·산 곳·용량
     var extra = { '서울우유 1L': { store: '이마트', amt: 1000, unit: 'ml' }, '계란 10구': { store: '홈플러스', amt: 10, unit: '개', qty: 2 }, '신라면 5입': { store: '쿠팡', amt: 5, unit: '개' },
@@ -5033,7 +5193,7 @@ input.dp-hid { display: none !important; }
 
 
 <!--APPINFO--><script>
-window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.05", "items": ["수정 버튼을 물건 이름 바로 옆으로 옮겼어요 (모든 탭)", "목록의 ⋮ 버튼으로 간단 수정: 이름·날짜(유통/소비기한)·메모, 냉동실로 옮기기, D-day는 금액도", "수정해서 저장하면 그 전 기록은 자세히 보기에서 안 보여요 (통계는 그대로)", "옷 탭에 상의·하의 추가, 옷 사진 찍어서 바로 등록", "오늘 입은 옷 달력: 평소엔 접어 두고, 펼치면 날마다 입은 옷 사진·이달 자주 입은 옷·안 입은 옷", "지난주에 입은 옷은 노란색으로 알려주고 '안 겹치게 골라주기'"]}, {"v": "v1.15", "d": "2026.11.05", "items": ["왼쪽 아래 버전 → 내 데이터 백업: 기록을 파일로 저장했다가 새 폰에서 불러오기"]}, {"v": "v1.14", "d": "2026.11.01", "items": ["D-day 탭도 다른 탭처럼: 위쪽 지난 날·곧 다가와요·여유 요약(눌러서 거르기), 장보기 버튼, 사진 넣기, 말로 등록", "말로 D-day 등록: \"넷플릭스 만칠천 원 매달 15일\", \"엄마 생신 3월 5일\"", "기념일 선물·준비물을 장보기에 담기, 자동차 부품도 장보기에 담기", "통계 탭별에 D-day(해지·점검한 개수)도 보여요"]}, {"v": "v1.13", "d": "2026.11.01", "items": ["날짜 없이 등록하면 날짜 칸으로 바로 데려가 빨갛게 표시하고, 년도 고르기를 열어 줘요", "6개월·1년 같은 교체 주기를 달력 기준으로 계산해요 (11월 1일 + 6개월 = 5월 1일)"]}, {"v": "v1.12", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 기기에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때와, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄)만 써요.", "backup": {"keys": ["gyoche_v1"], "idb": [{"db": "gyoche_photos", "store": "p"}], "bridge": "Android"}};
+window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.05", "items": ["수정 버튼을 물건 이름 바로 옆으로 옮겼어요 (모든 탭)", "목록의 ⋮ 버튼으로 간단 수정: 이름·날짜(유통/소비기한)·메모, 냉동실로 옮기기, D-day는 금액도", "수정해서 저장하면 그 전 기록은 자세히 보기에서 안 보여요 (통계는 그대로)", "옷 탭에 상의·하의 추가, 옷 사진 찍어서 바로 등록", "오늘 입은 옷 달력: 평소엔 접어 두고, 펼치면 날마다 입은 옷 사진·이달 자주 입은 옷·안 입은 옷", "지난주에 입은 옷은 노란색으로 알려주고 '안 겹치게 골라주기'", "날씨 보고 옷 추천(설정에서 지역 고르기), 옷마다 사계절·여름·봄가을·겨울", "코디 저장: 자주 입는 상의+하의를 한 번에", "두 달 넘게 안 입은 옷 정리 · 기부·중고용 목록 복사", "상의·하의는 교체 주기 없이 옷장으로만 관리 (켤 수 있어요)", "아침 알림에 오늘 입을 옷 추천 한 줄"]}, {"v": "v1.15", "d": "2026.11.05", "items": ["왼쪽 아래 버전 → 내 데이터 백업: 기록을 파일로 저장했다가 새 폰에서 불러오기"]}, {"v": "v1.14", "d": "2026.11.01", "items": ["D-day 탭도 다른 탭처럼: 위쪽 지난 날·곧 다가와요·여유 요약(눌러서 거르기), 장보기 버튼, 사진 넣기, 말로 등록", "말로 D-day 등록: \"넷플릭스 만칠천 원 매달 15일\", \"엄마 생신 3월 5일\"", "기념일 선물·준비물을 장보기에 담기, 자동차 부품도 장보기에 담기", "통계 탭별에 D-day(해지·점검한 개수)도 보여요"]}, {"v": "v1.13", "d": "2026.11.01", "items": ["날짜 없이 등록하면 날짜 칸으로 바로 데려가 빨갛게 표시하고, 년도 고르기를 열어 줘요", "6개월·1년 같은 교체 주기를 달력 기준으로 계산해요 (11월 1일 + 6개월 = 5월 1일)"]}, {"v": "v1.12", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 기기에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄), 설정에서 날씨를 켰을 때 고른 지역의 기온을 가져올 때(Open-Meteo, 지역 위치만 보냄)만 써요.", "backup": {"keys": ["gyoche_v1"], "idb": [{"db": "gyoche_photos", "store": "p"}], "bridge": "Android"}};
 window.APP_INFO.online=!!(window.Android&&window.Android.version);
 window.APP_INFO.version=function(){try{return window.Android.version()}catch(e){return '1.10'}};
 </script>
