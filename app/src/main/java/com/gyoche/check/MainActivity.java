@@ -149,6 +149,29 @@ public class MainActivity extends Activity {
 
     // ── 웹 화면에서 부르는 기능 ──
     class Bridge {
+        /** 백업 파일 저장: 사용자가 '파일' 창에서 고른 곳에만 써요 (권한 필요 없음, 인터넷으로 보내지 않음) */
+        @JavascriptInterface
+        public void backupSave(String name, String json) {
+            runOnUiThread(() -> {
+                bkData = json;
+                try {
+                    startActivityForResult(new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE)
+                            .setType("application/json").putExtra(Intent.EXTRA_TITLE, name), REQ_BK_SAVE);
+                } catch (Exception e) { bkData = null; js("window.AppInfo&&AppInfo.backupDone(false)"); }
+            });
+        }
+
+        /** 백업 파일 불러오기: 사용자가 고른 파일 하나만 읽어요 */
+        @JavascriptInterface
+        public void backupOpen() {
+            runOnUiThread(() -> {
+                try {
+                    startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE)
+                            .setType("*/*").putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"application/json", "text/plain", "application/octet-stream"}), REQ_BK_OPEN);
+                } catch (Exception e) { js("window.AppInfo&&AppInfo.backupOpened(null)"); }
+            });
+        }
+
         @JavascriptInterface
         public void sync(String json) {
             Reminder.save(MainActivity.this, json);
@@ -449,6 +472,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int req, int res, Intent data) {
         super.onActivityResult(req, res, data);
+        if (backupResult(req, res, data)) return;
         if (req == REQ_VOICE) {
             java.util.ArrayList<String> r = res == RESULT_OK && data != null ? data.getStringArrayListExtra(android.speech.RecognizerIntent.EXTRA_RESULTS) : null;
             voiceResult(r != null && !r.isEmpty() ? r.get(0) : null, null);
@@ -662,6 +686,39 @@ public class MainActivity extends Activity {
 
     private void status(String msg) {
         js("window.onNativeStatus&&window.onNativeStatus(" + JSONObject.quote(msg) + ")");
+    }
+
+    // ── 내 데이터 백업 (파일 저장·불러오기) ──
+    private static final int REQ_BK_SAVE = 7301, REQ_BK_OPEN = 7302;
+    private String bkData;
+
+    private boolean backupResult(int req, int res, Intent data) {
+        if (req != REQ_BK_SAVE && req != REQ_BK_OPEN) return false;
+        final android.net.Uri u = (res == RESULT_OK && data != null) ? data.getData() : null;
+        if (req == REQ_BK_SAVE) {
+            final String text = bkData; bkData = null;
+            if (u == null || text == null) { js("window.AppInfo&&AppInfo.backupDone(false,'cancel')"); return true; }
+            new Thread(() -> {
+                boolean ok;
+                try (java.io.OutputStream o = getContentResolver().openOutputStream(u, "wt")) {
+                    o.write(text.getBytes(java.nio.charset.StandardCharsets.UTF_8)); ok = true;
+                } catch (Exception e) { ok = false; }
+                js("window.AppInfo&&AppInfo.backupDone(" + ok + ")");
+            }).start();
+            return true;
+        }
+        if (u == null) { js("window.AppInfo&&AppInfo.backupOpened(null)"); return true; }
+        new Thread(() -> {
+            String out;
+            try (java.io.InputStream in = getContentResolver().openInputStream(u)) {
+                java.io.ByteArrayOutputStream b = new java.io.ByteArrayOutputStream();
+                byte[] buf = new byte[65536]; int n;
+                while ((n = in.read(buf)) > 0) { b.write(buf, 0, n); if (b.size() > 80 * 1024 * 1024) throw new java.io.IOException("too big"); }
+                out = new String(b.toByteArray(), java.nio.charset.StandardCharsets.UTF_8);
+            } catch (Exception e) { out = null; }
+            js("window.AppInfo&&AppInfo.backupOpened(" + (out == null ? "null" : org.json.JSONObject.quote(out)) + ")");
+        }).start();
+        return true;
     }
 
     private void js(String code) {
