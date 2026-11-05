@@ -508,20 +508,43 @@ input.dp-hid { display: none !important; }
 .sheet h2 .h2edit svg { width: 13px; height: 13px; color: currentColor; vertical-align: 0; }
 .qe-acts { display: flex; flex-wrap: wrap; gap: 8px; margin: 2px 0 14px; }
 .qe-acts .btn { flex: 1 1 auto; }
-.wear { background: var(--card); border-radius: 16px; padding: 12px 12px 10px; box-shadow: var(--shadow); margin: 6px 0 10px; }
-.wear-h { display: flex; justify-content: space-between; align-items: center; margin: 0 2px 8px; font-size: 14px; }
-.wear-h b { font-size: 15px; }
-.wear-h button { color: var(--brand); font-weight: 600; font-size: 13.5px; }
-.wk { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-.wk button { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0 5px; border-radius: 10px; font-size: 11.5px; color: var(--sub); min-width: 0; }
-.wk button.on { background: var(--brand-soft); color: var(--brand); font-weight: 700; }
-.wk .th { width: 100%; max-width: 40px; height: 40px; border-radius: 9px; background: var(--bg); display: grid; place-items: center; overflow: hidden; position: relative; }
-.wk .th img { width: 100%; height: 100%; object-fit: cover; }
-.wk .th svg { width: 18px; height: 18px; color: var(--clothes); }
-.wk .th em { position: absolute; right: 2px; bottom: 1px; font-style: normal; font-size: 10px; font-weight: 700; color: var(--ink); background: var(--card); border-radius: 6px; padding: 0 3px; }
-.wk .th.none { border: 1.5px dashed var(--line); background: none; }
-.wear-t { font-size: 13px; color: var(--sub); margin: 8px 2px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.wear-t b { color: var(--ink); }
+.wear { background: var(--card); border-radius: 16px; box-shadow: var(--shadow); margin: 6px 0 10px; }
+.wear-bar { width: 100%; display: flex; align-items: center; gap: 10px; padding: 11px 14px; text-align: left; font-size: 14px; color: var(--ink); }
+.wear-bar .wb-ic { flex: none; display: flex; }
+.wear-bar .wb-ic img, .wear-bar .wb-ic i { width: 30px; height: 30px; border-radius: 8px; object-fit: cover; margin-right: -8px; box-shadow: 0 0 0 2px var(--card); background: var(--bg); display: grid; place-items: center; }
+.wear-bar .wb-ic i svg { width: 17px; height: 17px; color: var(--clothes); }
+.wear-bar .wb-t { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 6px; }
+.wear-bar .wb-t small { color: var(--sub); margin-left: 4px; }
+.wear-bar > svg { flex: none; color: var(--sub); transition: transform .2s; }
+.wear.open .wear-bar > svg { transform: rotate(180deg); }
+.wear-body { padding: 0 10px 12px; }
+.wcal-h { display: flex; align-items: center; justify-content: space-between; margin: 0 2px 6px; }
+.wcal-h b { font-size: 15px; }
+.wcal-h button { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; color: var(--sub); }
+.wcal-h button:disabled { opacity: .3; }
+.wcal-h button svg { width: 18px; height: 18px; }
+.wcal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 3px; }
+.wcal .wh { text-align: center; font-size: 11px; color: var(--sub); padding-bottom: 2px; }
+.wcal .wh.sun { color: var(--over); }
+.wcal button { position: relative; min-width: 0; aspect-ratio: 3 / 4; border-radius: 9px; padding: 3px 2px 2px; display: flex; flex-direction: column; align-items: stretch; gap: 2px; background: var(--bg); text-align: left; }
+.wcal button:disabled { background: none; opacity: .35; }
+.wcal button.out { visibility: hidden; }
+.wcal button.td { box-shadow: inset 0 0 0 2px var(--brand); }
+.wcal .dn { font-size: 10.5px; line-height: 1; color: var(--sub); padding-left: 2px; font-variant-numeric: tabular-nums; }
+.wcal button.td .dn { color: var(--brand); font-weight: 700; }
+.wcal .ths { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; min-height: 0; }
+.wcal .ths.one { grid-template-columns: 1fr; }
+.wcal .ths span { border-radius: 4px; overflow: hidden; background: var(--card); display: grid; place-items: center; min-height: 0; }
+.wcal .ths img { width: 100%; height: 100%; object-fit: cover; }
+.wcal .ths svg { width: 12px; height: 12px; color: var(--clothes); }
+.wcal .more { position: absolute; right: 2px; bottom: 2px; font-size: 9.5px; font-weight: 700; background: var(--ink); color: var(--card); border-radius: 5px; padding: 0 3px; line-height: 1.4; }
+.wcal .rp { position: absolute; top: 3px; right: 3px; width: 6px; height: 6px; border-radius: 50%; background: var(--soon); }
+.wsum { display: grid; gap: 6px; margin-top: 10px; font-size: 13px; }
+.wsum > div { display: flex; justify-content: space-between; gap: 10px; background: var(--bg); border-radius: 10px; padding: 8px 10px; }
+.wsum span:first-child { color: var(--sub); flex: none; }
+.wsum span:last-child { text-align: right; min-width: 0; }
+.wlegend { font-size: 11.5px; color: var(--sub); margin: 6px 2px 0; }
+.wlegend i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--soon); margin-right: 4px; vertical-align: 1px; }
 .wdays { display: flex; gap: 6px; overflow-x: auto; margin: 0 -4px 12px; padding: 0 4px 2px; }
 .wgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-bottom: 14px; }
 .wtile { position: relative; background: var(--card); border: 2px solid var(--line); border-radius: 14px; padding: 6px 6px 7px; text-align: center; min-width: 0; }
@@ -3188,12 +3211,13 @@ input.dp-hid { display: none !important; }
         : '<label for="q-date">' + q.label + '</label>') +
         '<input class="inp" type="date" id="q-date" value="' + esc(it[q.key] || '') + '"></div>';
     }
+    if (it.mode === 'dday') h += '<div class="field"><label for="q-price">' + (it.mode !== 'dday' ? '가격' : it.kind === 'sub' ? (it.cycle === 'year' ? '1년 요금' : '한 달 요금') : it.kind === 'contract' ? '월 요금' : it.kind === 'anniv' ? '준비할 금액' : it.kind === 'warranty' ? '산 가격' : '금액') + ' <span style="font-weight:400">(' + (it.cur === 'USD' ? '$' : '원') + ')</span></label><input class="inp" id="q-price" type="number" inputmode="decimal" min="0" placeholder="비우면 금액 없음" value="' + (it.price || '') + '"></div>';
     h += '<div class="field"><label for="q-memo">메모</label><input class="inp" id="q-memo" maxlength="200" placeholder="예: 냉장고 둘째 칸" value="' + esc(it.memo || '') + '"></div>';
     var acts = '';
     if (it.cat === 'food' && it.loc !== '냉동') acts += '<button class="btn soft" data-qa="freeze">' + IC.snow + '냉동실로 옮기기</button>';
     if (wearable) acts += '<button class="btn soft" data-qa="wear">' + (wornOn(today()).indexOf(it.id) >= 0 ? '오늘 입은 옷에서 빼기' : '오늘 입었어요') + '</button>';
     if (acts) h += '<div class="qe-acts">' + acts + '</div>';
-    h += '<div class="actions"><button class="btn" data-qa="full">전체 수정</button><button class="btn pri" data-qa="save">저장</button></div>';
+    h += '<div class="actions"><button class="btn" data-qa="full">전체 수정하기</button><button class="btn pri" data-qa="save">저장</button></div>';
     openSheet(h, function (el) {
       $$('#q-kind button', el).forEach(function (b) { b.onclick = function () { kind = b.dataset.k; $$('#q-kind button', el).forEach(function (x) { x.classList.toggle('on', x === b); }); }; });
       $$('[data-qa]', el).forEach(function (b) {
@@ -3215,6 +3239,8 @@ input.dp-hid { display: none !important; }
           if (q) it[q.key] = dv;
           if (q && q.kinds) it.kind = kind;
           if (memo) it.memo = memo; else delete it.memo;
+          var pe = $('#q-price', el);
+          if (pe) { var pv = Math.round((+pe.value || 0) * 100) / 100; if (pv > 0) it.price = pv; else delete it.price; }
           if (it.mode === 'dday' && it.kind === 'sub' && it.trialEnd && it.trialEnd < it.start) delete it.trialEnd;
           markEdited(it, before);
           persist(); closeSheet(true); render();
@@ -3240,8 +3266,8 @@ input.dp-hid { display: none !important; }
   }
   function setWear(d, ids) {
     if (ids.length) S.wear[d] = ids; else delete S.wear[d];
-    // 넉 달 넘은 기록은 정리 (용량 절약)
-    var cut = G.addDays(today(), -120);
+    // 1년 넘은 기록은 정리 (용량 절약)
+    var cut = G.addDays(today(), -400);
     Object.keys(S.wear).forEach(function (k) { if (k < cut) delete S.wear[k]; });
     persist();
   }
@@ -3255,31 +3281,64 @@ input.dp-hid { display: none !important; }
     var w = DPW[G.parseYmd(d).getDay()];
     return n === 0 ? '오늘' : n === 1 ? '어제' : n < 7 ? w + '요일' : md(d) + ' ' + w;
   }
+  var wearYm = null;
+  function wearRepeat(d) {
+    return wornOn(d).some(function (id) { var l = lastWorn(id, d); return l && G.diffDays(d, l) < 7; });
+  }
+  function nameOf(id) { var x = S.items.filter(function (i) { return i.id === id; })[0]; return x ? x.name : ''; }
+  function wThumb(id) { return PH[id] ? '<img alt="" decoding="async" src="' + PH[id] + '">' : IC.clothes; }
   function wearPanel(t) {
     var items = wearItems();
     if (!items.length) {
-      return '<button class="strip" data-act="wphoto"><span>' + IC.cam + ' 상의·하의를 사진으로 등록하면 <b>날마다 입은 옷</b>을 기록해 지난주와 안 겹치게 도와드려요</span>' + IC.right + '</button>';
+      return '<button class="strip" data-act="wphoto"><span>' + IC.cam + ' 상의·하의를 사진으로 등록하면 <b>날마다 입은 옷</b>을 달력으로 기록해요</span>' + IC.right + '</button>';
     }
-    var days = [];
-    for (var i = 6; i >= 0; i--) days.push(G.addDays(t, -i));
-    var h = '<div class="wear"><div class="wear-h"><b>오늘 입은 옷</b><button data-wday="' + t + '">' + (wornOn(t).length ? '바꾸기' : '고르기') + '</button></div><div class="wk">';
-    h += days.map(function (d) {
-      var ids = wornOn(d), first = ids[0];
-      var th = !ids.length ? '<span class="th none"></span>'
-        : '<span class="th">' + (PH[first] ? '<img alt="" decoding="async" src="' + PH[first] + '">' : IC.clothes) + (ids.length > 1 ? '<em>+' + (ids.length - 1) + '</em>' : '') + '</span>';
-      return '<button data-wday="' + d + '" class="' + (d === t ? 'on' : '') + '" aria-label="' + md(d) + ' 입은 옷">' + th + (d === t ? '오늘' : DPW[G.parseYmd(d).getDay()]) + '</button>';
-    }).join('');
-    h += '</div>';
-    var today_ = wornOn(t);
-    if (today_.length) {
-      var names = today_.map(function (id) { return S.items.filter(function (x) { return x.id === id; })[0].name; });
-      var rep = today_.filter(function (id) { var l = lastWorn(id, t); return l && G.diffDays(t, l) < 7; });
-      h += '<p class="wear-t"><b>' + esc(names.join(' · ')) + '</b>' + (rep.length ? ' · <span style="color:var(--soon)">' + rep.length + '벌은 이번 주에 입었어요</span>' : ' · 이번 주 안 겹쳐요') + '</p>';
+    var open = !!S.set.wearOpen, now = wornOn(t);
+    var h = '<div class="wear' + (open ? ' open' : '') + '"><button class="wear-bar" data-wtog aria-expanded="' + open + '">';
+    if (now.length) {
+      h += '<span class="wb-ic">' + now.slice(0, 2).map(function (id) { return PH[id] ? '<img alt="" src="' + PH[id] + '">' : '<i>' + IC.clothes + '</i>'; }).join('') + '</span>';
+      var rep = now.some(function (id) { var l = lastWorn(id, t); return l && G.diffDays(t, l) < 7; });
+      h += '<span class="wb-t"><b>오늘</b> ' + esc(now.map(nameOf).join(' · ')) + (rep ? '<small style="color:var(--soon)">이번 주에 입은 옷</small>' : '') + '</span>';
     } else {
-      var fresh = items.filter(function (x) { var l = lastWorn(x.id, t); return !l || G.diffDays(t, l) >= 7; }).length;
-      h += '<p class="wear-t">일주일 안 입은 옷 <b>' + fresh + '벌</b> · 누르면 안 겹치게 골라드려요</p>';
+      h += '<span class="wb-t"><b>오늘 입은 옷</b><small>기록하기 · 달력</small></span>';
     }
+    h += IC.down + '</button>';
+    if (open) h += '<div class="wear-body">' + wearCal(t) + '</div>';
     return h + '</div>';
+  }
+  function wearCal(t) {
+    var ym = wearYm || t.slice(0, 7);
+    var y = +ym.slice(0, 4), m = +ym.slice(5, 7);
+    var first = new Date(y, m - 1, 1), days = new Date(y, m, 0).getDate();
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    var minYm = G.addDays(t, -400).slice(0, 7);
+    var h = '<div class="wcal-h"><button data-wym="-1" aria-label="지난달"' + (ym <= minYm ? ' disabled' : '') + '><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>' +
+      '<b>' + y + '년 ' + m + '월</b><button data-wym="1" aria-label="다음 달"' + (ym >= t.slice(0, 7) ? ' disabled' : '') + '>' + IC.right + '</button></div>';
+    h += '<div class="wcal">' + DPW.map(function (w, k) { return '<span class="wh' + (k ? '' : ' sun') + '">' + w + '</span>'; }).join('');
+    for (var k = 0; k < first.getDay(); k++) h += '<button class="out" disabled aria-hidden="true"></button>';
+    var monthIds = {}, recDays = 0, repDays = 0;
+    for (var dn = 1; dn <= days; dn++) {
+      var d = ym + '-' + pad(dn), ids = wornOn(d), fut = d > t;
+      if (ids.length) { recDays++; ids.forEach(function (id) { monthIds[id] = (monthIds[id] || 0) + 1; }); }
+      var rp = ids.length && wearRepeat(d);
+      if (rp) repDays++;
+      h += '<button data-wday="' + d + '"' + (fut ? ' disabled' : '') + ' class="' + (d === t ? 'td' : '') + '" aria-label="' + m + '월 ' + dn + '일' + (ids.length ? ' ' + esc(ids.map(nameOf).join(', ')) : ' 기록 없음') + '">' +
+        '<span class="dn">' + dn + '</span>' +
+        (ids.length ? '<span class="ths' + (ids.length === 1 ? ' one' : '') + '">' + ids.slice(0, 2).map(function (id) { return '<span>' + wThumb(id) + '</span>'; }).join('') + '</span>' : '') +
+        (ids.length > 2 ? '<span class="more">+' + (ids.length - 2) + '</span>' : '') +
+        (rp ? '<span class="rp" title="7일 안에 또 입은 옷"></span>' : '') + '</button>';
+    }
+    h += '</div>';
+    if (repDays) h += '<p class="wlegend"><i></i>점은 7일 안에 같은 옷을 또 입은 날이에요</p>';
+    // 이달 요약
+    var items = wearItems();
+    var top = Object.keys(monthIds).sort(function (a, b) { return monthIds[b] - monthIds[a]; }).slice(0, 3);
+    var none = items.filter(function (x) { return !monthIds[x.id]; });
+    var sum = '<div><span>기록한 날</span><span>' + recDays + '일</span></div>';
+    if (top.length) sum += '<div><span>자주 입은 옷</span><span>' + top.map(function (id) { return esc(nameOf(id)) + ' ' + monthIds[id] + '번'; }).join(' · ') + '</span></div>';
+    if (recDays) sum += '<div><span>이달 안 입은 옷</span><span>' + (none.length ? esc(none.slice(0, 3).map(function (x) { return x.name; }).join(' · ')) + (none.length > 3 ? ' 외 ' + (none.length - 3) + '벌' : '') : '없어요 · 골고루 입었어요') + '</span></div>';
+    h += '<div class="wsum">' + sum + '</div>';
+    h += '<button class="btn pri block" data-wday="' + t + '" style="margin-top:10px">' + (wornOn(t).length ? '오늘 입은 옷 바꾸기' : '오늘 입은 옷 고르기') + '</button>';
+    return h;
   }
   // 날짜별 고르기 화면
   function openWear(d, picked) {
@@ -3294,6 +3353,7 @@ input.dp-hid { display: none !important; }
     }
     var h = '<h2>' + (d === t ? '오늘' : md(d) + ' (' + DPW[G.parseYmd(d).getDay()] + ')') + ' 입은 옷<button data-x>닫기</button></h2>';
     h += '<div class="wdays">';
+    if (G.diffDays(t, d) > 6) h += '<button class="chip on" data-wd="' + d + '">' + md(d) + (wornOn(d).length ? ' ✓' : '') + '</button>';
     for (var i = 6; i >= 0; i--) {
       var x = G.addDays(t, -i);
       h += '<button class="chip' + (x === d ? ' on' : '') + '" data-wd="' + x + '">' + (x === t ? '오늘' : x === G.addDays(t, -1) ? '어제' : DPW[G.parseYmd(x).getDay()] + ' ' + (+x.slice(8))) + (wornOn(x).length ? ' ✓' : '') + '</button>';
@@ -4581,7 +4641,7 @@ input.dp-hid { display: none !important; }
   var NEWS = { id: 'v16-2026-11', items: [
     ['pen', '수정 버튼이 이름 옆으로', '물건을 누르면 이름 바로 옆에 수정이 있어요. 고쳐서 저장하면 그 전 기록은 안 보여요.'],
     ['dots', '⋮ 간단 수정', '목록 오른쪽 ⋮로 이름·유통/소비기한·메모를 바로 고치고, 음식은 냉동실로 옮겨요.'],
-    ['clothes', '오늘 입은 옷', '옷 탭에 상의·하의를 사진으로 등록하고, 지난주와 안 겹치게 골라 입어요.']
+    ['clothes', '오늘 입은 옷 달력', '옷 탭에 상의·하의를 사진으로 등록하고, 달력으로 보면서 지난주와 안 겹치게 입어요.']
   ] };
   function showNews() {
     S.set.news = NEWS.id; persist();
@@ -4757,6 +4817,8 @@ input.dp-hid { display: none !important; }
     $$('#app [data-photo]').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); viewPhoto(b.dataset.photo); }; });
     $$('#app [data-more]').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); quickEdit(b.dataset.more); }; });
     $$('#app [data-wday]').forEach(function (b) { b.onclick = function () { openWear(b.dataset.wday); }; });
+    var wt = $('#app [data-wtog]'); if (wt) wt.onclick = function () { S.set.wearOpen = !S.set.wearOpen; if (!S.set.wearOpen) wearYm = null; persist(); render(); };
+    $$('#app [data-wym]').forEach(function (b) { b.onclick = function () { var ym = wearYm || today().slice(0, 7), y = +ym.slice(0, 4), m = +ym.slice(5, 7) + +b.dataset.wym; if (m < 1) { m = 12; y--; } if (m > 12) { m = 1; y++; } wearYm = y + '-' + (m < 10 ? '0' : '') + m; render(); }; });
     $$('#app [data-rc]').forEach(function (b) { b.onclick = function () { openRecipe(b.dataset.rc); }; });
     var more = $('#app [data-recipes]'); if (more) more.onclick = recipeList;
     var rt = $('#app [data-rectog]'); if (rt) rt.onclick = function () { S.set.recOpen = !S.set.recOpen; persist(); render(); };
@@ -4825,7 +4887,7 @@ input.dp-hid { display: none !important; }
     yt.use[G.addMonths(t, -1).slice(0, 7)] = false; yt.use[G.addMonths(t, -2).slice(0, 7)] = false;
     S.set.chk = { food: a(-9) };
     S.plan = null;
-    S.wear = {}; S.wear[a(-1)] = ['demow1', 'demow4']; S.wear[a(-3)] = ['demow2', 'demow4']; S.wear[a(-5)] = ['demow1', 'demow4']; S.wear[a(-10)] = ['demow3', 'demow5'];
+    S.wear = {}; [[1, 'demow1', 'demow4'], [2, 'demow2', 'demow5'], [3, 'demow2', 'demow4'], [5, 'demow1', 'demow4'], [6, 'demow2', 'demow5'], [8, 'demow1', 'demow4'], [9, 'demow2', 'demow4'], [11, 'demow3', 'demow5'], [12, 'demow1', 'demow4'], [13, 'demow2', 'demow5'], [15, 'demow3', 'demow4'], [16, 'demow1', 'demow5'], [19, 'demow2', 'demow4'], [20, 'demow1', 'demow5'], [22, 'demow3', 'demow4']].forEach(function (w) { S.wear[a(-w[0])] = [w[1], w[2]]; });
     var mom = S.items.filter(function (i) { return i.name === '엄마 생신'; })[0]; mom.date = (+t.slice(0, 4) - 58) + a(5).slice(4);
     // 수량·산 곳·용량
     var extra = { '서울우유 1L': { store: '이마트', amt: 1000, unit: 'ml' }, '계란 10구': { store: '홈플러스', amt: 10, unit: '개', qty: 2 }, '신라면 5입': { store: '쿠팡', amt: 5, unit: '개' },
@@ -4971,7 +5033,7 @@ input.dp-hid { display: none !important; }
 
 
 <!--APPINFO--><script>
-window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.05", "items": ["수정 버튼을 물건 이름 바로 옆으로 옮겼어요 (모든 탭)", "목록의 ⋮ 버튼으로 간단 수정: 이름·날짜(유통/소비기한)·메모, 냉동실로 옮기기", "수정해서 저장하면 그 전 기록은 자세히 보기에서 안 보여요 (통계는 그대로)", "옷 탭에 상의·하의 추가, 옷 사진 찍어서 바로 등록", "오늘 입은 옷 기록: 최근 7일을 한눈에, 지난주에 입은 옷은 노란색, '안 겹치게 골라주기'"]}, {"v": "v1.15", "d": "2026.11.05", "items": ["왼쪽 아래 버전 → 내 데이터 백업: 기록을 파일로 저장했다가 새 폰에서 불러오기"]}, {"v": "v1.14", "d": "2026.11.01", "items": ["D-day 탭도 다른 탭처럼: 위쪽 지난 날·곧 다가와요·여유 요약(눌러서 거르기), 장보기 버튼, 사진 넣기, 말로 등록", "말로 D-day 등록: \"넷플릭스 만칠천 원 매달 15일\", \"엄마 생신 3월 5일\"", "기념일 선물·준비물을 장보기에 담기, 자동차 부품도 장보기에 담기", "통계 탭별에 D-day(해지·점검한 개수)도 보여요"]}, {"v": "v1.13", "d": "2026.11.01", "items": ["날짜 없이 등록하면 날짜 칸으로 바로 데려가 빨갛게 표시하고, 년도 고르기를 열어 줘요", "6개월·1년 같은 교체 주기를 달력 기준으로 계산해요 (11월 1일 + 6개월 = 5월 1일)"]}, {"v": "v1.12", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 기기에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때와, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄)만 써요.", "backup": {"keys": ["gyoche_v1"], "idb": [{"db": "gyoche_photos", "store": "p"}], "bridge": "Android"}};
+window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.05", "items": ["수정 버튼을 물건 이름 바로 옆으로 옮겼어요 (모든 탭)", "목록의 ⋮ 버튼으로 간단 수정: 이름·날짜(유통/소비기한)·메모, 냉동실로 옮기기, D-day는 금액도", "수정해서 저장하면 그 전 기록은 자세히 보기에서 안 보여요 (통계는 그대로)", "옷 탭에 상의·하의 추가, 옷 사진 찍어서 바로 등록", "오늘 입은 옷 달력: 평소엔 접어 두고, 펼치면 날마다 입은 옷 사진·이달 자주 입은 옷·안 입은 옷", "지난주에 입은 옷은 노란색으로 알려주고 '안 겹치게 골라주기'"]}, {"v": "v1.15", "d": "2026.11.05", "items": ["왼쪽 아래 버전 → 내 데이터 백업: 기록을 파일로 저장했다가 새 폰에서 불러오기"]}, {"v": "v1.14", "d": "2026.11.01", "items": ["D-day 탭도 다른 탭처럼: 위쪽 지난 날·곧 다가와요·여유 요약(눌러서 거르기), 장보기 버튼, 사진 넣기, 말로 등록", "말로 D-day 등록: \"넷플릭스 만칠천 원 매달 15일\", \"엄마 생신 3월 5일\"", "기념일 선물·준비물을 장보기에 담기, 자동차 부품도 장보기에 담기", "통계 탭별에 D-day(해지·점검한 개수)도 보여요"]}, {"v": "v1.13", "d": "2026.11.01", "items": ["날짜 없이 등록하면 날짜 칸으로 바로 데려가 빨갛게 표시하고, 년도 고르기를 열어 줘요", "6개월·1년 같은 교체 주기를 달력 기준으로 계산해요 (11월 1일 + 6개월 = 5월 1일)"]}, {"v": "v1.12", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 기기에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때와, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄)만 써요.", "backup": {"keys": ["gyoche_v1"], "idb": [{"db": "gyoche_photos", "store": "p"}], "bridge": "Android"}};
 window.APP_INFO.online=!!(window.Android&&window.Android.version);
 window.APP_INFO.version=function(){try{return window.Android.version()}catch(e){return '1.10'}};
 </script>
