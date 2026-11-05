@@ -1927,6 +1927,7 @@ input.dp-hid { display: none !important; }
     s.myp = s.myp || [];
     s.set.chk = s.set.chk || {};
     s.del = s.del || {};
+    delete s.set.wx; delete s.set.wxCity;
     // 오늘 입은 옷: { 'YYYY-MM-DD': [물건 id] } 모양만 받음 (백업 파일이 망가져도 안전하게)
     var wr = s.wear && typeof s.wear === 'object' && !Array.isArray(s.wear) ? s.wear : {};
     s.wear = {};
@@ -3386,7 +3387,6 @@ input.dp-hid { display: none !important; }
   // 날짜별 고르기 화면
   function openWear(d, picked) {
     var t = today();
-    if (d === t) fetchWx(function () { if ($('.sheet .wx') && !picked) openWear(d, wornOn(d).slice()); });
     var items = wearItems();
     if (!items.length) { doAct('wphoto'); return; }
     var sel = picked || wornOn(d).slice();
@@ -3404,7 +3404,7 @@ input.dp-hid { display: none !important; }
     }
     h += '</div>';
     var sea = d === t ? todaySeason() : { key: monthSeason(d), src: 'month' };
-    h += '<div class="wx">' + IC.leaf + '<span>' + (sea.src === 'wx' ? '오늘 ' + esc(sea.city) + ' <b>' + sea.min + '~' + sea.max + '°C</b> · ' : (d === t ? '오늘은 ' : '이날은 ') + '계절로 보면 ') + '<b>' + SEASON_W[sea.key] + '</b> 옷을 먼저 보여드려요</span></div>';
+    h += '<div class="wx">' + IC.leaf + '<span>' + (d === t ? '지금은 ' : '이날은 ') + '<b>' + SEASON_W[sea.key] + '</b> 옷을 먼저 보여드려요</span></div>';
     var ofs = (S.outfits || []).filter(function (o) { return o.ids.some(function (id) { return items.some(function (x) { return x.id === id; }); }); });
     if (ofs.length) h += '<p class="lbl">내 코디 <span style="font-weight:400">· 누르면 한 번에 골라져요</span></p><div class="ofits">' + ofs.map(function (o) {
       var ids = o.ids.filter(function (id) { return items.some(function (x) { return x.id === id; }); });
@@ -3459,7 +3459,7 @@ input.dp-hid { display: none !important; }
             WEAR_LOCS.forEach(function (loc) {
               var c = items.filter(function (x) { return x.loc === loc; }).map(function (x) { var f = info(x); return { it: x, g: f.gap == null ? 9999 : f.gap, r: seaRank(x, sea.key) }; });
               if (!c.length) return;
-              // 날씨에 맞는 옷 중에서, 일주일 안 입은 옷 → 가장 오래 안 입은 옷
+              // 계절에 맞는 옷 중에서, 일주일 안 입은 옷 → 가장 오래 안 입은 옷
               var fit = c.filter(function (x) { return x.r < 3; }); if (fit.length) c = fit;
               c.sort(function (p, q) { return (p.g >= 7 ? 0 : 1) - (q.g >= 7 ? 0 : 1) || p.r - q.r || q.g - p.g; });
               var best = c.filter(function (x) { return x.g === c[0].g && x.r === c[0].r; });
@@ -3480,7 +3480,7 @@ input.dp-hid { display: none !important; }
       });
     });
   }
-  // ── 날씨·계절 (날씨는 설정에서 켠 사람만, 지역 좌표만 보냄) ──
+  // ── 계절 (인터넷 없이 달로 판단) ──
   var SEASON_W = { all: '사계절', summer: '여름', mid: '봄·가을', winter: '겨울' };
   function seasonGuess(n) {
     n = String(n || '');
@@ -3490,28 +3490,7 @@ input.dp-hid { display: none !important; }
     return 'all';
   }
   function monthSeason(d) { var m = +d.slice(5, 7); return m >= 6 && m <= 8 ? 'summer' : m === 12 || m <= 2 ? 'winter' : 'mid'; }
-  function tempSeason(min, max) { var a = (min + max) / 2; return a >= 22 ? 'summer' : a < 9 ? 'winter' : 'mid'; }
-  var CITIES = [['서울', 37.57, 126.98], ['인천', 37.46, 126.71], ['수원', 37.26, 127.03], ['춘천', 37.88, 127.73], ['강릉', 37.75, 128.88], ['대전', 36.35, 127.38], ['세종', 36.48, 127.29], ['청주', 36.64, 127.49], ['전주', 35.82, 127.15], ['광주', 35.16, 126.85], ['대구', 35.87, 128.6], ['포항', 36.02, 129.34], ['울산', 35.54, 129.31], ['부산', 35.18, 129.08], ['창원', 35.23, 128.68], ['여수', 34.76, 127.66], ['제주', 33.5, 126.53]];
-  function todaySeason() {
-    var t = today(), w = S.set.wx;
-    if (S.set.wxCity && w && w.d === t && w.city === S.set.wxCity) return { key: tempSeason(w.min, w.max), src: 'wx', min: w.min, max: w.max, city: w.city };
-    return { key: monthSeason(t), src: 'month' };
-  }
-  var wxBusy = false;
-  function fetchWx(cb) {
-    var c = CITIES.filter(function (x) { return x[0] === S.set.wxCity; })[0], t = today();
-    if (!c || PV || wxBusy || (S.set.wx && S.set.wx.d === t && S.set.wx.city === c[0]) || !window.fetch) return;
-    wxBusy = true;
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=' + c[1] + '&longitude=' + c[2] + '&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSeoul&forecast_days=1')
-      .then(function (r) { return r.json(); })
-      .then(function (j) {
-        wxBusy = false;
-        var mx = j && j.daily && j.daily.temperature_2m_max && +j.daily.temperature_2m_max[0], mn = j && j.daily && j.daily.temperature_2m_min && +j.daily.temperature_2m_min[0];
-        if (!isFinite(mx) || !isFinite(mn)) return;
-        S.set.wx = { d: t, city: c[0], max: Math.round(mx), min: Math.round(mn) };
-        persist(); if (cb) cb();
-      }).catch(function () { wxBusy = false; });
-  }
+  function todaySeason() { return { key: monthSeason(today()), src: 'month' }; }
   // 0 딱 맞음 · 1 사계절 · 2 비슷 · 3 안 맞음
   function seaRank(it, key) {
     var s = it.season || 'all';
@@ -3522,7 +3501,7 @@ input.dp-hid { display: none !important; }
   }
   function seasonField(d) {
     if (!d.season) d.season = seasonGuess(d.name);
-    return '<div class="field"><span class="lbl">언제 입어요 <span style="font-weight:400">· 날씨에 맞는 옷을 먼저 골라 드려요</span></span><div class="seg" id="f-sea">' +
+    return '<div class="field"><span class="lbl">언제 입어요 <span style="font-weight:400">· 계절에 맞는 옷을 먼저 골라 드려요</span></span><div class="seg" id="f-sea">' +
       ['all', 'summer', 'mid', 'winter'].map(function (k) { return '<button data-sea="' + k + '" class="' + (d.season === k ? 'on' : '') + '">' + SEASON_W[k] + '</button>'; }).join('') + '</div></div>';
   }
   // 아침 알림에 넣을 오늘 옷 추천 (기록을 쓰는 사람만)
@@ -3589,7 +3568,7 @@ input.dp-hid { display: none !important; }
     h += '<div class="hero"><span class="dd ' + s.state + '">' + s.label + '</span><div class="when">' + when + ' · ' + fullDate(due) + '</div></div>';
     h += memoBox(it);
     h += '<div class="kv"><div><span>탭</span>' + G.CATS[it.cat] + (it.loc ? ' · ' + esc(it.loc) : '') + '</div>' +
-      (it.noCycle ? '<div><span>교체 주기</span>끔 (옷장으로만 관리)</div><div><span>날씨</span>' + SEASON_W[it.season || 'all'] + '</div>' : it.mode === 'cycle' ? '<div><span>' + (it.cat === 'food' ? '만든 날' : '사용 시작') + '</span>' + fullDate(it.start) + '</div><div><span>' + (it.cat === 'food' ? '먹을 기간' : '교체 주기') + '</span>' + cycleText(it.days) + '</div>' + (WEAR_LOCS.indexOf(it.loc) >= 0 && it.cat === 'clothes' ? '<div><span>날씨</span>' + SEASON_W[it.season || 'all'] + '</div>' : '')
+      (it.noCycle ? '<div><span>교체 주기</span>끔 (옷장으로만 관리)</div><div><span>계절</span>' + SEASON_W[it.season || 'all'] + '</div>' : it.mode === 'cycle' ? '<div><span>' + (it.cat === 'food' ? '만든 날' : '사용 시작') + '</span>' + fullDate(it.start) + '</div><div><span>' + (it.cat === 'food' ? '먹을 기간' : '교체 주기') + '</span>' + cycleText(it.days) + '</div>' + (WEAR_LOCS.indexOf(it.loc) >= 0 && it.cat === 'clothes' ? '<div><span>계절</span>' + SEASON_W[it.season || 'all'] + '</div>' : '')
         : '<div><span>' + esc(it.kind || '유통기한') + '</span>' + fullDate(it.due) + '</div>') +
       '<div><span>수량</span><span class="step sm"><button data-a="q-" aria-label="수량 하나 빼기">−</button><b>' + qtyOf(it) + '</b><button data-a="q+" aria-label="수량 하나 더하기">+</button></span></div>' +
       (it.store ? '<div><span>산 곳</span>' + esc(it.store) + '</div>' : '') +
@@ -4796,7 +4775,7 @@ input.dp-hid { display: none !important; }
     ['pen', '수정 버튼이 이름 옆으로', '물건을 누르면 이름 바로 옆에 수정이 있어요. 고쳐서 저장하면 그 전 기록은 안 보여요.'],
     ['dots', '⋮ 간단 수정', '목록 오른쪽 ⋮로 이름·유통/소비기한·메모를 바로 고치고, 음식은 냉동실로 옮겨요.'],
     ['clothes', '오늘 입은 옷 달력', '상의·하의를 사진으로 등록하고, 달력으로 보면서 지난주와 안 겹치게 입어요.'],
-    ['leaf', '날씨 보고 옷 추천 · 코디 저장', '설정에서 지역을 고르면 기온에 맞는 옷부터, 자주 입는 조합은 코디로 한 번에.']
+    ['leaf', '계절 맞춤 · 코디 저장', '지금 계절에 맞는 옷부터 골라 주고, 자주 입는 조합은 코디로 한 번에.']
   ] };
   function showNews() {
     S.set.news = NEWS.id; persist();
@@ -4873,7 +4852,6 @@ input.dp-hid { display: none !important; }
       '</div>';
     var due = dueNow();
     h += '<div class="set"><div><span>오늘 알림 내용<small>' + (due.length ? due.slice(0, 4).map(function (x) { return esc(x.it.name) + '(' + x.s.label + ')'; }).join(', ') + (due.length > 4 ? ' 외 ' + (due.length - 4) + '개' : '') : '오늘은 챙길 물건이 없어요') + '</small></span></div></div>';
-    if (isOn('clothes')) h += '<p class="sec-h">옷 · 날씨</p><div class="set"><div><span>날씨 보고 옷 추천<small>' + (S.set.wxCity ? '오늘 기온에 맞는 옷을 먼저 골라 드려요. 고른 지역 위치만 날씨 서비스(Open-Meteo)에 보내요' : '끄면 달(계절)로 골라 드려요. 켜면 고른 지역 위치만 날씨 서비스(Open-Meteo)에 보내요') + '</small></span><select class="inp" id="s-wx" style="width:110px"><option value="">끄기</option>' + CITIES.map(function (c) { return '<option' + (S.set.wxCity === c[0] ? ' selected' : '') + '>' + c[0] + '</option>'; }).join('') + '</select></div></div>';
     h += '<p class="sec-h">쓸 탭 고르기</p><div class="set tabsel">' + ALL_TABS.map(function (c) {
       var n = S.items.filter(function (i) { return i.cat === c; }).length;
       return '<div><span class="tl"><span class="ico ' + c + '">' + IC[c] + '</span><span>' + TITLES[c] + '<small>' + SUBS[c] + (n ? ' · ' + n + '개' : '') + '</small></span></span><label class="sw"><input type="checkbox" data-tab="' + c + '"' + (isOn(c) ? ' checked' : '') + '><i></i></label></div>';
@@ -4905,7 +4883,6 @@ input.dp-hid { display: none !important; }
 
   function bindSettings() {
     var n = $('#s-noti'); if (n) n.onchange = function () { S.set.notify = n.checked; if (n.checked) { S.set.asked = false; askNotifyOnce(); } persist(); toast(n.checked ? '매일 ' + S.set.time + '에 알려드려요' : '알림을 껐어요'); };
-    var wxs = $('#s-wx'); if (wxs) wxs.onchange = function () { S.set.wxCity = wxs.value || null; delete S.set.wx; persist(); render(); if (S.set.wxCity) { fetchWx(function () { var w = S.set.wx; if (w) toast('오늘 ' + w.city + ' ' + w.min + '~' + w.max + '°C · ' + SEASON_W[tempSeason(w.min, w.max)] + ' 옷을 먼저 골라 드려요', 3000); }); } else toast('날씨 대신 계절로 골라 드려요'); };
     var tm = $('#s-time'); if (tm) tm.onchange = function () { if (!tm.value) return; S.set.time = tm.value; persist(); toast('매일 ' + tm.value + '에 알려드려요'); };
     var ts = $('#s-test'); if (ts) ts.onclick = function () { syncNative(); A.testNotify(); };
     $$('[data-tab]').forEach(function (c) {
@@ -5193,7 +5170,7 @@ input.dp-hid { display: none !important; }
 
 
 <!--APPINFO--><script>
-window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.05", "items": ["수정 버튼을 물건 이름 바로 옆으로 옮겼어요 (모든 탭)", "목록의 ⋮ 버튼으로 간단 수정: 이름·날짜(유통/소비기한)·메모, 냉동실로 옮기기, D-day는 금액도", "수정해서 저장하면 그 전 기록은 자세히 보기에서 안 보여요 (통계는 그대로)", "옷 탭에 상의·하의 추가, 옷 사진 찍어서 바로 등록", "오늘 입은 옷 달력: 평소엔 접어 두고, 펼치면 날마다 입은 옷 사진·이달 자주 입은 옷·안 입은 옷", "지난주에 입은 옷은 노란색으로 알려주고 '안 겹치게 골라주기'", "날씨 보고 옷 추천(설정에서 지역 고르기), 옷마다 사계절·여름·봄가을·겨울", "코디 저장: 자주 입는 상의+하의를 한 번에", "두 달 넘게 안 입은 옷 정리 · 기부·중고용 목록 복사", "상의·하의는 교체 주기 없이 옷장으로만 관리 (켤 수 있어요)", "아침 알림에 오늘 입을 옷 추천 한 줄"]}, {"v": "v1.15", "d": "2026.11.05", "items": ["왼쪽 아래 버전 → 내 데이터 백업: 기록을 파일로 저장했다가 새 폰에서 불러오기"]}, {"v": "v1.14", "d": "2026.11.01", "items": ["D-day 탭도 다른 탭처럼: 위쪽 지난 날·곧 다가와요·여유 요약(눌러서 거르기), 장보기 버튼, 사진 넣기, 말로 등록", "말로 D-day 등록: \"넷플릭스 만칠천 원 매달 15일\", \"엄마 생신 3월 5일\"", "기념일 선물·준비물을 장보기에 담기, 자동차 부품도 장보기에 담기", "통계 탭별에 D-day(해지·점검한 개수)도 보여요"]}, {"v": "v1.13", "d": "2026.11.01", "items": ["날짜 없이 등록하면 날짜 칸으로 바로 데려가 빨갛게 표시하고, 년도 고르기를 열어 줘요", "6개월·1년 같은 교체 주기를 달력 기준으로 계산해요 (11월 1일 + 6개월 = 5월 1일)"]}, {"v": "v1.12", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 기기에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄), 설정에서 날씨를 켰을 때 고른 지역의 기온을 가져올 때(Open-Meteo, 지역 위치만 보냄)만 써요.", "backup": {"keys": ["gyoche_v1"], "idb": [{"db": "gyoche_photos", "store": "p"}], "bridge": "Android"}};
+window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.05", "items": ["수정 버튼을 물건 이름 바로 옆으로 옮겼어요 (모든 탭)", "목록의 ⋮ 버튼으로 간단 수정: 이름·날짜(유통/소비기한)·메모, 냉동실로 옮기기, D-day는 금액도", "수정해서 저장하면 그 전 기록은 자세히 보기에서 안 보여요 (통계는 그대로)", "옷 탭에 상의·하의 추가, 옷 사진 찍어서 바로 등록", "오늘 입은 옷 달력: 평소엔 접어 두고, 펼치면 날마다 입은 옷 사진·이달 자주 입은 옷·안 입은 옷", "지난주에 입은 옷은 노란색으로 알려주고 '안 겹치게 골라주기'", "계절 맞춤: 옷마다 사계절·여름·봄가을·겨울, 지금 계절 옷부터 골라 줘요", "코디 저장: 자주 입는 상의+하의를 한 번에", "두 달 넘게 안 입은 옷 정리 · 기부·중고용 목록 복사", "상의·하의는 교체 주기 없이 옷장으로만 관리 (켤 수 있어요)", "아침 알림에 오늘 입을 옷 추천 한 줄"]}, {"v": "v1.15", "d": "2026.11.05", "items": ["왼쪽 아래 버전 → 내 데이터 백업: 기록을 파일로 저장했다가 새 폰에서 불러오기"]}, {"v": "v1.14", "d": "2026.11.01", "items": ["D-day 탭도 다른 탭처럼: 위쪽 지난 날·곧 다가와요·여유 요약(눌러서 거르기), 장보기 버튼, 사진 넣기, 말로 등록", "말로 D-day 등록: \"넷플릭스 만칠천 원 매달 15일\", \"엄마 생신 3월 5일\"", "기념일 선물·준비물을 장보기에 담기, 자동차 부품도 장보기에 담기", "통계 탭별에 D-day(해지·점검한 개수)도 보여요"]}, {"v": "v1.13", "d": "2026.11.01", "items": ["날짜 없이 등록하면 날짜 칸으로 바로 데려가 빨갛게 표시하고, 년도 고르기를 열어 줘요", "6개월·1년 같은 교체 주기를 달력 기준으로 계산해요 (11월 1일 + 6개월 = 5월 1일)"]}, {"v": "v1.12", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 기기에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때와, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄)만 써요.", "backup": {"keys": ["gyoche_v1"], "idb": [{"db": "gyoche_photos", "store": "p"}], "bridge": "Android"}};
 window.APP_INFO.online=!!(window.Android&&window.Android.version);
 window.APP_INFO.version=function(){try{return window.Android.version()}catch(e){return '1.10'}};
 </script>
