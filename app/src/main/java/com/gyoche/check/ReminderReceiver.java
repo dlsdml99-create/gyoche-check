@@ -10,7 +10,8 @@ public class ReminderReceiver extends BroadcastReceiver {
     public void onReceive(Context c, Intent i) {
         String a = i == null ? null : i.getAction();
         if (a != null && a.startsWith("com.gyoche.check.") && !Reminder.ACTION.equals(a)) { Reminder.handleAction(c, i); return; }
-        if (Reminder.ACTION.equals(a)) {
+        // 아침 알림 신호도 이 앱이 만든 것만 (다른 앱이 알림을 마구 띄우지 못하게)
+        if (Reminder.ACTION.equals(a) && Reminder.token(c).equals(i.getStringExtra("tok"))) {
             try { Reminder.notifyNow(c, false); } catch (Exception ignored) {}
         }
         Reminder.schedule(c);

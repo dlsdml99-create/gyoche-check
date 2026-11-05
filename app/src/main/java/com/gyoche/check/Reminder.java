@@ -124,7 +124,7 @@ public class Reminder {
     }
 
     private static PendingIntent alarmIntent(Context c) {
-        Intent i = new Intent(c, ReminderReceiver.class).setAction(ACTION);
+        Intent i = new Intent(c, ReminderReceiver.class).setAction(ACTION).putExtra("tok", token(c));
         return PendingIntent.getBroadcast(c, 1, i, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
 

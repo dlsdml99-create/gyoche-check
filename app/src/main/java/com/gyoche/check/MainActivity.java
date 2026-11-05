@@ -80,6 +80,9 @@ public class MainActivity extends Activity {
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
+        // 앱 화면(assets)만 열고, 폰의 다른 파일·콘텐츠는 화면에서 못 읽게
+        s.setAllowFileAccess(false);
+        s.setAllowContentAccess(false);
         web.addJavascriptInterface(new Bridge(), "Android");
         web.setWebViewClient(new WebViewClient() {
             @Override
@@ -624,7 +627,9 @@ public class MainActivity extends Activity {
                 if (assets != null) {
                     for (int i = 0; i < assets.length(); i++) {
                         JSONObject a = assets.getJSONObject(i);
-                        if (a.optString("name").endsWith(".apk")) { url = a.optString("browser_download_url"); break; }
+                        // 업데이트 파일은 챙김이 저장소의 릴리스 주소일 때만 (다른 주소면 무시)
+                        String du = a.optString("browser_download_url");
+                        if (a.optString("name").endsWith(".apk") && du.startsWith("https://github.com/dlsdml99-create/gyoche-check/releases/download/")) { url = du; break; }
                     }
                 }
                 latestVersion = latest;
