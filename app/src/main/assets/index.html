@@ -1943,12 +1943,22 @@ input.dp-hid { display: none !important; }
   function load() {
     var s = null;
     try { s = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
-    s = s || {};
-    s.items = s.items || [];
-    s.events = s.events || [];
-    s.barcodes = s.barcodes || {};
-    s.set = s.set || {};
-    s.car = s.car || { name: '내 차', km: null, log: [] };
+    // 망가진 저장 내용·백업이 들어와도 앱이 멈추지 않게 모양을 확인해요
+    var isObj = function (v) { return !!v && typeof v === 'object' && !Array.isArray(v); };
+    var objs = function (v) { return Array.isArray(v) ? v.filter(isObj) : []; };
+    if (!isObj(s)) s = {};
+    s.items = objs(s.items).filter(function (it) { return typeof it.id === 'string' && it.id && typeof it.name === 'string' && CAT_TABS.indexOf(it.cat) >= 0; });
+    s.events = objs(s.events);
+    s.barcodes = isObj(s.barcodes) ? s.barcodes : {};
+    s.set = isObj(s.set) ? s.set : {};
+    s.car = isObj(s.car) ? s.car : { name: '내 차', km: null, log: [] };
+    s.car.log = objs(s.car.log).filter(function (l) { return typeof l.date === 'string' && isFinite(+l.km); });
+    ['shop', 'prices', 'myp'].forEach(function (k) { s[k] = objs(s[k]); });
+    s.shop = s.shop.filter(function (x) { return typeof x.name === 'string'; });
+    s.fav = Array.isArray(s.fav) ? s.fav.filter(function (x) { return typeof x === 'string'; }) : [];
+    ['tpl', 'del'].forEach(function (k) { if (!isObj(s[k])) s[k] = {}; });
+    if (!isObj(s.set.seen)) s.set.seen = {};
+    if (!isObj(s.set.chk)) s.set.chk = {};
     if (s.set.notify == null) s.set.notify = true;
     if (!s.set.time) s.set.time = '09:00';
     s.shop = s.shop || [];
@@ -2152,7 +2162,7 @@ input.dp-hid { display: none !important; }
     var name = it.name, cat = it.cat;
     if (S.shop.some(function (x) { return !x.done && String(x.name).replace(/\s/g, '') === String(name).replace(/\s/g, ''); })) { toast(msg + ' · 장보기 목록에 이미 있어요', 2600); return; }
     actToast(msg, [
-      ['🛒 장보기에 담기', function () { addShop(name, cat, 'item'); persist(); render(); toast(eul(name) + ' 장보기에 담았어요'); }],
+      ['🛒 장보기에 담기', function () { addShop(name, cat, 'used'); persist(); render(); toast(eul(name) + ' 장보기에 담았어요'); }],
       ['★ 다음부터 자동으로', function () { if (S.fav.indexOf(name) < 0) { if (!S.tpl[name]) rememberTpl(it); S.fav.push(name); } addShop(name, cat, 'fav'); persist(); render(); toast('자주 쓰는 물품으로 정했어요. 다음부터 다 쓰면 장보기에 저절로 담겨요', 3200); }]
     ]);
   }
@@ -2533,7 +2543,7 @@ input.dp-hid { display: none !important; }
         return (groups.length > 1 || g.store ? '<p class="shop-g">' + (g.store ? esc(g.store) + '에서 <small>' + g.items.length + '개 · 내 기록에서 가장 싼 곳</small>' : '어디서든 <small>' + g.items.length + '개</small>') + '</p>' : '') +
           '<div class="used">' + g.items.map(function (y) {
             var x = y.x;
-            var from = x.from && x.from.indexOf('recipe:') === 0 ? x.from.slice(7) + ' 재료' : x.from === 'item' || x.from === 'due' ? '바꿀 때 됨' : x.from === 'fav' ? '자주 쓰는 물품' : x.from === 'dday' ? (x.note || '기념일 준비') : x.from === 'runout' ? (x.note || '곧 떨어짐') : '';
+            var from = x.from && x.from.indexOf('recipe:') === 0 ? x.from.slice(7) + ' 재료' : x.from === 'due' ? '바꿀 때 됨' : x.from === 'used' ? '다 써서 담음' : x.from === 'item' ? '직접 담음' : x.from === 'fav' ? '자주 쓰는 물품' : x.from === 'dday' ? (x.note || '기념일 준비') : x.from === 'runout' ? (x.note || '곧 떨어짐') : '';
             if (y.b && y.b.label) from = (from ? from + ' · ' : '') + y.b.label;
             return '<div class="urow"><input type="checkbox" data-buy="' + x.id + '" aria-label="' + esc(x.name) + ' 샀어요"><span>' + esc(x.name) + (from ? ' <small class="hint" style="display:inline">· ' + esc(from) + '</small>' : '') + '</span><button class="clink" data-shdel="' + x.id + '" style="margin:0">빼기</button></div>';
           }).join('') + '</div>';
@@ -2756,7 +2766,7 @@ input.dp-hid { display: none !important; }
     h += '<div class="field"><span class="lbl">자주 쓰는 품목</span><div class="presets">' +
       presets.map(function (p) { return '<button class="chip' + (p.mine ? ' mine' : '') + (d.preset === p.name ? ' on' : '') + '" data-p="' + esc(p.name) + '">' + (p.mine ? IC.star : '') + esc(p.name) + '</button>'; }).join('') +
       '<button class="chip add" data-addp>+ 지금 입력한 걸 내 품목으로</button></div></div>';
-    h += '<div class="field"><label for="f-name">이름</label><div class="row"><input class="inp" id="f-name" placeholder="' + (d.cat === 'food' ? '예: 서울우유 1L' : d.cat === 'clothes' ? '예: 흰 양말' : '예: 욕실 칫솔') + '" value="' + esc(d.name) + '" style="flex:1">' +
+    h += '<div class="field"><label for="f-name">이름</label><div class="row"><input class="inp" id="f-name" maxlength="60" placeholder="' + (d.cat === 'food' ? '예: 서울우유 1L' : d.cat === 'clothes' ? '예: 흰 양말' : '예: 욕실 칫솔') + '" value="' + esc(d.name) + '" style="flex:1">' +
       '<div class="step" aria-label="수량"><button data-qty="-1" aria-label="하나 빼기">−</button><b id="f-qty">' + qtyOf(d) + '</b><button data-qty="1" aria-label="하나 더하기">+</button></div></div>' +
       '<p class="hint" style="margin-top:4px">오른쪽은 수량이에요. 여러 개 샀으면 +를 눌러주세요.</p></div>';
     var wearLoc = d.cat === 'clothes' && WEAR_LOCS.indexOf(d.loc) >= 0;
@@ -3789,9 +3799,10 @@ input.dp-hid { display: none !important; }
     if (it.mode === 'dday') { openDdayDetail(it); return; }
     var t = today(), s = stat(it, t), due = G.itemDue(it);
     var when = s.left > 0 ? s.left + '일 남았어요' : s.left === 0 ? '오늘이에요' : (-s.left) + '일 지났어요';
+    if (it.noCycle) { var lw = lastWorn(it.id, G.addDays(t, 1)); when = lw ? '마지막으로 입은 날 ' + dayWord(lw) : '교체 알림 없이 옷장에서 관리해요'; }
     var h = titleH(it);
     if (PH[it.id]) h += '<button class="dphoto" data-pv="' + it.id + '"><img alt="' + esc(it.name) + ' 사진" src="' + PH[it.id] + '"></button>';
-    h += '<div class="hero"><span class="dd ' + s.state + '">' + s.label + '</span><div class="when">' + when + ' · ' + fullDate(due) + '</div></div>';
+    h += '<div class="hero"><span class="dd ' + s.state + '">' + s.label + '</span><div class="when">' + when + (it.noCycle ? '' : ' · ' + fullDate(due)) + '</div></div>';
     h += memoBox(it);
     h += '<div class="kv"><div><span>탭</span>' + G.CATS[it.cat] + (it.loc ? ' · ' + esc(it.loc) : '') + '</div>' +
       (it.noCycle ? '<div><span>교체 주기</span>끔 (옷장으로만 관리)</div><div><span>계절</span>' + SEASON_W[it.season || 'all'] + '</div>' : it.mode === 'cycle' ? '<div><span>' + (it.cat === 'food' ? '만든 날' : '사용 시작') + '</span>' + fullDate(it.start) + '</div><div><span>' + (it.cat === 'food' ? '먹을 기간' : '교체 주기') + '</span>' + cycleText(it.days) + '</div>' + (WEAR_LOCS.indexOf(it.loc) >= 0 && it.cat === 'clothes' ? '<div><span>계절</span>' + SEASON_W[it.season || 'all'] + '</div>' : '')
@@ -4553,7 +4564,8 @@ input.dp-hid { display: none !important; }
     if (PV) {
       pending = { kind: kind || 'voice' };
       busy('듣는 중…');
-      setTimeout(function () { busy(null); toast('미리보기라서 예시 문장으로 보여드려요', 2400); window.onNative({ type: 'voice', ok: true, text: '우유 두 개 이마트에서 오천구백 원 그리고 두부 하나 천팔백 원' }); }, 700);
+      var sample = kind === 'ddayVoice' ? '넷플릭스 만칠천 원 매달 15일' : view === 'clothes' ? '양말 다섯 켤레 유니클로 만 원' : view === 'daily' ? '휴지 30롤 쿠팡 만 팔천 원' : '우유 두 개 이마트에서 오천구백 원 그리고 두부 하나 천팔백 원';
+      setTimeout(function () { busy(null); toast('미리보기라서 예시 문장으로 보여드려요', 2400); window.onNative({ type: 'voice', ok: true, text: sample }); }, 700);
       return;
     }
     if (!A || !A.listen) { noNative(); return; }
@@ -4565,6 +4577,7 @@ input.dp-hid { display: none !important; }
     var t = today(), vs = G.parseVoice(text, t);
     if (!vs.length) { toast('"' + text + '" 을(를) 물건으로 알아듣지 못했어요. 예: 우유 두 개 이마트 오천 원', 3600); return; }
     var items = vs.map(function (v) {
+      v.name = String(v.name || '').slice(0, 40);
       var g = G.guess(v.name), it = { name: v.name, matched: true, qty: v.qty, price: v.price, cur: v.cur };
       it.cat = g ? g.cat : (CAT_TABS.indexOf(view) >= 0 && view !== 'car' && view !== 'dday' ? view : 'food');
       it.mode = g ? g.mode : (it.cat === 'food' ? 'expiry' : 'cycle');
@@ -4662,7 +4675,7 @@ input.dp-hid { display: none !important; }
       '<button class="icon-btn" data-go="settings" aria-label="설정">' + IC.gear + '</button></div></div></header>';
     if (sOn('food') && statYm === cur) {
       var zc = G.zeroChallenge(EV, today());
-      if (zc.started) h += '<div class="zc' + (zc.curOk ? ' ok' : '') + '"><span class="zi">' + IC.trophy + '</span><span><b>' + (zc.curOk ? '이번 달 버린 음식 0개 · 이대로 가면 성공!' : '이번 달 ' + zc.cur + '개 버렸어요 · 다음 달 0원에 다시 도전') + '</b><small>' +
+      if (zc.started) h += '<div class="zc' + (zc.curOk ? ' ok' : '') + '"><span class="zi">' + IC.trophy + '</span><span><b>' + (zc.curOk ? '이번 달 버린 음식 0개 · 이대로 가면 성공!' : '이번 달 ' + zc.cur + '개 버렸어요 · 다음 달 0개에 다시 도전') + '</b><small>' +
         (zc.streak ? '연속 ' + zc.streak + '개월 성공 중' : '음식을 하나도 안 버린 달을 세어 드려요') + (zc.best > 1 ? ' · 최고 ' + zc.best + '개월' : '') + '</small></span></div>';
     }
     h += '<div class="month-nav"><button data-mn="-1"' + (statYm <= first ? ' disabled' : '') + '>' + IC.left + '</button><b>' + ymLabel(statYm) + '</b><button data-mn="1"' + (statYm >= cur ? ' disabled' : '') + '>' + IC.right + '</button></div>';
@@ -4823,6 +4836,7 @@ input.dp-hid { display: none !important; }
   }
   window.onSharedText = function (t) {
     closeSheet(true); t = String(t || '');
+    if (t.length > 200000) { toast('글이 너무 길어서 읽지 않았어요'); return; }
     if (t.indexOf('GYOFAM1:') >= 0 || t.indexOf('GYOFAM2:') >= 0) { famReceive(t); return; }
     var r = G.parseOrder(t, today());
     if (r.items.length) { showFound(r, '공유한 글에서 찾았어요', (r.store ? esc(r.store) + ' · ' : '') + '산 날 ' + fullDate(r.date) + ' · 품목마다 알맞은 탭으로 들어가요. 다르면 고쳐서 등록하세요.', true); return; }
@@ -5067,7 +5081,8 @@ input.dp-hid { display: none !important; }
   }
 
   // ════════ 새로 생긴 기능 ════════
-  var NEWS = { id: 'v18-2026-11', items: [
+  var NEWS = { id: 'v20-2026-11', items: [
+    ['cart', '다 쓴 물건 바로 장보기', '다 먹었어요·버렸어요·교체했어요를 누르면 장보기에 담기 버튼이 바로 떠요. 다음부터 자동으로 담을 수도 있어요.'],
     ['clothes', '세탁 체크 · 여행 짐 · 아이 사이즈', '옷 탭에서 빨 때 된 옷, 여행 짐 목록, 아이 옷 사이즈를 챙겨요.'],
     ['check', '백업·가족 공유 비밀번호', '버전 정보의 백업과 설정의 가족에게 보내기에서 비밀번호로 잠글 수 있어요.'],
     ['chart', '켠 탭만 통계에', '설정에서 고른 탭의 기록만 통계에 보여요. 통계에서도 찾기·장보기를 열 수 있어요.']
@@ -5469,7 +5484,7 @@ input.dp-hid { display: none !important; }
 
 
 <!--APPINFO--><script>
-window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.08", "items": ["🛒 다 먹었어요·버렸어요·교체했어요를 누르면 '장보기에 담기' 버튼이 바로 떠요. '다음부터 자동으로'를 누르면 다음엔 저절로 담겨요", "1분 냉장고 정리에서 교체한 자주 쓰는 물품도 장보기에 담겨요", "다운로드·설명서 페이지가 느린 인터넷에서도 하얀 화면 없이 바로 떠요"]}, {"v": "v1.18", "d": "2026.11.05", "items": ["세탁 체크: 옷마다 몇 번 입고 빨지 정해 두면 '빨 때 됐어요' 알려 주고, '빨았어요' 한 번이면 끝", "옷 1회 비용: 산 가격 ÷ 입은 횟수", "통계를 탭별로: 전체 · 음식 · 옷처럼 골라서 보기", "여행 짐 싸기: 떠나는 날과 며칠인지만 넣으면 내 옷장에서 짐 목록을 만들어 체크", "아이 옷 사이즈: 키·상의·하의·신발 기록, 작아질 때와 다음 사이즈 알려 주기", "보안: 백업 파일과 가족 공유를 비밀번호로 잠글 수 있어요", "보안: 앱 화면이 정해진 곳(GitHub 새 버전 확인) 말고는 인터넷에 연결하지 못하게 막음, 배포용 빌드만 올림", "아이폰·PC에서 쓰는 웹앱 주소가 생겼어요"]}, {"v": "v1.17", "d": "2026.11.05", "items": ["통계도 다른 탭처럼: 찾기·장보기 버튼, 이달 입은 옷, 기록을 누르면 그 물건 열기", "설정에서 켠 탭만 통계·결산 카드·장보기 가계부에 보여요", "보안 강화: 앱 화면은 폰의 다른 파일을 못 읽고, 업데이트는 챙김이 저장소 주소만 받고, 알림 신호를 흉내 낼 수 없게"]}, {"v": "v1.16", "d": "2026.11.05", "items": ["수정 버튼을 물건 이름 바로 옆으로 옮겼어요 (모든 탭)", "목록의 ⋮ 버튼으로 간단 수정: 이름·날짜(유통/소비기한)·메모, 냉동실로 옮기기, D-day는 금액도", "수정해서 저장하면 그 전 기록은 자세히 보기에서 안 보여요 (통계는 그대로)", "옷 탭에 상의·하의 추가, 옷 사진 찍어서 바로 등록", "오늘 입은 옷 달력: 평소엔 접어 두고, 펼치면 날마다 입은 옷 사진·이달 자주 입은 옷·안 입은 옷", "지난주에 입은 옷은 노란색으로 알려주고 '안 겹치게 골라주기'", "계절 맞춤: 옷마다 사계절·여름·봄가을·겨울, 지금 계절 옷부터 골라 줘요", "코디 저장: 자주 입는 상의+하의를 한 번에", "두 달 넘게 안 입은 옷 정리 · 기부·중고용 목록 복사", "상의·하의는 교체 주기 없이 옷장으로만 관리 (켤 수 있어요)", "아침 알림에 오늘 입을 옷 추천 한 줄"]}, {"v": "v1.15", "d": "2026.11.05", "items": ["왼쪽 아래 버전 → 내 데이터 백업: 기록을 파일로 저장했다가 새 폰에서 불러오기"]}, {"v": "v1.14", "d": "2026.11.01", "items": ["D-day 탭도 다른 탭처럼: 위쪽 지난 날·곧 다가와요·여유 요약(눌러서 거르기), 장보기 버튼, 사진 넣기, 말로 등록", "말로 D-day 등록: \"넷플릭스 만칠천 원 매달 15일\", \"엄마 생신 3월 5일\"", "기념일 선물·준비물을 장보기에 담기, 자동차 부품도 장보기에 담기", "통계 탭별에 D-day(해지·점검한 개수)도 보여요"]}, {"v": "v1.13", "d": "2026.11.01", "items": ["날짜 없이 등록하면 날짜 칸으로 바로 데려가 빨갛게 표시하고, 년도 고르기를 열어 줘요", "6개월·1년 같은 교체 주기를 달력 기준으로 계산해요 (11월 1일 + 6개월 = 5월 1일)"]}, {"v": "v1.12", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 기기에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때와, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄)만 써요.", "backup": {"keys": ["gyoche_v1"], "idb": [{"db": "gyoche_photos", "store": "p"}], "bridge": "Android"}};
+window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.08", "items": ["🛡️ 백업 파일이 망가져 있어도 앱이 멈추지 않아요 (전에는 앱이 아예 열리지 않았어요)", "옷장으로만 관리하는 옷 상세에 '99999일 남았어요' 대신 마지막으로 입은 날이 나와요", "장보기 목록 이름표 바로잡기: 직접 담은 건 '직접 담음', 다 써서 담은 건 '다 써서 담음'", "통계 문구 '다음 달 0원에 다시 도전' → '0개에 다시 도전'", "공유받은 글이 너무 길거나 이름이 너무 길면 알맞게 잘라요"]}, {"v": "v1.19", "d": "2026.11.08", "items": ["🛒 다 먹었어요·버렸어요·교체했어요를 누르면 '장보기에 담기' 버튼이 바로 떠요. '다음부터 자동으로'를 누르면 다음엔 저절로 담겨요", "1분 냉장고 정리에서 교체한 자주 쓰는 물품도 장보기에 담겨요", "다운로드·설명서 페이지가 느린 인터넷에서도 하얀 화면 없이 바로 떠요"]}, {"v": "v1.18", "d": "2026.11.05", "items": ["세탁 체크: 옷마다 몇 번 입고 빨지 정해 두면 '빨 때 됐어요' 알려 주고, '빨았어요' 한 번이면 끝", "옷 1회 비용: 산 가격 ÷ 입은 횟수", "통계를 탭별로: 전체 · 음식 · 옷처럼 골라서 보기", "여행 짐 싸기: 떠나는 날과 며칠인지만 넣으면 내 옷장에서 짐 목록을 만들어 체크", "아이 옷 사이즈: 키·상의·하의·신발 기록, 작아질 때와 다음 사이즈 알려 주기", "보안: 백업 파일과 가족 공유를 비밀번호로 잠글 수 있어요", "보안: 앱 화면이 정해진 곳(GitHub 새 버전 확인) 말고는 인터넷에 연결하지 못하게 막음, 배포용 빌드만 올림", "아이폰·PC에서 쓰는 웹앱 주소가 생겼어요"]}, {"v": "v1.17", "d": "2026.11.05", "items": ["통계도 다른 탭처럼: 찾기·장보기 버튼, 이달 입은 옷, 기록을 누르면 그 물건 열기", "설정에서 켠 탭만 통계·결산 카드·장보기 가계부에 보여요", "보안 강화: 앱 화면은 폰의 다른 파일을 못 읽고, 업데이트는 챙김이 저장소 주소만 받고, 알림 신호를 흉내 낼 수 없게"]}, {"v": "v1.16", "d": "2026.11.05", "items": ["수정 버튼을 물건 이름 바로 옆으로 옮겼어요 (모든 탭)", "목록의 ⋮ 버튼으로 간단 수정: 이름·날짜(유통/소비기한)·메모, 냉동실로 옮기기, D-day는 금액도", "수정해서 저장하면 그 전 기록은 자세히 보기에서 안 보여요 (통계는 그대로)", "옷 탭에 상의·하의 추가, 옷 사진 찍어서 바로 등록", "오늘 입은 옷 달력: 평소엔 접어 두고, 펼치면 날마다 입은 옷 사진·이달 자주 입은 옷·안 입은 옷", "지난주에 입은 옷은 노란색으로 알려주고 '안 겹치게 골라주기'", "계절 맞춤: 옷마다 사계절·여름·봄가을·겨울, 지금 계절 옷부터 골라 줘요", "코디 저장: 자주 입는 상의+하의를 한 번에", "두 달 넘게 안 입은 옷 정리 · 기부·중고용 목록 복사", "상의·하의는 교체 주기 없이 옷장으로만 관리 (켤 수 있어요)", "아침 알림에 오늘 입을 옷 추천 한 줄"]}, {"v": "v1.15", "d": "2026.11.05", "items": ["왼쪽 아래 버전 → 내 데이터 백업: 기록을 파일로 저장했다가 새 폰에서 불러오기"]}, {"v": "v1.14", "d": "2026.11.01", "items": ["D-day 탭도 다른 탭처럼: 위쪽 지난 날·곧 다가와요·여유 요약(눌러서 거르기), 장보기 버튼, 사진 넣기, 말로 등록", "말로 D-day 등록: \"넷플릭스 만칠천 원 매달 15일\", \"엄마 생신 3월 5일\"", "기념일 선물·준비물을 장보기에 담기, 자동차 부품도 장보기에 담기", "통계 탭별에 D-day(해지·점검한 개수)도 보여요"]}, {"v": "v1.13", "d": "2026.11.01", "items": ["날짜 없이 등록하면 날짜 칸으로 바로 데려가 빨갛게 표시하고, 년도 고르기를 열어 줘요", "6개월·1년 같은 교체 주기를 달력 기준으로 계산해요 (11월 1일 + 6개월 = 5월 1일)"]}, {"v": "v1.12", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 기기에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때와, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄)만 써요.", "backup": {"keys": ["gyoche_v1"], "idb": [{"db": "gyoche_photos", "store": "p"}], "bridge": "Android"}};
 window.APP_INFO.online=!!(window.Android&&window.Android.version);
 window.APP_INFO.version=function(){try{return window.Android.version()}catch(e){return '1.10'}};
 </script>
