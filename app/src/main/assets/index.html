@@ -2298,6 +2298,13 @@ input.dp-hid { display: none !important; }
       $('[data-y]', el).onclick = function () { closeSheet(true); cb(); };
     });
   }
+  // 목록을 카톡 등으로 바로 보내기 (공유창 → 안 되면 복사 → 안 되면 직접 복사 창)
+  function sendList(title, txt) {
+    if (A && A.shareText) { try { A.shareText(txt); return; } catch (e) {} }
+    if (navigator.share) { navigator.share({ text: txt }).catch(function (e) { if (!e || e.name !== 'AbortError') showText(title, txt); }); return; }
+    if (navigator.clipboard) { navigator.clipboard.writeText(txt).then(function () { toast('복사했어요. 카톡에 붙여넣어 보내세요'); }, function () { showText(title, txt); }); return; }
+    showText(title, txt);
+  }
   function showText(title, txt) {
     openSheet('<h2>' + esc(title) + '<button data-x>닫기</button></h2><textarea class="inp" id="show-t" rows="6" readonly>' + esc(txt) + '</textarea><p class="hint">글자를 길게 눌러 전체 선택 후 복사하세요.</p>', function (el) { var t = $('#show-t', el); t.focus(); t.select(); });
   }
@@ -2545,14 +2552,14 @@ input.dp-hid { display: none !important; }
       (favs.length ? '<p class="lbl">★ 즐겨찾는 요리</p><div class="rec-list col">' + favs.map(function (x, i) { return recipeCard(x, i).replace('data-rc="' + i + '"', 'data-rf="' + i + '"'); }).join('') + '</div><p class="lbl" style="margin-top:14px">지금 재료로 추천</p>' : '') +
       '<p class="hint" style="margin:-6px 2px 12px">기한이 가까운 재료를 쓰는 요리부터 보여드려요. ' + esc(window.GR.PANTRY) + ' 같은 기본 양념은 있다고 보고 골랐어요. 마음에 드는 요리는 ★ 즐겨찾기에 넣어 두세요.</p>' +
       '<div class="rec-list col">' + RLIST.map(function (x, i) { return recipeCard(x, i); }).join('') + '</div>', function (el) {
-      $$('[data-rf]', el).forEach(function (b) { b.onclick = function () { openRecipe(favs[+b.dataset.rf]); }; });
-      $$('[data-rc]', el).forEach(function (b) { b.onclick = function () { openRecipe(b.dataset.rc); }; });
+      $$('[data-rf]', el).forEach(function (b) { b.onclick = function () { openRecipe(favs[+b.dataset.rf], recipeList); }; });
+      $$('[data-rc]', el).forEach(function (b) { b.onclick = function () { openRecipe(b.dataset.rc, recipeList); }; });
     });
   }
-  function openRecipe(i) {
+  function openRecipe(i, back) {
     var x = typeof i === 'object' ? i : RLIST[+i]; if (!x) return;
     var r = x.r;
-    var h = '<h2>' + esc(r.name) + '<button data-x>닫기</button></h2>';
+    var h = '<h2>' + esc(r.name) + '<button data-x>' + (back ? '← 뒤로' : '닫기') + '</button></h2>';
     h += '<button class="rfav' + (rFav(r.name) ? ' on' : '') + '" data-rfav aria-pressed="' + rFav(r.name) + '">' + IC.star + (rFav(r.name) ? '즐겨찾는 요리' : '즐겨찾기에 넣기') + '</button>';
     h += '<p class="hint" style="margin:-6px 2px 12px">약 ' + r.time + '분 · 기본 양념(' + esc(window.GR.PANTRY) + ')은 있다고 봤어요.</p>';
     h += '<div class="kv"><div><span>꼭 필요한 재료</span><span style="text-align:right">' + r.need.map(function (k) { return (x.missing.indexOf(k) >= 0 ? '<b style="color:var(--over)">' + esc(k) + ' (없음)</b>' : esc(k) + ' ✓'); }).join(', ') + '</span></div>' +
@@ -2569,7 +2576,7 @@ input.dp-hid { display: none !important; }
         '<p class="hint">체크한 재료는 목록에서 빠지고 통계에 "다 먹음"으로 쌓여요. 남은 재료는 그대로 둬요.</p>';
     }
     openSheet(h, function (el) {
-      var rfb = $('[data-rfav]', el); if (rfb) rfb.onclick = function () { rFavToggle(r.name); toast(rFav(r.name) ? '★ 즐겨찾는 요리에 넣었어요' : '즐겨찾기에서 뺐어요'); render(); openRecipe(x); };
+      var rfb = $('[data-rfav]', el); if (rfb) rfb.onclick = function () { rFavToggle(r.name); toast(rFav(r.name) ? '★ 즐겨찾는 요리에 넣었어요' : '즐겨찾기에서 뺐어요'); render(); openRecipe(x, back); };
       var rs = $('[data-rshop]', el);
       if (rs) rs.onclick = function () { x.missing.forEach(function (k) { addShop(k, 'food', 'recipe:' + r.name); }); toast(x.missing.join(', ') + ' 장보기에 담았어요'); rs.disabled = true; render(); };
       var lb = $('[data-left]', el);
@@ -2587,7 +2594,7 @@ input.dp-hid { display: none !important; }
         persist(); closeSheet(true); render();
         toast(ids.length + '개 재료를 다 먹음으로 정리했어요');
       };
-    });
+    }, back || null);
   }
 
   // ── 장보기 목록 ──
@@ -2659,7 +2666,7 @@ input.dp-hid { display: none !important; }
             return '<div class="urow"><input type="checkbox" data-buy="' + x.id + '" aria-label="' + esc(x.name) + ' 샀어요"><span>' + esc(x.name) + (from ? ' <small class="hint" style="display:inline">· ' + esc(from) + '</small>' : '') + '</span><button class="clink" data-shdel="' + x.id + '" style="margin:0">빼기</button></div>';
           }).join('') + '</div>';
       }).join('') + '<p class="hint">산 것을 체크하면 바로 등록할 수 있게 열어드려요. 칫솔처럼 주기로 바꾸는 물건은 "오늘 바꿈"으로 바로 기록돼요.</p>';
-      h += '<div class="actions" style="margin-top:10px"><button class="btn full" id="sh-copy">목록 복사해서 보내기</button></div>';
+      h += '<div class="actions" style="margin-top:10px"><button class="btn full" id="sh-copy">📤 목록 보내기 (카톡 등)</button></div>';
     } else h += '<p class="hint" style="margin:4px 2px 12px">비어 있어요. 아래 추천에서 담거나 직접 적어 보세요.</p>';
     if (soonOut.length) {
       h += '<p class="lbl" style="margin-top:16px">곧 떨어질 것 <span style="font-weight:400">· 산 간격으로 예상했어요</span></p><div class="used">' + soonOut.slice(0, 8).map(function (x) {
@@ -2681,9 +2688,7 @@ input.dp-hid { display: none !important; }
       $$('[data-buy]', el).forEach(function (c) { c.onchange = function () { bought(c.dataset.buy); }; });
       var cp = $('#sh-copy', el); if (cp) cp.onclick = function () {
         var txt = '[장보기]' + groups.map(function (g) { return '\n' + (groups.length > 1 || g.store ? '\n[' + (g.store || '어디서든') + ']\n' : '') + g.items.map(function (y) { return '□ ' + y.x.name; }).join('\n'); }).join('');
-        if (A && A.copy) { A.copy(txt); toast('복사했어요. 카톡에 붙여넣어 보내세요.'); }
-        else if (navigator.clipboard) navigator.clipboard.writeText(txt).then(function () { toast('복사했어요'); }, function () { showText('장보기 목록', txt); });
-        else showText('장보기 목록', txt);
+        sendList('장보기 목록', txt);
       };
     });
   }
@@ -3738,7 +3743,7 @@ input.dp-hid { display: none !important; }
     openSheet(h, function (el) {
       $$('[data-keep]', el).forEach(function (b) { b.onclick = function () { var x = S.items.filter(function (i) { return i.id === b.dataset.keep; })[0]; if (x) { x.keepUntil = G.addDays(t, 90); persist(); } toast('세 달 뒤에 다시 물어볼게요'); openTidy(); }; });
       $$('[data-gone]', el).forEach(function (b) { b.onclick = function () { var x = S.items.filter(function (i) { return i.id === b.dataset.gone; })[0]; if (x) { S.items = S.items.filter(function (i) { return i !== x; }); photoDel(x.id); persist(); toast(eul(x.name) + ' 정리했어요'); } openTidy(); }; });
-      $('[data-tcopy]', el).onclick = function () { showText('정리할 옷 목록', list.map(function (x) { return '- ' + x.name + ' (' + x.loc + ')'; }).join('\n')); };
+      $('[data-tcopy]', el).onclick = function () { sendList('정리할 옷 목록', list.map(function (x) { return '- ' + x.name + ' (' + x.loc + ')'; }).join('\n')); };
     }, function () { render(); });
   }
   // 통계: 이달 입은 옷 (옷 탭을 켜고 기록하는 사람만)
@@ -3819,20 +3824,21 @@ input.dp-hid { display: none !important; }
     var h = '<h2>🧳 여행 짐 싸기<button data-x>닫기</button></h2>';
     h += '<div class="field"><label for="tr-start">떠나는 날</label><input class="inp" type="date" id="tr-start" value="' + esc(tr.start) + '"></div>';
     h += '<div class="field"><span class="lbl">며칠 동안</span><div class="row"><div class="step" aria-label="여행 날 수"><button data-td="-1" aria-label="하루 빼기">−</button><b>' + tr.days + '일</b><button data-td="1" aria-label="하루 더하기">+</button></div><span class="hint" style="margin:0">' + (tr.days > 1 ? (tr.days - 1) + '박 ' + tr.days + '일' : '당일') + ' · ' + SEASON_W[plan.key] + ' 옷으로 골랐어요</span></div></div>';
-    h += '<p class="hint">' + done + ' / ' + all.length + ' 챙겼어요' + (wearItems().length ? ' · 내 옷장에서 오래 안 입은 옷부터, 빨 때 된 옷은 빼고 골랐어요' : ' · 옷 탭에 상의·하의를 등록하면 내 옷으로 골라 드려요') + '</p><div class="tripl">';
+    h += '<p class="hint"><b id="tr-cnt">' + done + ' / ' + all.length + ' 챙겼어요</b>' + (wearItems().length ? ' · 내 옷장에서 오래 안 입은 옷부터, 빨 때 된 옷은 빼고 골랐어요' : ' · 옷 탭에 상의·하의를 등록하면 내 옷으로 골라 드려요') + '</p><div class="tripl">';
     plan.groups.forEach(function (g) {
       h += '<p class="tg">' + g[0] + '</p>' + g[1].map(function (x) { return '<label class="' + (ck[x] ? 'done' : '') + '"><input type="checkbox" data-tc="' + esc(x) + '"' + (ck[x] ? ' checked' : '') + '><span>' + esc(x) + '</span></label>'; }).join('');
     });
-    h += '</div><div class="actions"><button class="btn" data-ta="reset">처음부터</button><button class="btn pri" data-ta="copy">목록 복사</button></div>';
+    h += '</div><div class="actions"><button class="btn" data-ta="reset">처음부터</button><button class="btn pri" data-ta="copy">📤 목록 보내기</button></div>';
     openSheet(h, function (el) {
       function save() { S.trip = tr; persist(); }
       $('#tr-start', el).onchange = function () { if (!this.value) return; tr.start = this.value; tr.checks = {}; save(); openTrip(); };
       $$('[data-td]', el).forEach(function (b) { b.onclick = function () { tr.days = Math.max(1, Math.min(30, tr.days + +b.dataset.td)); save(); openTrip(); }; });
-      $$('[data-tc]', el).forEach(function (c) { c.onchange = function () { tr.checks = tr.checks || {}; if (c.checked) tr.checks[c.dataset.tc] = 1; else delete tr.checks[c.dataset.tc]; c.parentNode.classList.toggle('done', c.checked); save(); }; });
+      $$('[data-tc]', el).forEach(function (c) { c.onchange = function () { tr.checks = tr.checks || {}; if (c.checked) tr.checks[c.dataset.tc] = 1; else delete tr.checks[c.dataset.tc]; c.parentNode.classList.toggle('done', c.checked); save();
+        var nd = $$('[data-tc]:checked', el).length, tot = $$('[data-tc]', el).length, cn = $('#tr-cnt', el); if (cn) cn.textContent = nd + ' / ' + tot + ' 챙겼어요' + (nd === tot ? ' · 다 챙겼어요! 🎉' : ''); }; });
       $$('[data-ta]', el).forEach(function (b) {
         b.onclick = function () {
           if (b.dataset.ta === 'reset') { tr.checks = {}; save(); openTrip(); toast('체크를 모두 지웠어요'); return; }
-          showText('여행 짐 목록', md(tr.start) + '부터 ' + tr.days + '일\n' + plan.groups.map(function (g) { return '[' + g[0] + ']\n' + g[1].map(function (x) { return (tr.checks[x] ? '✓ ' : '- ') + x; }).join('\n'); }).join('\n'));
+          sendList('여행 짐 목록', '🧳 ' + md(tr.start) + '부터 ' + tr.days + '일\n' + plan.groups.map(function (g) { return '[' + g[0] + ']\n' + g[1].map(function (x) { return (tr.checks[x] ? '✓ ' : '- ') + x; }).join('\n'); }).join('\n'));
         };
       });
     }, function () { render(); });
@@ -3933,8 +3939,8 @@ input.dp-hid { display: none !important; }
       (it.noCycle ? '' : '<div><span>미리 알림</span>' + (it.alert ? it.alert + '일 전부터' : '당일') + '</div>') + '</div>';
     var lc = G.learnCycle(it, histOf(it));
     if (lc) h += '<div class="tipcard"><b>보통 ' + lc.avg + '일마다 바꾸셨어요</b><span>지금 주기는 ' + cycleText(it.days) + '예요. 실제로 바꾼 ' + lc.n + '번의 평균에 맞출까요?</span><button class="btn soft" data-a="learn">' + lc.avg + '일로 바꾸기</button></div>';
-    if (it.cat === 'food') h += foodGuide(it, s);
-    if (isMed(it)) h += '<div class="tipcard"><b>💊 매일 먹는 약·영양제</b><span>' + (it.medDaily ? '생필품 탭 위에서 날마다 먹었는지 체크해요. 이번 달 ' + medMonth(it.id) + '일 먹었어요' + (medStreak(it.id) > 1 ? ' · ' + medStreak(it.id) + '일 연속' : '') + '.' : '날마다 먹는 거라면 켜 두세요. 생필품 탭 위에 "오늘 먹었어요" 체크가 생겨요.') + '</span><button class="btn soft" data-a="meddaily">' + (it.medDaily ? '매일 체크 끄기' : '매일 먹어요 · 체크 켜기') + '</button></div>';
+    var guide = it.cat === 'food' ? foodGuide(it, s) : '';
+    if (isMed(it)) guide += '<div class="tipcard"><b>💊 매일 먹는 약·영양제</b><span>' + (it.medDaily ? '생필품 탭 위에서 날마다 먹었는지 체크해요. 이번 달 ' + medMonth(it.id) + '일 먹었어요' + (medStreak(it.id) > 1 ? ' · ' + medStreak(it.id) + '일 연속' : '') + '.' : '날마다 먹는 거라면 켜 두세요. 생필품 탭 위에 "오늘 먹었어요" 체크가 생겨요.') + '</span><button class="btn soft" data-a="meddaily">' + (it.medDaily ? '매일 체크 끄기' : '매일 먹어요 · 체크 켜기') + '</button></div>';
     h += '<div class="actions">';
     if (it.cat === 'food') {
       h += qtyOf(it) > 1 ? '<button class="btn soft" data-a="eaten">1개 먹었어요</button><button class="btn warn" data-a="discard">1개 버렸어요</button>'
@@ -3949,7 +3955,7 @@ input.dp-hid { display: none !important; }
     } else {
       h += '<button class="btn pri full" data-a="renew">새 걸로 바꿨어요</button>';
     }
-    h += '</div>';
+    h += '</div>' + guide;
     var hist = histOf(it).slice(-6).reverse();
     if (hist.length) {
       h += '<p class="lbl" style="margin-top:14px">지난 기록</p><ul class="hist">' + hist.map(function (e) { return '<li>' + fullDate(e.date) + ' · ' + TYPE_WORD[e.type] + '</li>'; }).join('') + '</ul>';
@@ -5172,13 +5178,13 @@ input.dp-hid { display: none !important; }
     if (p.missing.length) h += '<button class="btn soft block" data-pshop style="margin-top:6px">' + IC.cart + '모자란 재료 ' + p.missing.length + '개 장보기에 담기 (' + esc(p.missing.join(', ')) + ')</button>';
     h += '<p class="hint center">' + window.GR.RECIPES.length + '가지 레시피 중에서 골랐어요 · 아침 알림에도 오늘 메뉴를 알려드려요</p>';
     openSheet(h, function (el) {
-      $$('[data-pr]', el).forEach(function (b) { b.onclick = function () { openRecipe(PLAN.days[+b.dataset.pr].x); }; });
+      $$('[data-pr]', el).forEach(function (b) { b.onclick = function () { openRecipe(PLAN.days[+b.dataset.pr].x, function () { openPlan(); }); }; });
       $$('[data-pre]', el).forEach(function (b) { b.onclick = function () { var o = PLAN.days[+b.dataset.pre]; openPlan({ date: o.date, name: o.x.r.name }); }; });
       var ps = $('[data-pshop]', el); if (ps) ps.onclick = function () {
         var n = 0; PLAN.days.forEach(function (o) { o.x.missing.forEach(function (m) { if (addShop(m, 'food', 'recipe:' + o.x.r.name)) n++; }); });
         toast(n ? n + '개를 장보기에 담았어요' : '이미 장보기에 있어요'); ps.disabled = true; render();
       };
-    });
+    }, function () { render(); });
   }
 
   // ════════ 계기판 사진 → 주행거리 ════════
@@ -5602,7 +5608,7 @@ input.dp-hid { display: none !important; }
 
 
 <!--APPINFO--><script>
-window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.08", "items": ["🧊 보관 팁: 음식마다 알맞은 보관법과 냉동하면 얼마나 가는지 알려줘요", "🕐 기한 지난 음식 안내: 유통기한이 지났으면 버리기 전에 확인할 것을, 소비기한이 지났으면 버리라고 알려줘요", "🛒 장보기를 마트 코너별로: 채소·정육·우유·생활용품처럼 코너 순서로 묶어서 덜 돌아다녀요", "💊 약·영양제 매일 체크: 생필품 탭 위에서 오늘 먹었는지 누르고, 며칠째인지 보여줘요", "★ 레시피 즐겨찾기: 마음에 든 요리를 모아 두고 바로 열어요", "🧾 옷 탭에서도 영수증·바코드로 등록해요", "장보기에 같은 걸 또 적으면 '이미 목록에 있어요'라고 알려줘요", "다크 모드에서 '장보기에 담기' 버튼이 잘 보이게 고쳤어요", "🛡️ 백업 파일이 망가져 있어도 앱이 멈추지 않아요 (전에는 앱이 아예 열리지 않았어요)", "옷장으로만 관리하는 옷 상세에 '99999일 남았어요' 대신 마지막으로 입은 날이 나와요", "장보기 목록 이름표 바로잡기: 직접 담은 건 '직접 담음', 다 써서 담은 건 '다 써서 담음'", "통계 문구 '다음 달 0원에 다시 도전' → '0개에 다시 도전'", "공유받은 글이 너무 길거나 이름이 너무 길면 알맞게 잘라요"]}, {"v": "v1.19", "d": "2026.11.08", "items": ["🛒 다 먹었어요·버렸어요·교체했어요를 누르면 '장보기에 담기' 버튼이 바로 떠요. '다음부터 자동으로'를 누르면 다음엔 저절로 담겨요", "1분 냉장고 정리에서 교체한 자주 쓰는 물품도 장보기에 담겨요", "다운로드·설명서 페이지가 느린 인터넷에서도 하얀 화면 없이 바로 떠요"]}, {"v": "v1.18", "d": "2026.11.05", "items": ["세탁 체크: 옷마다 몇 번 입고 빨지 정해 두면 '빨 때 됐어요' 알려 주고, '빨았어요' 한 번이면 끝", "옷 1회 비용: 산 가격 ÷ 입은 횟수", "통계를 탭별로: 전체 · 음식 · 옷처럼 골라서 보기", "여행 짐 싸기: 떠나는 날과 며칠인지만 넣으면 내 옷장에서 짐 목록을 만들어 체크", "아이 옷 사이즈: 키·상의·하의·신발 기록, 작아질 때와 다음 사이즈 알려 주기", "보안: 백업 파일과 가족 공유를 비밀번호로 잠글 수 있어요", "보안: 앱 화면이 정해진 곳(GitHub 새 버전 확인) 말고는 인터넷에 연결하지 못하게 막음, 배포용 빌드만 올림", "아이폰·PC에서 쓰는 웹앱 주소가 생겼어요"]}, {"v": "v1.17", "d": "2026.11.05", "items": ["통계도 다른 탭처럼: 찾기·장보기 버튼, 이달 입은 옷, 기록을 누르면 그 물건 열기", "설정에서 켠 탭만 통계·결산 카드·장보기 가계부에 보여요", "보안 강화: 앱 화면은 폰의 다른 파일을 못 읽고, 업데이트는 챙김이 저장소 주소만 받고, 알림 신호를 흉내 낼 수 없게"]}, {"v": "v1.16", "d": "2026.11.05", "items": ["수정 버튼을 물건 이름 바로 옆으로 옮겼어요 (모든 탭)", "목록의 ⋮ 버튼으로 간단 수정: 이름·날짜(유통/소비기한)·메모, 냉동실로 옮기기, D-day는 금액도", "수정해서 저장하면 그 전 기록은 자세히 보기에서 안 보여요 (통계는 그대로)", "옷 탭에 상의·하의 추가, 옷 사진 찍어서 바로 등록", "오늘 입은 옷 달력: 평소엔 접어 두고, 펼치면 날마다 입은 옷 사진·이달 자주 입은 옷·안 입은 옷", "지난주에 입은 옷은 노란색으로 알려주고 '안 겹치게 골라주기'", "계절 맞춤: 옷마다 사계절·여름·봄가을·겨울, 지금 계절 옷부터 골라 줘요", "코디 저장: 자주 입는 상의+하의를 한 번에", "두 달 넘게 안 입은 옷 정리 · 기부·중고용 목록 복사", "상의·하의는 교체 주기 없이 옷장으로만 관리 (켤 수 있어요)", "아침 알림에 오늘 입을 옷 추천 한 줄"]}, {"v": "v1.15", "d": "2026.11.05", "items": ["왼쪽 아래 버전 → 내 데이터 백업: 기록을 파일로 저장했다가 새 폰에서 불러오기"]}, {"v": "v1.14", "d": "2026.11.01", "items": ["D-day 탭도 다른 탭처럼: 위쪽 지난 날·곧 다가와요·여유 요약(눌러서 거르기), 장보기 버튼, 사진 넣기, 말로 등록", "말로 D-day 등록: \"넷플릭스 만칠천 원 매달 15일\", \"엄마 생신 3월 5일\"", "기념일 선물·준비물을 장보기에 담기, 자동차 부품도 장보기에 담기", "통계 탭별에 D-day(해지·점검한 개수)도 보여요"]}, {"v": "v1.13", "d": "2026.11.01", "items": ["날짜 없이 등록하면 날짜 칸으로 바로 데려가 빨갛게 표시하고, 년도 고르기를 열어 줘요", "6개월·1년 같은 교체 주기를 달력 기준으로 계산해요 (11월 1일 + 6개월 = 5월 1일)"]}, {"v": "v1.12", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 기기에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때와, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄)만 써요.", "backup": {"keys": ["gyoche_v1"], "idb": [{"db": "gyoche_photos", "store": "p"}], "bridge": "Android"}};
+window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.08", "items": ["📤 장보기·여행 짐·정리할 옷 목록을 한 번에 카톡 등으로 보내요 (복사·붙여넣기 안 해도 돼요)", "↩️ 3일 식단이나 요리 목록에서 레시피를 열었다가 뒤로 가면 원래 화면으로 돌아가요", "음식을 누르면 '다 먹었어요'·'버렸어요' 버튼이 맨 위에 바로 보여요 (보관 팁은 그 아래로)", "🧳 여행 짐을 체크하면 '몇 개 챙겼어요'가 바로 바뀌고, 다 챙기면 알려줘요", "3일 식단을 닫으면 음식 탭의 오늘 메뉴도 바로 바뀌어요"]}, {"v": "v1.20", "d": "2026.11.08", "items": ["🧊 보관 팁: 음식마다 알맞은 보관법과 냉동하면 얼마나 가는지 알려줘요", "🕐 기한 지난 음식 안내: 유통기한이 지났으면 버리기 전에 확인할 것을, 소비기한이 지났으면 버리라고 알려줘요", "🛒 장보기를 마트 코너별로: 채소·정육·우유·생활용품처럼 코너 순서로 묶어서 덜 돌아다녀요", "💊 약·영양제 매일 체크: 생필품 탭 위에서 오늘 먹었는지 누르고, 며칠째인지 보여줘요", "★ 레시피 즐겨찾기: 마음에 든 요리를 모아 두고 바로 열어요", "🧾 옷 탭에서도 영수증·바코드로 등록해요", "장보기에 같은 걸 또 적으면 '이미 목록에 있어요'라고 알려줘요", "다크 모드에서 '장보기에 담기' 버튼이 잘 보이게 고쳤어요", "🛡️ 백업 파일이 망가져 있어도 앱이 멈추지 않아요 (전에는 앱이 아예 열리지 않았어요)", "옷장으로만 관리하는 옷 상세에 '99999일 남았어요' 대신 마지막으로 입은 날이 나와요", "장보기 목록 이름표 바로잡기: 직접 담은 건 '직접 담음', 다 써서 담은 건 '다 써서 담음'", "통계 문구 '다음 달 0원에 다시 도전' → '0개에 다시 도전'", "공유받은 글이 너무 길거나 이름이 너무 길면 알맞게 잘라요"]}, {"v": "v1.19", "d": "2026.11.08", "items": ["🛒 다 먹었어요·버렸어요·교체했어요를 누르면 '장보기에 담기' 버튼이 바로 떠요. '다음부터 자동으로'를 누르면 다음엔 저절로 담겨요", "1분 냉장고 정리에서 교체한 자주 쓰는 물품도 장보기에 담겨요", "다운로드·설명서 페이지가 느린 인터넷에서도 하얀 화면 없이 바로 떠요"]}, {"v": "v1.18", "d": "2026.11.05", "items": ["세탁 체크: 옷마다 몇 번 입고 빨지 정해 두면 '빨 때 됐어요' 알려 주고, '빨았어요' 한 번이면 끝", "옷 1회 비용: 산 가격 ÷ 입은 횟수", "통계를 탭별로: 전체 · 음식 · 옷처럼 골라서 보기", "여행 짐 싸기: 떠나는 날과 며칠인지만 넣으면 내 옷장에서 짐 목록을 만들어 체크", "아이 옷 사이즈: 키·상의·하의·신발 기록, 작아질 때와 다음 사이즈 알려 주기", "보안: 백업 파일과 가족 공유를 비밀번호로 잠글 수 있어요", "보안: 앱 화면이 정해진 곳(GitHub 새 버전 확인) 말고는 인터넷에 연결하지 못하게 막음, 배포용 빌드만 올림", "아이폰·PC에서 쓰는 웹앱 주소가 생겼어요"]}, {"v": "v1.17", "d": "2026.11.05", "items": ["통계도 다른 탭처럼: 찾기·장보기 버튼, 이달 입은 옷, 기록을 누르면 그 물건 열기", "설정에서 켠 탭만 통계·결산 카드·장보기 가계부에 보여요", "보안 강화: 앱 화면은 폰의 다른 파일을 못 읽고, 업데이트는 챙김이 저장소 주소만 받고, 알림 신호를 흉내 낼 수 없게"]}, {"v": "v1.16", "d": "2026.11.05", "items": ["수정 버튼을 물건 이름 바로 옆으로 옮겼어요 (모든 탭)", "목록의 ⋮ 버튼으로 간단 수정: 이름·날짜(유통/소비기한)·메모, 냉동실로 옮기기, D-day는 금액도", "수정해서 저장하면 그 전 기록은 자세히 보기에서 안 보여요 (통계는 그대로)", "옷 탭에 상의·하의 추가, 옷 사진 찍어서 바로 등록", "오늘 입은 옷 달력: 평소엔 접어 두고, 펼치면 날마다 입은 옷 사진·이달 자주 입은 옷·안 입은 옷", "지난주에 입은 옷은 노란색으로 알려주고 '안 겹치게 골라주기'", "계절 맞춤: 옷마다 사계절·여름·봄가을·겨울, 지금 계절 옷부터 골라 줘요", "코디 저장: 자주 입는 상의+하의를 한 번에", "두 달 넘게 안 입은 옷 정리 · 기부·중고용 목록 복사", "상의·하의는 교체 주기 없이 옷장으로만 관리 (켤 수 있어요)", "아침 알림에 오늘 입을 옷 추천 한 줄"]}, {"v": "v1.15", "d": "2026.11.05", "items": ["왼쪽 아래 버전 → 내 데이터 백업: 기록을 파일로 저장했다가 새 폰에서 불러오기"]}, {"v": "v1.14", "d": "2026.11.01", "items": ["D-day 탭도 다른 탭처럼: 위쪽 지난 날·곧 다가와요·여유 요약(눌러서 거르기), 장보기 버튼, 사진 넣기, 말로 등록", "말로 D-day 등록: \"넷플릭스 만칠천 원 매달 15일\", \"엄마 생신 3월 5일\"", "기념일 선물·준비물을 장보기에 담기, 자동차 부품도 장보기에 담기", "통계 탭별에 D-day(해지·점검한 개수)도 보여요"]}, {"v": "v1.13", "d": "2026.11.01", "items": ["날짜 없이 등록하면 날짜 칸으로 바로 데려가 빨갛게 표시하고, 년도 고르기를 열어 줘요", "6개월·1년 같은 교체 주기를 달력 기준으로 계산해요 (11월 1일 + 6개월 = 5월 1일)"]}, {"v": "v1.12", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 기기에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때와, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄)만 써요.", "backup": {"keys": ["gyoche_v1"], "idb": [{"db": "gyoche_photos", "store": "p"}], "bridge": "Android"}};
 window.APP_INFO.online=!!(window.Android&&window.Android.version);
 window.APP_INFO.version=function(){try{return window.Android.version()}catch(e){return '1.10'}};
 </script>
