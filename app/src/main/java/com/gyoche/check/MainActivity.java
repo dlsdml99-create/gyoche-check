@@ -24,7 +24,19 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.Toast;
+import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
+import android.window.OnBackInvokedDispatcher;
+
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.appupdate.AppUpdateOptions;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
 
 import androidx.core.content.FileProvider;
 
@@ -105,7 +117,28 @@ public class MainActivity extends Activity {
                 return true;
             }
         });
-        setContentView(web);
+        // 안드로이드 15 이상은 화면이 상태바·내비게이션 바 밑까지 넓어짐 → 그만큼 안쪽으로 띄워서 글자가 가려지지 않게
+        FrameLayout box = new FrameLayout(this);
+        box.setBackgroundColor(isNight() ? 0xFF151917 : 0xFFF6F4EF);
+        box.addView(web, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        if (Build.VERSION.SDK_INT >= 35) {
+            box.setOnApplyWindowInsetsListener((v, in) -> {
+                android.graphics.Insets b = in.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
+                android.graphics.Insets k = in.getInsets(WindowInsets.Type.ime());
+                v.setPadding(b.left, b.top, b.right, Math.max(b.bottom, k.bottom));
+                return WindowInsets.CONSUMED;
+            });
+            WindowInsetsController wc = getWindow().getInsetsController();
+            if (wc != null) {
+                int light = WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS;
+                wc.setSystemBarsAppearance(isNight() ? 0 : light, light);
+            }
+        }
+        setContentView(box);
+        // 안드로이드 16(뒤로 가기 새 방식)에서도 뒤로 가기가 화면 안 창부터 닫게
+        if (Build.VERSION.SDK_INT >= 33) {
+            getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, this::handleBack);
+        }
         web.loadUrl("file:///android_asset/index.html");
         Reminder.schedule(this);
         checkUpdate();
@@ -149,6 +182,10 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        handleBack();
+    }
+
+    private void handleBack() {
         web.evaluateJavascript("window.onBackKey?String(window.onBackKey()):'false'", v -> {
             if (v == null || !v.contains("true")) finish();
         });
@@ -226,9 +263,26 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> chooseSource("photo"));
         }
 
+        /** 어디서 받은 앱인지: "play"(플레이 스토어용) 또는 "github" */
+        @JavascriptInterface
+        public String store() {
+            return BuildConfig.PLAY ? "play" : "github";
+        }
+
+        /** 플레이 스토어용: 새 버전 확인 (플레이에 물어봄, GitHub에는 연결 안 함) */
+        @JavascriptInterface
+        public void playCheck() {
+            runOnUiThread(() -> checkPlay(false));
+        }
+
         @JavascriptInterface
         public void openUpdate() {
             runOnUiThread(() -> {
+                if (BuildConfig.PLAY) {
+                    if (playInfo != null && playInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) startPlayUpdate();
+                    else checkPlay(true);
+                    return;
+                }
                 if (latestUrl != null && latestVersion > currentVersion()) showUpdate(latestVersion, latestUrl);
                 else Toast.makeText(MainActivity.this, "지금 최신 버전이에요", Toast.LENGTH_SHORT).show();
             });
@@ -615,6 +669,8 @@ public class MainActivity extends Activity {
 
     // ── 새 버전 확인 (GitHub 최신 릴리스와 비교) ──
     private void checkUpdate() {
+        // 플레이 스토어용은 플레이가 업데이트를 맡음 (스토어 정책: 다른 곳에서 앱 파일을 받지 않음)
+        if (BuildConfig.PLAY) { checkPlay(false); return; }
         new Thread(() -> {
             try {
                 HttpURLConnection c = (HttpURLConnection) new URL(RELEASE_API).openConnection();
@@ -644,6 +700,65 @@ public class MainActivity extends Activity {
                 runOnUiThread(() -> showUpdate(latest, u));
             } catch (Exception ignored) {}
         }).start();
+    }
+
+    // ── 플레이 스토어 업데이트 (반자동: 새 버전이 있으면 물어보고, '업데이트'를 누르면 플레이 화면에서 바로 설치) ──
+    private static final int REQ_PLAY_UPDATE = 7401;
+    private AppUpdateManager playUpdates;
+    private AppUpdateInfo playInfo;
+    private boolean playAsked;
+
+    private void checkPlay(boolean manual) {
+        try {
+            if (playUpdates == null) playUpdates = AppUpdateManagerFactory.create(this);
+            playUpdates.getAppUpdateInfo().addOnSuccessListener(info -> {
+                playInfo = info;
+                long cur = currentVersion();
+                boolean up = info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE);
+                long v = up ? Math.max(cur, info.availableVersionCode()) : cur;
+                latestVersion = v;
+                js("window.onLatest&&window.onLatest(" + v + "," + cur + ")");
+                if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) { startPlayUpdate(); return; }
+                if (up && (manual || !playAsked)) { playAsked = true; showPlayUpdate(v); }
+                else if (manual && !up) Toast.makeText(this, "지금 최신 버전이에요", Toast.LENGTH_SHORT).show();
+            }).addOnFailureListener(e -> {
+                js("window.AppInfo&&AppInfo.checkFailed&&AppInfo.checkFailed()");
+                if (manual) Toast.makeText(this, "플레이 스토어에서 확인하지 못했어요", Toast.LENGTH_SHORT).show();
+            });
+        } catch (Exception e) {
+            js("window.AppInfo&&AppInfo.checkFailed&&AppInfo.checkFailed()");
+        }
+    }
+
+    private void showPlayUpdate(long latest) {
+        if (isFinishing()) return;
+        new AlertDialog.Builder(this)
+            .setTitle("새 버전이 있어요")
+            .setMessage("v1." + latest + " 업데이트가 나왔어요.\n'업데이트'를 누르면 플레이 스토어에서 바로 설치돼요. 등록한 물건은 그대로 남아요.")
+            .setPositiveButton("업데이트", (d, w) -> startPlayUpdate())
+            .setNegativeButton("나중에", null)
+            .show();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void startPlayUpdate() {
+        try {
+            if (playUpdates != null && playInfo != null)
+                playUpdates.startUpdateFlowForResult(playInfo, this, AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(), REQ_PLAY_UPDATE);
+        } catch (Exception e) {
+            try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName()))); } catch (Exception ignored) {}
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 업데이트 도중 앱을 나갔다 오면 이어서 설치
+        if (BuildConfig.PLAY && playUpdates != null) {
+            playUpdates.getAppUpdateInfo().addOnSuccessListener(info -> {
+                if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) { playInfo = info; startPlayUpdate(); }
+            });
+        }
     }
 
     @SuppressWarnings("deprecation")

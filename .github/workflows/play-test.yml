@@ -1,0 +1,48 @@
+# 플레이 스토어용 시험 빌드: play-store 가지에 올리면 AAB와 점검 결과를 'play-test' 미리 보기 릴리스에 올림 (정식 릴리스·앱 업데이트에는 영향 없음)
+name: 챙김이 플레이 시험 빌드
+on:
+  push:
+    branches: [play-store]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with: { distribution: temurin, java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v5
+        with: { gradle-version: '8.13' }
+      - name: Build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SIGNING: ${{ secrets.GYOCHE_SIGNING }}
+        run: |
+          set -o pipefail
+          N=$(gh release view --json tagName -q .tagName | tr -dc 0-9); echo "N=$N" >> $GITHUB_ENV
+          export RUN_NUMBER=$N KEY_PASS="${SIGNING%%:*}"
+          echo "${SIGNING#*:}" | base64 -d > app/gyoche.jks
+          trap 'rm -f app/gyoche.jks' EXIT
+          (STORE=play gradle bundleRelease assembleRelease --no-daemon 2>&1) | tee build.log
+          cp app/build/outputs/bundle/release/app-release.aab gyoche-check-play.aab
+          cp app/build/outputs/apk/release/app-release.apk gyoche-check-play-test.apk
+      - name: Check
+        run: |
+          A=$(ls $ANDROID_HOME/build-tools | sort -V | tail -1)
+          {
+            echo "== badging"; $ANDROID_HOME/build-tools/$A/aapt2 dump badging gyoche-check-play-test.apk | grep -E "package:|sdkVersion|targetSdk|uses-permission"
+            echo "== native libs in aab"; unzip -l gyoche-check-play.aab | grep '\.so$' || echo "(none)"
+            echo "== 16KB align"; $ANDROID_HOME/build-tools/$A/zipalign -c -P 16 -v 4 gyoche-check-play-test.apk | tail -3
+            echo "== sizes"; ls -la *.aab *.apk
+            echo "== cert"; $ANDROID_HOME/build-tools/$A/apksigner verify --print-certs gyoche-check-play-test.apk | head -4
+          } > report.txt 2>&1
+          cat report.txt
+      - name: Publish test files
+        if: always()
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          gh release delete play-test --yes --cleanup-tag || true
+          F=""; for f in gyoche-check-play.aab gyoche-check-play-test.apk report.txt build.log; do [ -f "$f" ] && F="$F $f"; done
+          gh release create play-test $F --prerelease --latest=false --target play-store --title "플레이 시험 빌드 (설치용 아님)" --notes "플레이 스토어 준비용 시험 빌드예요. 정식 업데이트가 아니에요."

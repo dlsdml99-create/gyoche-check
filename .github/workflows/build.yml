@@ -28,7 +28,7 @@ jobs:
           java-version: '17'
       - uses: gradle/actions/setup-gradle@v5
         with:
-          gradle-version: '8.7'
+          gradle-version: '8.13'
       - name: Build APK
         env:
           RUN_NUMBER: ${{ github.run_number }}
@@ -45,6 +45,10 @@ jobs:
           gradle assembleRelease --no-daemon
           cp app/build/outputs/apk/release/app-release.apk gyoche-check.apk
           ls -la gyoche-check.apk
+          # 플레이 스토어에 올릴 파일(AAB): 업데이트를 플레이가 맡는 버전, 같은 번호
+          STORE=play gradle bundleRelease --no-daemon
+          cp app/build/outputs/bundle/release/app-release.aab gyoche-check-play.aab
+          ls -la gyoche-check-play.aab
       - name: Publish APK
         env:
           GH_TOKEN: ${{ github.token }}
@@ -53,7 +57,7 @@ jobs:
           gh release delete "v${{ github.run_number }}" --yes --cleanup-tag || true
           git push --delete origin "v${{ github.run_number }}" || true
           sed -i "s/__N__/${{ github.run_number }}/g; s/__MB__/$(du -m gyoche-check.apk | cut -f1)/g" notes.md
-          gh release create "v${{ github.run_number }}" gyoche-check.apk --latest --title "챙김이 v1.${{ github.run_number }}" --notes-file notes.md
+          gh release create "v${{ github.run_number }}" gyoche-check.apk gyoche-check-play.aab --latest --title "챙김이 v1.${{ github.run_number }}" --notes-file notes.md
       - name: Build download page
         run: |
           python3 .github/webapp.py "${{ github.run_number }}"
