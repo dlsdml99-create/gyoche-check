@@ -33,6 +33,7 @@ jobs:
         env:
           RUN_NUMBER: ${{ github.run_number }}
           SIGNING: ${{ secrets.GYOCHE_SIGNING }}
+          KEY2: ${{ secrets.GYOCHE_KEY2 }}
         run: |
           if [ -z "$SIGNING" ]; then
             echo "::error::서명 키 비밀값(GYOCHE_SIGNING)이 없어요. 저장소 Settings - Secrets and variables - Actions 에서 New repository secret 으로 넣어주세요."
@@ -44,6 +45,25 @@ jobs:
           trap 'rm -f app/gyoche.jks' EXIT
           gradle assembleRelease --no-daemon
           cp app/build/outputs/apk/release/app-release.apk gyoche-check.apk
+          # 보안: 예전 서명 키가 옛 커밋에 공개돼 있어 새 키로 넘어감(키 교체, 앱 지우지 않고 업데이트 가능)
+          # 새 키는 app/gyoche2.jks.enc 에 암호화돼 있고, 비밀번호는 GitHub 비밀값 GYOCHE_KEY2 에만 있음
+          if [ -n "$KEY2" ]; then
+            BT="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
+            printf '%s' "$KEY2" > "$RUNNER_TEMP/k2"
+            trap 'rm -f app/gyoche.jks "$RUNNER_TEMP/k2" "$RUNNER_TEMP/new.jks"' EXIT
+            openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in app/gyoche2.jks.enc -out "$RUNNER_TEMP/new.jks" -pass file:"$RUNNER_TEMP/k2" \
+              || { echo "::error::GYOCHE_KEY2 비밀번호가 맞지 않아요."; exit 1; }
+            "$BT/apksigner" rotate --out "$RUNNER_TEMP/lineage" \
+              --old-signer --ks app/gyoche.jks --ks-key-alias gyoche --ks-pass env:KEY_PASS \
+              --new-signer --ks "$RUNNER_TEMP/new.jks" --ks-key-alias gyoche2 --ks-pass file:"$RUNNER_TEMP/k2"
+            "$BT/apksigner" sign --lineage "$RUNNER_TEMP/lineage" --rotation-min-sdk-version 28 \
+              --ks app/gyoche.jks --ks-key-alias gyoche --ks-pass env:KEY_PASS \
+              --next-signer --ks "$RUNNER_TEMP/new.jks" --ks-key-alias gyoche2 --ks-pass file:"$RUNNER_TEMP/k2" \
+              gyoche-check.apk
+            "$BT/apksigner" verify -v --print-certs gyoche-check.apk | grep -E "Verified|SHA-256|lineage" || true
+          else
+            echo "::warning::새 서명 키 비밀번호(GYOCHE_KEY2)가 아직 없어 예전 키로만 서명했어요."
+          fi
           ls -la gyoche-check.apk
       - name: Publish APK
         env:
