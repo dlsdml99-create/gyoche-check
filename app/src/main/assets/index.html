@@ -1686,7 +1686,7 @@ input.dp-hid { display: none !important; }
     '감자': ['감자'],
     '고구마': ['고구마'],
     '당근': ['당근'],
-    '애호박': ['애호박', '호박'],
+    '애호박': ['애호박', /(^|[^단])호박/],
     '버섯': ['버섯', '느타리', '팽이', '표고', '새송이'],
     '콩나물': ['콩나물', '숙주'],
     '양배추': ['양배추'],
@@ -1731,7 +1731,30 @@ input.dp-hid { display: none !important; }
     '멸치': ['멸치'],
     '진미채': ['진미채', '오징어채'],
     '청경채': ['청경채'],
-    '옥수수': ['옥수수', '스위트콘']
+    '옥수수': ['옥수수', '스위트콘'],
+    '명란': ['명란'],
+    '단호박': ['단호박'],
+    '또띠아': ['또띠아', '또르띠아', '토르티야', '토르티아'],
+    '아보카도': ['아보카도'],
+    '삼치': ['삼치'],
+    '갈치': ['갈치'],
+    '꽁치': ['꽁치'],
+    '메밀면': ['메밀', '소바'],
+    '쌀국수': ['쌀국수', '쌀면'],
+    '라이스페이퍼': ['라이스페이퍼'],
+    '게맛살': ['맛살', '크래미', '게살'],
+    '메추리알': ['메추리'],
+    '묵': [/(도토리|청포|메밀)묵|^묵(\d|\(|$)/],
+    '순대': ['순대'],
+    '고추': ['청양', '풋고추', '꽈리', '오이고추', '홍고추'],
+    '마늘종': ['마늘종', '마늘쫑'],
+    '연근': ['연근'],
+    '우엉': ['우엉'],
+    '오리고기': ['오리고기', '훈제오리', '오리훈제', '오리주물럭'],
+    '냉면': ['냉면'],
+    '쫄면': ['쫄면'],
+    '샐러드채소': ['샐러드채소', '어린잎', '루꼴라', '로메인', '양상추', '샐러드믹스'],
+    '딸기': ['딸기']
   };
   var PANTRY = '밥·간장·소금·설탕·식용유·고춧가루·고추장·된장·참기름·다진 마늘·후추';
 
@@ -1852,6 +1875,175 @@ input.dp-hid { display: none !important; }
     { name: '소고기 야채죽', time: 30, need: ['소고기'], opt: ['당근', '애호박', '버섯'], steps: ['다진 소고기를 참기름에 볶아요.', '잘게 썬 채소와 밥 1공기, 물 4컵을 넣고 저어가며 끓여요.', '걸쭉해지면 국간장이나 소금으로 간해요.'] }
   ];
 
+  // v1.29 — 레시피를 더 다양하게: 양식·중식·일식·아시아·가벼운 식사·아이 반찬·간식
+  // kind: 한식(기본)·양식·중식·일식·아시아·가벼운 / kid: 아이가 잘 먹는 메뉴
+  var MORE = [
+    // ── 양식
+    { name: '까르보나라', kind: '양식', time: 20, need: ['파스타면', '계란'], opt: ['베이컨', '치즈', '양파'], steps: ['면을 소금물에 포장지 시간대로 삶고, 면 삶은 물 반 컵을 남겨요.', '계란 노른자 2개, 치즈 가루(없으면 슬라이스 치즈 잘게), 후추를 섞어요.', '베이컨을 볶아 불을 끄고 면과 면수를 넣은 뒤 노른자 소스를 부어 빠르게 버무려요.'] },
+    { name: '로제 파스타', kind: '양식', time: 20, need: ['파스타면', '토마토', '우유'], opt: ['베이컨', '양파', '버섯', '새우'], steps: ['면을 소금물에 삶아요.', '다진 마늘·양파·베이컨을 볶다가 토마토를 썰어 넣고 으깨며 5분 끓여요.', '우유(또는 생크림) 1컵을 붓고 걸쭉해지면 면을 넣어 버무려요.'] },
+    { name: '새우 알리오 올리오', kind: '양식', time: 15, need: ['파스타면', '새우'], opt: ['브로콜리', '버섯'], steps: ['면을 소금물에 삶아요.', '기름을 넉넉히 두르고 편 썬 마늘을 약불에 노릇하게 볶아요.', '새우를 넣어 익으면 면과 면수 반 컵을 넣고 소금·후추로 간해요.'] },
+    { name: '명란 크림 파스타', kind: '양식', time: 20, need: ['파스타면', '명란', '우유'], opt: ['버터', '김', '양파'], steps: ['면을 삶아요.', '버터에 양파를 볶고 우유 1컵을 부어 끓여요.', '껍질 벗긴 명란 반을 풀고 면을 넣어 버무린 뒤 남은 명란과 김가루를 올려요.'] },
+    { name: '맥앤치즈', kind: '양식', kid: true, time: 20, need: ['파스타면', '치즈', '우유'], opt: ['버터', '베이컨'], steps: ['짧은 파스타(없으면 아무 면이나 짧게 부숴서)를 삶아요.', '버터 1숟가락을 녹이고 우유 1컵, 치즈 3장을 넣어 녹여요.', '면을 넣어 버무리고 소금·후추로 간해요.'] },
+    { name: '함박스테이크', kind: '양식', kid: true, time: 30, need: ['소고기'], opt: ['돼지고기', '양파', '계란'], steps: ['다진 고기에 볶은 양파, 계란 1개, 빵가루 3숟가락, 소금·후추를 넣고 치대요.', '도톰하게 빚어 가운데를 살짝 눌러요.', '중불에 앞뒤를 굽고 물 3숟가락을 넣어 뚜껑 덮고 5분 익혀요. 케첩 2, 간장 1, 설탕 1을 졸여 소스로 끼얹어요.'] },
+    { name: '치킨 스테이크', kind: '양식', time: 20, need: ['닭고기'], opt: ['양파', '버섯', '버터'], steps: ['닭다리살(또는 가슴살)에 소금·후추를 뿌려요.', '껍질 쪽부터 중불에 6분, 뒤집어 5분 구워요.', '간장 2, 설탕 1, 물 3숟가락으로 소스를 졸여 버섯·양파와 곁들여요.'] },
+    { name: '소고기 스테이크', kind: '양식', time: 15, need: ['소고기'], opt: ['버터', '감자', '버섯'], steps: ['고기를 실온에 20분 두고 물기를 닦아 소금·후추를 뿌려요.', '연기 날 만큼 달군 팬에 앞뒤 2~3분씩 구워요.', '버터와 마늘을 넣고 끼얹은 뒤 5분 쉬었다 썰어요.'] },
+    { name: '감자 수프', kind: '양식', time: 25, need: ['감자', '우유'], opt: ['양파', '버터', '베이컨'], steps: ['버터에 얇게 썬 양파와 감자를 볶아요.', '물 1컵을 넣고 감자가 푹 익을 때까지 10분 끓여요.', '우유 1.5컵을 넣고 곱게 갈아 소금·후추로 간해요.'] },
+    { name: '버섯 크림수프', kind: '양식', time: 20, need: ['버섯', '우유'], opt: ['양파', '버터'], steps: ['버터에 양파와 버섯을 볶아요.', '밀가루 1숟가락을 넣어 1분 더 볶아요.', '우유 2컵을 조금씩 부으며 저어 걸쭉해지면 소금·후추로 간해요.'] },
+    { name: '단호박 수프', kind: '양식', kid: true, time: 25, need: ['단호박', '우유'], opt: ['양파', '버터'], steps: ['단호박을 전자레인지에 5분 돌려 껍질과 씨를 빼요.', '버터에 양파를 볶고 단호박, 물 반 컵을 넣고 5분 끓여요.', '우유 1.5컵을 넣고 곱게 갈아 소금으로 간해요.'] },
+    { name: '콘수프', kind: '양식', kid: true, time: 15, need: ['옥수수', '우유'], opt: ['양파', '버터'], steps: ['버터에 양파와 옥수수를 볶아요.', '우유 2컵을 붓고 절반만 갈아 다시 넣어요.', '약불에 저어가며 끓이고 소금으로 간해요.'] },
+    { name: '토마토 리조또', kind: '양식', time: 20, need: ['토마토'], opt: ['양파', '버섯', '치즈', '베이컨'], steps: ['양파·버섯을 볶다가 토마토를 썰어 넣고 으깨요.', '밥 1공기와 물 반 컵을 넣고 저어가며 졸여요.', '치즈를 넣어 녹이고 소금·후추로 간해요.'] },
+    { name: '버섯 크림 리조또', kind: '양식', time: 20, need: ['버섯', '우유'], opt: ['양파', '베이컨', '치즈'], steps: ['버터나 기름에 양파·버섯·베이컨을 볶아요.', '밥 1공기와 우유 1컵을 넣고 저어가며 졸여요.', '치즈를 넣어 녹이고 소금·후추로 간해요.'] },
+    { name: '감바스', kind: '양식', time: 15, need: ['새우'], opt: ['버섯', '브로콜리', '식빵'], steps: ['작은 팬에 기름을 1cm 붓고 편 마늘을 약불에 익혀요.', '새우와 버섯을 넣고 소금, 고춧가루(또는 페퍼론치노)를 뿌려 익혀요.', '구운 빵을 기름에 찍어 먹어요.'] },
+    { name: '프리타타', kind: '양식', time: 20, need: ['계란'], opt: ['감자', '양파', '시금치', '치즈', '베이컨'], steps: ['채소와 베이컨을 작게 썰어 팬에 볶아요.', '계란 4개, 우유 2숟가락, 소금을 섞어 부어요.', '치즈를 올리고 뚜껑을 덮어 약불에서 10분 익혀요.'] },
+    { name: '샥슈카(에그 인 헬)', kind: '양식', time: 20, need: ['계란', '토마토'], opt: ['양파', '파프리카', '식빵'], steps: ['양파·파프리카를 볶다가 토마토를 넣고 으깨 5분 끓여요.', '소금·후추·고춧가루로 간하고 가운데를 파서 계란을 깨 넣어요.', '뚜껑을 덮고 계란이 반숙이 될 때까지 익혀 빵과 먹어요.'] },
+    { name: '감자 그라탕', kind: '양식', kid: true, time: 35, need: ['감자', '우유', '치즈'], opt: ['베이컨', '양파'], steps: ['감자를 얇게 썰어 우유 1컵, 소금과 함께 10분 끓여요.', '그릇에 담고 베이컨·양파를 올려요.', '치즈를 덮고 에어프라이어 180도에서 12분 구워요.'] },
+    { name: '라따뚜이', kind: '양식', time: 35, need: ['가지', '토마토'], opt: ['애호박', '양파', '파프리카'], steps: ['양파와 토마토 1개를 볶아 소스를 만들어 그릇에 깔아요.', '가지·애호박·토마토를 동그랗게 썰어 번갈아 세워 담아요.', '기름·소금·후추를 뿌리고 에어프라이어(오븐) 180도에서 20분 구워요.'] },
+    { name: '미트볼 토마토조림', kind: '양식', kid: true, time: 30, need: ['소고기', '토마토'], opt: ['돼지고기', '양파'], steps: ['다진 고기에 소금·후추·빵가루를 넣고 동그랗게 빚어 굴려 구워요.', '양파를 볶다가 토마토를 넣고 으깨 끓여요.', '미트볼을 넣고 10분 졸여요.'] },
+    { name: '시저 샐러드', kind: '가벼운', time: 15, need: ['상추'], opt: ['닭고기', '베이컨', '치즈', '식빵', '계란'], steps: ['상추(로메인)를 한입 크기로 찢어 물기를 빼요.', '마요네즈 2, 레몬즙(없으면 식초) 1, 다진 마늘 약간, 치즈 가루로 드레싱을 만들어요.', '구운 베이컨·닭고기, 빵 조각을 올리고 드레싱을 뿌려요.'] },
+    { name: '햄치즈 샌드위치', kind: '양식', kid: true, time: 10, need: ['식빵', '햄'], opt: ['치즈', '상추', '토마토', '계란'], steps: ['식빵 한쪽에 마요네즈, 다른 쪽에 머스터드(없으면 케첩)를 발라요.', '상추·햄·치즈·토마토를 차례로 올려요.', '덮고 랩으로 싸서 반 갈라요.'] },
+    { name: '에그마요 샌드위치', kind: '양식', kid: true, time: 15, need: ['식빵', '계란'], opt: ['오이', '햄'], steps: ['계란을 10분 삶아 잘게 으깨요.', '마요네즈 2, 설탕 반, 소금 약간을 섞어요.', '식빵 사이에 듬뿍 넣고 가장자리를 잘라요.'] },
+    { name: '퀘사디아', kind: '양식', time: 15, need: ['또띠아', '치즈'], opt: ['닭고기', '양파', '파프리카', '옥수수'], steps: ['고기와 채소를 잘게 썰어 볶아 소금·후추로 간해요.', '또띠아 반쪽에 치즈와 속을 올리고 반으로 접어요.', '마른 팬에 앞뒤로 눌러 구워 치즈가 녹으면 잘라요.'] },
+    { name: '또띠아 피자', kind: '양식', kid: true, snack: true, time: 15, need: ['또띠아', '치즈'], opt: ['햄', '양파', '파프리카', '옥수수', '토마토'], steps: ['또띠아에 케첩(또는 토마토소스)을 얇게 발라요.', '토핑을 올리고 치즈를 듬뿍 뿌려요.', '에어프라이어 180도에서 8분, 또는 팬에 뚜껑 덮고 약불로 구워요.'] },
+    { name: '식빵 피자', kind: '양식', kid: true, snack: true, time: 10, need: ['식빵', '치즈'], opt: ['햄', '옥수수', '양파'], steps: ['식빵에 케첩을 발라요.', '햄·옥수수·양파를 올리고 치즈를 덮어요.', '에어프라이어 180도에서 6분 구워요.'] },
+    { name: '그릴드 치즈 샌드위치', kind: '양식', kid: true, snack: true, time: 10, need: ['식빵', '치즈'], opt: ['햄', '버터'], steps: ['식빵 바깥쪽에 버터를 발라요.', '안쪽에 치즈 2장과 햄을 넣어요.', '약불 팬에 눌러가며 앞뒤로 노릇하게 구워요.'] },
+    { name: '아보카도 토스트', kind: '가벼운', snack: true, time: 10, need: ['식빵', '아보카도'], opt: ['계란', '토마토'], steps: ['식빵을 바삭하게 구워요.', '아보카도를 으깨 소금·후추·레몬즙을 섞어요.', '빵에 펴 바르고 반숙 계란이나 토마토를 올려요.'] },
+
+    // ── 중식
+    { name: '탕수육', kind: '중식', kid: true, time: 40, need: ['돼지고기'], opt: ['양파', '당근', '오이'], steps: ['고기를 길게 썰어 소금·후추로 밑간하고 전분과 물을 섞은 반죽을 입혀요.', '기름에 두 번 튀겨요(에어프라이어 200도 15분도 돼요).', '물 1컵, 설탕 4, 식초 3, 간장 1을 끓여 채소를 넣고 전분물로 걸쭉하게 해 부어요.'] },
+    { name: '깐풍기', kind: '중식', time: 30, need: ['닭고기'], opt: ['대파', '파프리카', '고추'], steps: ['닭을 한입 크기로 썰어 전분을 묻혀 바삭하게 튀겨요(구워도 돼요).', '기름에 대파·마늘·고추를 볶아 향을 내요.', '간장 2, 설탕 2, 식초 2, 물 2숟가락을 넣고 닭을 버무려요.'] },
+    { name: '유린기', kind: '중식', time: 30, need: ['닭고기', '상추'], opt: ['대파', '고추'], steps: ['닭다리살을 펴서 전분을 묻혀 바삭하게 튀기거나 구워요.', '간장 3, 식초 2, 설탕 2, 물 2, 다진 대파·고추를 섞어 소스를 만들어요.', '채 썬 상추 위에 닭을 썰어 올리고 소스를 부어요.'] },
+    { name: '고추잡채', kind: '중식', time: 20, need: ['돼지고기', '파프리카'], opt: ['양파', '버섯'], steps: ['고기를 채 썰어 간장·후추로 밑간해요.', '센불에 고기를 볶다가 채 썬 파프리카·양파를 넣어요.', '굴소스(없으면 간장) 1숟가락으로 간하고 꽃빵이나 밥과 먹어요.'] },
+    { name: '어향가지', kind: '중식', time: 20, need: ['가지', '돼지고기'], opt: ['대파'], steps: ['가지를 길게 썰어 전분을 묻혀 기름에 노릇하게 구워요.', '다진 고기·대파·마늘을 볶아요.', '간장 2, 설탕 1, 식초 1, 고춧가루 반, 물 3을 넣고 가지를 버무려요.'] },
+    { name: '청경채 소고기볶음', kind: '중식', time: 15, need: ['청경채', '소고기'], opt: ['버섯'], steps: ['소고기를 간장·후추로 밑간해요.', '센불에 마늘과 고기를 볶아요.', '청경채를 넣고 굴소스 1숟가락으로 빠르게 볶아요.'] },
+    { name: '차돌 숙주볶음', kind: '중식', time: 10, need: ['소고기', '콩나물'], opt: ['대파'], steps: ['차돌박이를 센불에 구워 기름을 내요.', '숙주(콩나물)와 대파를 넣고 30초만 볶아요.', '굴소스(또는 간장) 1, 후추로 간하고 바로 불을 꺼요.'] },
+    { name: '새우 계란볶음', kind: '중식', time: 10, need: ['새우', '계란'], opt: ['대파'], steps: ['계란을 반숙으로 스크램블해 덜어 둬요.', '파기름에 새우를 볶아요.', '계란을 다시 넣고 소금·후추로 간해요.'] },
+    { name: '짬뽕 라면', kind: '중식', time: 15, need: ['라면'], opt: ['오징어', '새우', '바지락', '양배추', '양파'], steps: ['기름에 고춧가루 1숟가락, 양배추·양파를 센불에 볶아요.', '해물을 넣어 볶고 물 600ml와 스프를 넣어 끓여요.', '면을 넣고 4분 끓여요.'] },
+    { name: '짜장 떡볶이', kind: '중식', kid: true, time: 20, need: ['떡', '짜장'], opt: ['어묵', '양배추', '양파'], steps: ['물 2컵에 짜장 가루 2숟가락, 설탕 1숟가락을 풀어 끓여요.', '떡·어묵·채소를 넣고 8분 졸여요.', '걸쭉해지면 불을 꺼요.'] },
+    { name: '중화 볶음면', kind: '중식', time: 15, need: ['라면'], opt: ['양배추', '돼지고기', '양파', '당근'], steps: ['라면 사리를 2분만 삶아 건져요.', '고기와 채소를 센불에 볶아요.', '면을 넣고 굴소스 1, 간장 1, 설탕 반으로 볶아요(스프는 반만).'] },
+
+    // ── 일식
+    { name: '오야꼬동', kind: '일식', kid: true, time: 20, need: ['닭고기', '계란', '양파'], opt: ['대파'], steps: ['물 반 컵, 간장 2, 설탕 1, 맛술 1에 양파를 넣고 끓여요.', '한입 크기 닭고기를 넣고 5분 익혀요.', '계란 2개를 풀어 둘러 붓고 반숙일 때 밥 위에 올려요.'] },
+    { name: '연어 덮밥(사케동)', kind: '일식', time: 10, need: ['연어'], opt: ['양파', '김', '아보카도'], steps: ['연어를 도톰하게 썰어요.', '양파를 얇게 썰어 찬물에 헹궈 매운맛을 빼요.', '밥 위에 양파·연어를 올리고 간장·와사비를 곁들여요.'] },
+    { name: '차슈 덮밥', kind: '일식', time: 50, need: ['돼지고기'], opt: ['대파', '계란'], steps: ['통삼겹(목살)을 겉만 노릇하게 구워요.', '물 1컵, 간장 반 컵, 설탕 3숟가락, 대파를 넣고 약불에서 40분 졸여요.', '얇게 썰어 밥에 올리고 졸인 소스와 반숙 계란을 곁들여요.'] },
+    { name: '닭 데리야끼', kind: '일식', kid: true, time: 20, need: ['닭고기'], opt: ['양파', '대파'], steps: ['닭다리살을 껍질부터 노릇하게 구워요.', '간장 2, 설탕 1, 맛술 2, 물 2숟가락을 넣어요.', '뒤집어가며 윤기 나게 졸여 썰어요.'] },
+    { name: '삼치 데리야끼', kind: '일식', time: 20, need: ['삼치'], opt: ['대파'], steps: ['삼치 물기를 닦고 전분을 살짝 묻혀요.', '앞뒤로 노릇하게 구워요.', '간장 2, 설탕 1, 맛술 2, 물 2를 넣고 졸여요.'] },
+    { name: '일본식 카레우동', kind: '일식', time: 20, need: ['우동면', '카레'], opt: ['돼지고기', '양파', '대파'], steps: ['고기와 양파를 볶아요.', '물 2.5컵, 간장 1숟가락을 넣고 끓으면 카레 가루 2숟가락을 풀어요.', '우동면을 넣고 2분 끓여 대파를 올려요.'] },
+    { name: '냉메밀 소바', kind: '일식', time: 15, need: ['메밀면'], opt: ['무', '대파', '김'], steps: ['메밀면을 삶아 찬물에 비벼 헹궈요.', '물 1컵, 간장 3, 설탕 1, 맛술 1을 끓여 식혀 쯔유를 만들어요(시판 쯔유도 돼요).', '간 무, 대파, 김을 곁들여 찍어 먹어요.'] },
+    { name: '오코노미야끼', kind: '일식', time: 25, need: ['양배추', '계란'], opt: ['베이컨', '오징어', '새우'], steps: ['채 썬 양배추에 계란 2개, 부침가루 반 컵, 물 3숟가락을 섞어요.', '팬에 도톰하게 펴고 베이컨을 올려 약불에서 앞뒤로 익혀요.', '돈가스 소스와 마요네즈를 뿌리고 김가루를 올려요.'] },
+    { name: '밀푀유나베', kind: '일식', time: 30, need: ['배추', '소고기'], opt: ['깻잎', '버섯', '청경채'], steps: ['배추·깻잎·고기를 겹겹이 쌓아 4cm 길이로 썰어요.', '냄비 바깥부터 세워 둘러 담고 가운데에 버섯을 넣어요.', '물 4컵, 간장 3, 쯔유 또는 국간장으로 국물을 부어 끓여요.'] },
+    { name: '샤브샤브', kind: '일식', time: 25, need: ['소고기'], opt: ['배추', '버섯', '청경채', '칼국수면', '콩나물'], steps: ['물 6컵에 국간장 2숟가락, 다시마(있으면)를 넣고 끓여요.', '채소를 넣고 고기는 살짝만 데쳐 건져 먹어요.', '남은 국물에 칼국수면이나 밥으로 마무리해요.'] },
+    { name: '일본식 된장국', kind: '일식', time: 10, need: ['두부', '미역'], opt: ['대파'], steps: ['물 3컵을 끓여 불린 미역과 깍둑 썬 두부를 넣어요.', '불을 줄이고 된장 1.5숟가락을 풀어요(끓이지 않아요).', '대파를 올려요.'] },
+    { name: '명란 계란말이', kind: '일식', time: 15, need: ['계란', '명란'], opt: ['대파'], steps: ['계란 3개를 풀어요.', '팬에 얇게 부어 가운데에 명란을 길게 올려요.', '돌돌 말고 남은 계란물을 이어 부어 말아요.'] },
+    { name: '명란 마요 덮밥', kind: '일식', time: 10, need: ['명란'], opt: ['계란', '김', '대파'], steps: ['명란 껍질을 벗겨 마요네즈 1숟가락과 섞어요.', '밥 위에 스크램블 에그와 명란마요를 올려요.', '김가루와 대파를 뿌려요.'] },
+    { name: '연어 주먹밥', kind: '일식', kid: true, time: 15, need: ['연어'], opt: ['김'], steps: ['연어를 구워 잘게 부숴요.', '밥에 소금·참기름과 연어를 섞어요.', '세모나게 뭉쳐 김을 둘러요.'] },
+
+    // ── 아시아
+    { name: '팟타이', kind: '아시아', time: 25, need: ['쌀국수'], opt: ['새우', '계란', '콩나물', '부추'], steps: ['쌀국수를 찬물에 30분 불려요.', '새우를 볶고 계란을 스크램블해요.', '면과 굴소스 1, 간장 1, 설탕 1, 식초 1을 넣어 볶다가 숙주·부추를 넣어요.'] },
+    { name: '소고기 쌀국수', kind: '아시아', time: 25, need: ['쌀국수', '소고기'], opt: ['콩나물', '양파'], steps: ['물 4컵에 국간장 1, 액젓(없으면 소금), 양파를 넣고 끓여요.', '불린 쌀국수를 끓는 물에 30초 데쳐 그릇에 담아요.', '얇은 소고기를 올리고 뜨거운 국물을 부어 숙주를 곁들여요.'] },
+    { name: '분짜', kind: '아시아', time: 30, need: ['쌀국수', '돼지고기'], opt: ['상추', '오이', '당근'], steps: ['고기를 간장 1, 설탕 1, 다진 마늘로 재워 구워요.', '물 반 컵, 설탕 2, 식초 2, 액젓 1로 소스를 만들고 당근을 넣어요.', '삶은 쌀국수와 채소, 고기를 소스에 적셔 먹어요.'] },
+    { name: '월남쌈', kind: '아시아', time: 25, need: ['라이스페이퍼'], opt: ['새우', '게맛살', '파프리카', '오이', '당근', '상추'], steps: ['채소를 가늘게 채 썰고 새우는 데쳐요.', '라이스페이퍼를 따뜻한 물에 살짝 적셔요.', '속을 올려 돌돌 말고 칠리소스나 땅콩소스에 찍어 먹어요.'] },
+    { name: '팟카파오 덮밥', kind: '아시아', time: 15, need: ['돼지고기', '계란'], opt: ['양파', '고추', '파프리카'], steps: ['다진 돼지고기를 마늘·고추와 센불에 볶아요.', '굴소스 1, 간장 1, 설탕 반, 액젓 약간으로 간해요.', '밥 위에 올리고 바삭한 계란프라이를 얹어요.'] },
+    { name: '탄두리 치킨', kind: '아시아', time: 40, need: ['닭고기', '요거트'], opt: ['양파'], steps: ['요거트 3, 카레 가루 1, 다진 마늘 1, 소금 반 숟가락에 닭을 30분 재워요.', '에어프라이어 190도에서 20분 구워요(중간에 뒤집기).', '양파와 곁들여요.'] },
+    { name: '버터치킨 카레', kind: '아시아', time: 30, need: ['닭고기', '카레'], opt: ['토마토', '우유', '버터', '양파'], steps: ['버터에 양파와 닭을 볶아요.', '토마토를 넣고 으깨며 볶다가 물 1.5컵을 부어요.', '카레 가루 2숟가락과 우유 반 컵을 넣어 걸쭉하게 끓여요.'] },
+    { name: '나시고랭', kind: '아시아', time: 15, need: ['계란'], opt: ['새우', '양파', '당근', '닭고기'], steps: ['양파·당근·새우를 볶아요.', '밥을 넣고 케첩 1, 굴소스 1, 간장 1, 고춧가루 약간으로 볶아요.', '계란프라이를 올려요.'] },
+
+    // ── 한식 더
+    { name: '김치찜', time: 50, need: ['김치', '돼지고기'], opt: ['대파', '두부'], steps: ['냄비에 묵은 김치를 통째로 깔고 돼지고기를 올려요.', '물 2컵, 김치 국물 반 컵, 설탕 1, 고춧가루 1을 부어요.', '센불에 끓이다 약불로 40분 푹 쪄요.'] },
+    { name: '콩나물밥', time: 25, need: ['콩나물'], opt: ['돼지고기', '대파'], steps: ['쌀(또는 밥) 위에 콩나물과 볶은 고기를 올려요.', '물을 평소보다 조금 적게 넣고 밥을 지어요.', '간장 3, 고춧가루 1, 다진 파, 참기름으로 양념장을 만들어 비벼요.'] },
+    { name: '닭한마리', time: 50, need: ['닭고기'], opt: ['감자', '대파', '칼국수면'], steps: ['닭을 물 8컵, 대파, 마늘과 30분 끓여요.', '감자를 넣고 10분 더 끓여 소금으로 간해요.', '간장 2, 식초 1, 겨자, 고춧가루로 소스를 만들어 찍어 먹고 칼국수로 마무리해요.'] },
+    { name: '삼계탕', time: 60, need: ['닭고기'], opt: ['대파'], steps: ['작은 닭 속에 불린 찹쌀(없으면 쌀)과 마늘을 넣어요.', '물 8컵을 붓고 센불에 끓이다 중불로 45분 끓여요.', '소금·후추·대파를 곁들여요.'] },
+    { name: '육개장', time: 50, need: ['소고기', '대파'], opt: ['콩나물', '버섯'], steps: ['소고기를 물 6컵에 20분 삶아 찢고 국물은 둬요.', '대파·콩나물·버섯에 고춧가루 2, 국간장 2, 참기름 1, 다진 마늘을 버무려요.', '국물에 넣고 20분 끓여 소금으로 간해요.'] },
+    { name: '오징어 뭇국', time: 25, need: ['오징어', '무'], opt: ['대파'], steps: ['무를 나박 썰어 참기름에 볶아요.', '물 4컵을 붓고 무가 투명해지면 오징어를 넣어요.', '고춧가루·국간장·다진 마늘로 간하고 대파를 넣어요.'] },
+    { name: '꽁치 김치찌개', time: 25, need: ['꽁치', '김치'], opt: ['양파', '대파'], steps: ['냄비에 김치를 깔고 꽁치(통조림)를 국물째 올려요.', '물 2컵, 고춧가루 1, 다진 마늘을 넣고 15분 끓여요.', '양파·대파를 넣고 5분 더 끓여요.'] },
+    { name: '갈치조림', time: 30, need: ['갈치'], opt: ['무', '감자', '대파'], steps: ['냄비에 무·감자를 깔고 갈치를 올려요.', '물 1.5컵, 간장 3, 고춧가루 2, 설탕 1, 다진 마늘 1을 부어요.', '중불에서 국물을 끼얹으며 20분 졸여요.'] },
+    { name: '삼치구이', time: 15, need: ['삼치'], opt: [], steps: ['삼치 물기를 닦고 소금을 살짝 뿌려요.', '기름 두른 팬에 껍질부터 중불로 5분 구워요.', '뒤집어 4분 더 구워요.'] },
+    { name: '바지락 술찜', time: 15, need: ['바지락'], opt: ['대파', '버터', '고추'], steps: ['바지락을 소금물에 담가 해감해요.', '기름에 마늘·고추를 볶다가 바지락과 소주(또는 물) 반 컵을 넣어요.', '뚜껑을 덮고 입이 벌어지면 버터와 대파를 넣어요.'] },
+    { name: '오삼불고기', time: 25, need: ['오징어', '돼지고기'], opt: ['양파', '양배추', '대파'], steps: ['고추장 2, 고춧가루 1, 간장 1, 설탕 1, 다진 마늘 1로 양념을 만들어요.', '돼지고기를 먼저 볶아요.', '오징어·채소·양념을 넣고 센불에 빠르게 볶아요.'] },
+    { name: '도토리묵무침', time: 10, need: ['묵'], opt: ['상추', '오이', '당근'], steps: ['묵을 한입 크기로 썰어요.', '간장 2, 고춧가루 1, 설탕 반, 참기름 1, 깨로 양념을 만들어요.', '채소와 함께 살살 버무려요.'] },
+    { name: '순대볶음', time: 20, need: ['순대'], opt: ['양배추', '깻잎', '대파'], steps: ['고추장 2, 고춧가루 1, 간장 1, 설탕 1로 양념을 만들어요.', '양배추를 볶다가 순대를 넣어요.', '양념을 넣고 볶다가 깻잎·들깨가루를 넣어요.'] },
+    { name: '깻잎전', time: 25, need: ['깻잎', '돼지고기'], opt: ['두부', '양파'], steps: ['다진 고기에 으깬 두부, 양파, 소금·후추를 섞어요.', '깻잎 안쪽에 밀가루를 묻히고 속을 넣어 반으로 접어요.', '밀가루·계란물을 입혀 약불에 부쳐요.'] },
+    { name: '깻잎 장아찌', time: 15, need: ['깻잎'], opt: [], steps: ['깻잎을 씻어 물기를 털어요.', '간장 4, 물 4, 설탕 2, 식초 2를 끓여요.', '뜨거울 때 깻잎에 부어 식히고 하루 뒤부터 먹어요.'] },
+    { name: '꽈리고추 멸치볶음', time: 10, need: ['멸치', '고추'], opt: [], steps: ['마른 팬에 멸치를 볶아 덜어 둬요.', '꽈리고추를 기름에 볶아요.', '간장 1, 설탕 1, 물엿 1을 넣고 멸치와 버무려요.'] },
+    { name: '마늘종 볶음', time: 10, need: ['마늘종'], opt: ['멸치', '새우'], steps: ['마늘종을 4cm로 썰어 소금물에 30초 데쳐요.', '기름에 볶다가 간장 1, 설탕 반, 물엿 약간을 넣어요.', '깨를 뿌려요.'] },
+    { name: '연근조림', time: 30, need: ['연근'], opt: [], steps: ['연근을 얇게 썰어 식초 넣은 물에 5분 데쳐요.', '물 1컵, 간장 4, 설탕 2를 넣고 중불에 졸여요.', '물엿 1숟가락을 넣어 윤기 나게 마무리해요.'] },
+    { name: '우엉조림', time: 30, need: ['우엉'], opt: ['당근'], steps: ['우엉을 채 썰어 식초물에 담갔다 건져요.', '기름에 3분 볶아요.', '물 반 컵, 간장 3, 설탕 1.5를 넣고 졸여 물엿과 깨를 넣어요.'] },
+    { name: '무나물', time: 15, need: ['무'], opt: ['대파'], steps: ['무를 채 썰어요.', '들기름(참기름)에 볶다가 물 3숟가락을 넣고 뚜껑을 덮어 익혀요.', '소금·다진 마늘로 간하고 대파를 넣어요.'] },
+    { name: '깍두기', time: 30, need: ['무'], opt: ['대파'], steps: ['무를 깍둑 썰어 소금 1, 설탕 1숟가락에 30분 절여요(헹구지 않아요).', '고춧가루 3, 액젓 2, 다진 마늘 1, 설탕 반을 섞어요.', '무와 대파를 버무려 하루 실온에 뒀다 냉장고에 넣어요.'] },
+    { name: '양파 장아찌', time: 15, need: ['양파'], opt: ['고추'], steps: ['양파를 큼직하게 썰어 통에 담아요.', '간장 1컵, 물 1컵, 설탕 반 컵, 식초 반 컵을 끓여요.', '뜨거울 때 붓고 식으면 냉장고에 넣어요.'] },
+    { name: '부추무침', time: 5, need: ['부추'], opt: ['양파'], steps: ['부추를 4cm로 썰어요.', '고춧가루 1, 간장 1, 식초 반, 설탕 반, 참기름 1을 섞어요.', '먹기 직전에 살살 버무려요.'] },
+    { name: '오리 부추볶음', time: 15, need: ['오리고기', '부추'], opt: ['양파'], steps: ['훈제오리를 기름 없이 볶아요.', '양파를 넣어 볶다가 기름을 조금 따라내요.', '부추를 넣고 30초만 볶아요.'] },
+    { name: '간장 돼지불고기', kid: true, time: 25, need: ['돼지고기'], opt: ['양파', '대파', '당근'], steps: ['간장 3, 설탕 1.5, 다진 마늘 1, 참기름 1, 후추로 양념해요.', '얇은 돼지고기를 15분 재워요.', '채소와 함께 센불에 볶아요.'] },
+    { name: '삼겹살 숙주볶음', time: 15, need: ['돼지고기', '콩나물'], opt: ['대파'], steps: ['대패삼겹을 노릇하게 구워요.', '숙주(콩나물)를 넣고 30초 볶아요.', '굴소스 1, 후추로 간해요.'] },
+    { name: '차돌 된장찌개', time: 20, need: ['소고기', '두부'], opt: ['애호박', '양파', '버섯', '고추'], steps: ['차돌박이를 냄비에 볶아 기름을 내요.', '물 2컵, 된장 1.5, 고춧가루 반을 풀고 채소를 넣어 끓여요.', '두부·고추를 넣고 3분 더 끓여요.'] },
+    { name: '소갈비찜', time: 90, need: ['소고기'], opt: ['무', '당근', '감자'], steps: ['갈비를 찬물에 1시간 담가 핏물을 빼고 한 번 데쳐요.', '간장 반 컵, 설탕 3, 배즙(없으면 설탕 1 더), 다진 마늘 2, 물 3컵을 넣고 40분 끓여요.', '무·당근을 넣고 20분 더 졸여요.'] },
+    { name: '물냉면', time: 15, need: ['냉면'], opt: ['오이', '계란', '무'], steps: ['냉면을 40초 삶아 찬물에 비벼 헹궈요.', '시판 육수를 살얼음 상태로 준비해요(없으면 찬물에 식초·설탕·간장).', '면 위에 오이·삶은 계란을 올리고 육수를 부어요.'] },
+    { name: '비빔냉면', time: 15, need: ['냉면'], opt: ['오이', '계란'], steps: ['냉면을 삶아 찬물에 헹궈요.', '고추장 2, 고춧가루 1, 설탕 1.5, 식초 1.5, 참기름 1로 양념해요.', '면에 버무리고 오이·계란을 올려요.'] },
+    { name: '쫄면', time: 15, need: ['쫄면'], opt: ['콩나물', '양배추', '오이', '계란'], steps: ['쫄면을 4분 삶아 찬물에 헹궈요.', '콩나물을 데치고 채소를 채 썰어요.', '고추장 2, 식초 2, 설탕 2, 참기름으로 비벼요.'] },
+    { name: '김치말이국수', time: 15, need: ['소면', '김치'], opt: ['오이'], steps: ['김치를 잘게 썰어 설탕·참기름에 무쳐요.', '김치 국물 반 컵, 찬물 2컵, 식초 1, 설탕 1로 국물을 만들어요.', '삶은 소면에 김치와 국물을 부어요.'] },
+    { name: '들기름 막국수', time: 15, need: ['메밀면'], opt: ['김'], steps: ['메밀면을 삶아 찬물에 헹궈요.', '들기름(참기름) 2, 간장 1, 설탕 반을 섞어요.', '면에 비비고 김가루와 깨를 듬뿍 올려요.'] },
+    { name: '김치 볶음우동', time: 15, need: ['우동면', '김치'], opt: ['돼지고기', '양파'], steps: ['고기와 김치를 볶아요.', '우동면을 넣고 고추장 반, 간장 1, 설탕 반으로 볶아요.', '참기름을 둘러요.'] },
+    { name: '크림 떡볶이', kid: true, time: 20, need: ['떡', '우유'], opt: ['베이컨', '치즈', '양파', '버섯'], steps: ['베이컨·양파를 볶아요.', '우유 2컵을 붓고 떡을 넣어 8분 끓여요.', '치즈를 넣고 소금·후추로 간해요.'] },
+    { name: '닭가슴살 볶음밥', time: 15, need: ['닭고기'], opt: ['양파', '당근', '계란', '파프리카'], steps: ['닭가슴살을 잘게 썰어 볶아요.', '채소와 밥을 넣어 볶아요.', '간장 1, 굴소스 반으로 간해요.'] },
+    { name: '소고기 볶음밥', kid: true, time: 15, need: ['소고기'], opt: ['당근', '애호박', '양파', '계란'], steps: ['다진 소고기를 간장 약간으로 볶아요.', '잘게 썬 채소를 넣고 볶아요.', '밥을 넣고 소금·참기름으로 간해요.'] },
+    { name: '케첩 소시지 볶음밥', kid: true, time: 15, need: ['햄'], opt: ['양파', '당근', '계란'], steps: ['소시지와 채소를 잘게 썰어 볶아요.', '밥을 넣고 케첩 2숟가락으로 볶아요.', '계란을 올려 오므라이스처럼 먹어도 좋아요.'] },
+
+    // ── 아이 반찬
+    { name: '메추리알 장조림', kid: true, time: 25, need: ['메추리알'], opt: ['소고기'], steps: ['깐 메추리알을 준비해요(생이면 6분 삶아 까요).', '물 1컵, 간장 4, 설탕 2를 끓여요.', '메추리알을 넣고 중약불에서 15분 졸여요.'] },
+    { name: '동그랑땡', kid: true, time: 30, need: ['돼지고기', '두부'], opt: ['당근', '양파', '계란'], steps: ['물기 짠 두부와 다진 고기, 잘게 썬 채소, 소금·후추를 치대요.', '동글납작하게 빚어요.', '밀가루·계란물을 입혀 약불에 앞뒤로 부쳐요.'] },
+    { name: '떡갈비', kid: true, time: 30, need: ['소고기'], opt: ['돼지고기', '양파'], steps: ['다진 고기에 간장 2, 설탕 1, 다진 마늘·양파, 참기름을 넣고 치대요.', '납작하게 빚어 가운데를 눌러요.', '약불에서 뚜껑 덮고 앞뒤로 익혀 마지막에 양념을 발라 윤기를 내요.'] },
+    { name: '치킨너겟', kid: true, time: 25, need: ['닭고기'], opt: ['계란'], steps: ['닭가슴살을 곱게 다져 소금·후추, 계란 반 개를 섞어요.', '한입 크기로 빚어 빵가루를 입혀요.', '기름을 살짝 뿌려 에어프라이어 190도에서 12분 구워요.'] },
+    { name: '두부 스테이크', kid: true, time: 20, need: ['두부'], opt: ['돼지고기', '당근', '양파'], steps: ['두부를 으깨 물기를 꼭 짜고 다진 채소·고기, 전분 2숟가락을 섞어요.', '도톰하게 빚어 약불에 앞뒤로 구워요.', '간장 1, 설탕 1, 물 2를 졸여 소스로 부어요.'] },
+    { name: '두부 강정', kid: true, time: 20, need: ['두부'], opt: [], steps: ['두부를 깍둑 썰어 물기를 닦고 전분을 묻혀요.', '기름에 바삭하게 구워요.', '간장 1, 설탕 1, 케첩 1, 물엿 1을 졸여 버무려요.'] },
+    { name: '닭강정', kid: true, time: 30, need: ['닭고기'], opt: [], steps: ['닭을 한입 크기로 썰어 소금·후추, 전분을 묻혀요.', '튀기거나 에어프라이어 200도에서 15분 구워요.', '간장 2, 설탕 2, 물엿 2, 케첩 1을 졸여 버무려요.'] },
+    { name: '감자 치즈전', kid: true, time: 20, need: ['감자', '치즈'], opt: ['햄'], steps: ['감자를 곱게 채 썰어 소금 한 꼬집과 섞어요.', '팬에 얇게 펴고 치즈를 올려요.', '감자를 한 번 더 덮어 약불에서 앞뒤로 바삭하게 부쳐요.'] },
+    { name: '맛살전', kid: true, time: 15, need: ['게맛살', '계란'], opt: ['대파'], steps: ['게맛살을 결대로 찢거나 반 갈라요.', '계란 2개를 풀고 대파를 섞어요.', '맛살을 계란물에 적셔 약불에 부쳐요.'] },
+    { name: '브로콜리 계란볶음', kid: true, time: 10, need: ['브로콜리', '계란'], opt: [], steps: ['브로콜리를 작게 잘라 1분 데쳐요.', '계란을 스크램블해 덜어 둬요.', '브로콜리를 볶다가 계란을 넣고 소금으로 간해요.'] },
+    { name: '옥수수전', kid: true, time: 15, need: ['옥수수', '계란'], opt: ['양파'], steps: ['옥수수 물기를 빼고 계란 1개, 부침가루 3숟가락을 섞어요.', '한 숟가락씩 떠 팬에 동글게 올려요.', '약불에서 앞뒤로 노릇하게 부쳐요.'] },
+    { name: '멸치 주먹밥', kid: true, time: 10, need: ['멸치'], opt: ['김'], steps: ['잔멸치를 마른 팬에 볶아요.', '밥에 멸치, 참기름, 깨, 소금을 섞어요.', '한입 크기로 동글게 뭉쳐 김가루에 굴려요.'] },
+    { name: '모양 주먹밥(공룡·별 틀)', kid: true, time: 15, need: ['김'], opt: ['햄', '계란', '치즈'], steps: ['밥에 소금·참기름을 넣고 비벼요.', '쿠키 틀(공룡·별·하트)에 꾹 눌러 모양을 내요.', '김으로 눈을, 치즈나 계란으로 무늬를 붙여요.'] },
+    { name: '미니 핫도그', kid: true, snack: true, time: 15, need: ['햄', '식빵'], opt: ['치즈'], steps: ['식빵 가장자리를 자르고 밀대로 얇게 밀어요.', '소시지를 올려 돌돌 말고 이쑤시개로 고정해요.', '에어프라이어 180도에서 6분 굽고 케첩을 뿌려요.'] },
+
+    // ── 가벼운 식사
+    { name: '두부 샐러드', kind: '가벼운', time: 10, need: ['두부'], opt: ['샐러드채소', '토마토', '오이'], steps: ['두부를 깍둑 썰어 물기를 빼고 노릇하게 구워요(생으로도 돼요).', '채소를 한입 크기로 썰어 담아요.', '간장 1, 식초 1, 참기름 1, 깨로 드레싱을 뿌려요.'] },
+    { name: '닭가슴살 포케', kind: '가벼운', time: 15, need: ['닭고기'], opt: ['아보카도', '오이', '옥수수', '샐러드채소'], steps: ['닭가슴살을 구워 깍둑 썰어요.', '밥이나 채소 위에 재료를 칸칸이 올려요.', '간장 1, 참기름 1, 식초 반, 설탕 반으로 소스를 뿌려요.'] },
+    { name: '연어 포케', kind: '가벼운', time: 10, need: ['연어'], opt: ['아보카도', '오이', '양파', '샐러드채소'], steps: ['연어를 깍둑 썰어 간장 1, 참기름 반에 버무려요.', '밥이나 채소 위에 채소와 연어를 올려요.', '마요네즈나 와사비를 곁들여요.'] },
+    { name: '오이 토마토 샐러드', kind: '가벼운', time: 5, need: ['오이', '토마토'], opt: ['양파'], steps: ['오이와 토마토를 한입 크기로 썰어요.', '올리브유(또는 식용유) 1, 식초 1, 소금·후추를 섞어요.', '버무려 바로 먹어요.'] },
+    { name: '양배추 롤', kind: '가벼운', time: 30, need: ['양배추', '돼지고기'], opt: ['양파', '당근'], steps: ['양배추 잎을 쪄서 부드럽게 해요.', '다진 고기와 채소에 소금·후추를 섞어 잎에 올려 돌돌 말아요.', '냄비에 담고 물 1컵, 간장 1, 케첩 2를 부어 15분 졸여요.'] },
+    { name: '브로콜리 닭가슴살 볶음', kind: '가벼운', time: 15, need: ['닭고기', '브로콜리'], opt: ['파프리카'], steps: ['브로콜리를 1분 데쳐요.', '닭가슴살을 볶다가 브로콜리를 넣어요.', '굴소스 1숟가락과 후추로 간해요.'] },
+    { name: '토마토 달걀 수프', kind: '가벼운', time: 15, need: ['토마토', '계란'], opt: ['양파', '대파'], steps: ['토마토와 양파를 볶다가 물 3컵을 부어 끓여요.', '소금·후추·간장 약간으로 간해요.', '계란을 풀어 천천히 둘러 넣고 대파를 올려요.'] },
+    { name: '양배추 달걀 덮밥', kind: '가벼운', time: 10, need: ['양배추', '계란'], opt: ['당근'], steps: ['양배추를 채 썰어 볶아요.', '계란 2개를 풀어 넣고 함께 익혀요.', '굴소스나 간장으로 간해 밥에 올려요.'] },
+    { name: '두부면 비빔국수', kind: '가벼운', time: 10, need: ['두부', '오이'], opt: ['계란', '김치'], steps: ['두부를 아주 가늘게 채 썰어요(두부면을 써도 돼요).', '고추장 1, 식초 1, 설탕 반, 참기름 1로 양념을 만들어요.', '오이채와 함께 살살 비벼요.'] },
+
+    // ── 간식
+    { name: '떡꼬치', kid: true, snack: true, time: 15, need: ['떡'], opt: [], steps: ['떡을 데쳐 꼬치에 꽂아요.', '기름에 앞뒤로 바삭하게 구워요.', '고추장 1, 케첩 2, 설탕 1, 물엿 1을 끓여 발라요.'] },
+    { name: '군만두', snack: true, time: 10, need: ['만두'], opt: [], steps: ['팬에 기름을 두르고 만두를 올려요.', '물 3숟가락을 넣고 뚜껑을 덮어 3분 익혀요.', '뚜껑을 열고 바닥이 바삭해질 때까지 구워요.'] },
+    { name: '감자튀김', kid: true, snack: true, time: 25, need: ['감자'], opt: [], steps: ['감자를 길게 썰어 찬물에 10분 담가 물기를 닦아요.', '기름 1숟가락, 소금을 버무려요.', '에어프라이어 200도에서 18분, 중간에 흔들어 구워요.'] },
+    { name: '사과칩', kid: true, snack: true, time: 60, need: ['사과'], opt: [], steps: ['사과를 아주 얇게 썰어요.', '에어프라이어 100도에서 50분 구워요(중간에 뒤집기).', '식히면 바삭해져요.'] },
+    { name: '사과 시나몬 토스트', snack: true, time: 10, need: ['식빵', '사과'], opt: ['버터'], steps: ['사과를 얇게 썰어 버터·설탕에 살짝 볶아요.', '식빵을 구워 사과를 올려요.', '시나몬 가루를 뿌려요.'] },
+    { name: '딸기 우유', kid: true, snack: true, time: 10, need: ['딸기', '우유'], opt: [], steps: ['딸기를 잘게 다져 설탕 1숟가락과 버무려 10분 둬요.', '컵에 딸기청을 담아요.', '찬 우유를 부어 섞어 마셔요.'] },
+    { name: '딸기 요거트 바크', kid: true, snack: true, time: 10, need: ['요거트'], opt: ['딸기', '바나나'], steps: ['쟁반에 종이호일을 깔고 요거트를 1cm 두께로 펴요.', '과일을 썰어 콕콕 올려요.', '냉동실에 3시간 얼려 손으로 부숴 먹어요.'] },
+    { name: '고구마 라떼', snack: true, time: 10, need: ['고구마', '우유'], opt: [], steps: ['찐 고구마 반 개를 으깨요.', '우유 1컵, 꿀(설탕) 1숟가락과 갈아요.', '따뜻하게 데워 마셔요.'] },
+    { name: '단호박 찜', kid: true, snack: true, time: 15, need: ['단호박'], opt: [], steps: ['단호박을 깨끗이 씻어 반 갈라 씨를 빼요.', '한입 크기로 썰어 전자레인지에 6분 돌리거나 찜기에 12분 쪄요.', '그대로 먹거나 꿀을 살짝 뿌려요.'] },
+    { name: '옥수수 버터구이', kid: true, snack: true, time: 10, need: ['옥수수', '버터'], opt: [], steps: ['옥수수 물기를 빼요.', '버터를 녹인 팬에 옥수수를 볶아요.', '설탕 한 꼬집, 소금 약간을 뿌려요.'] },
+    { name: '계란빵', kid: true, snack: true, time: 25, need: ['계란', '우유'], opt: ['치즈', '햄'], steps: ['핫케이크 가루(밀가루+설탕) 1컵에 우유 반 컵을 섞어요.', '종이컵 반까지 반죽을 붓고 계란을 하나씩 깨 올려요.', '에어프라이어 170도에서 15분 구워요.'] },
+    { name: '고구마 치즈볼', kid: true, snack: true, time: 25, need: ['고구마', '치즈'], opt: [], steps: ['찐 고구마를 으깨 설탕을 약간 섞어요.', '치즈를 가운데 넣고 동그랗게 빚어요.', '빵가루를 묻혀 에어프라이어 180도에서 10분 구워요.'] }
+  ];
+  // 기존 레시피에도 종류·아이 표시를 붙여요
+  var KIND0 = {
+    '양식': ['크림 파스타', '토마토 파스타', '알리오 올리오', '연어 스테이크', '새우 버터구이', '감자샐러드', '카프레제', '프렌치토스트', '스크램블 에그', '바나나 팬케이크', '마늘빵', '콘치즈', '계란 우유 푸딩'],
+    '중식': ['마파두부', '청경채 볶음', '토마토 계란볶음'],
+    '일식': ['우동', '볶음우동', '오므라이스', '돈까스 덮밥', '소고기 덮밥', '카레라이스'],
+    '가벼운': ['닭가슴살 샐러드', '요거트 과일볼', '바나나 우유 스무디', '오이냉국', '브로콜리 숙회']
+  };
+  var KID0 = ['계란말이', '계란찜', '계란볶음밥', '오므라이스', '카레라이스', '짜장밥', '소시지 야채볶음', '감자볶음', '어묵볶음', '멸치볶음', '감자조림', '콘치즈', '고구마 맛탕', '바나나 팬케이크', '계란 우유 푸딩', '프렌치토스트', '궁중떡볶이', '소고기 야채죽', '참치 주먹밥', '스팸마요 덮밥', '돈까스 덮밥', '김밥', '소불고기', '만두국', '떡국', '고구마구이', '스크램블 에그', '감자국', '계란국', '두부부침', '소고기 장조림'];
+  RECIPES.forEach(function (r) {
+    if (!r.kind) Object.keys(KIND0).forEach(function (k) { if (KIND0[k].indexOf(r.name) >= 0) r.kind = k; });
+    if (!r.kind) r.kind = '한식';
+    if (KID0.indexOf(r.name) >= 0) r.kid = true;
+  });
+  MORE.forEach(function (r) { if (!r.kind) r.kind = '한식'; RECIPES.push(r); });
+  var KINDS = ['한식', '양식', '중식', '일식', '아시아', '가벼운'];
+
   function norm(s) { return String(s).replace(/\s/g, ''); }
 
   // 등록한 음식 이름 → 해당하는 재료들
@@ -1862,7 +2054,7 @@ input.dp-hid { display: none !important; }
       if (k === '햄' && /햄버거/.test(n)) hit = false;
       if (k === '떡' && /떡갈비/.test(n)) hit = false;
       if (k === '오징어' && /오징어채/.test(n)) hit = false;
-      if (k === '소면' && /칼국수/.test(n) && !/소면/.test(n)) hit = false;
+      if (k === '소면' && /칼국수|쌀국수|메밀/.test(n) && !/소면/.test(n)) hit = false;
       if (hit) out.push(k);
     });
     return out;
@@ -1890,7 +2082,7 @@ input.dp-hid { display: none !important; }
       have.concat(extra).forEach(function (k) { own[k].forEach(function (o) { if (used.indexOf(o.it) < 0) used.push(o.it); }); });
       return { r: r, have: have, missing: missing, extra: extra, urgent: urgent, used: used,
         score: urgent.length * 10 + have.length * 3 + extra.length * 2 - missing.length * 8 };
-    }).filter(function (x) { return x.have.length > 0 && x.missing.length <= (opts.allowMissing == null ? 1 : opts.allowMissing); });
+    }).filter(function (x) { return opts.all || (x.have.length > 0 && x.missing.length <= (opts.allowMissing == null ? 1 : opts.allowMissing)); });
     out.sort(function (a, b) { return a.missing.length - b.missing.length || b.score - a.score || a.r.time - b.r.time; });
     return out;
   }
@@ -1941,7 +2133,7 @@ input.dp-hid { display: none !important; }
     return { days: out, missing: missing };
   }
 
-  root.GR = { INGR: INGR, PANTRY: PANTRY, RECIPES: RECIPES, ingredientsOf: ingredientsOf, recommend: recommend, dishFor: dishFor, plan: plan };
+  root.GR = { INGR: INGR, PANTRY: PANTRY, RECIPES: RECIPES, KINDS: KINDS, ingredientsOf: ingredientsOf, recommend: recommend, dishFor: dishFor, plan: plan };
 })(typeof window !== 'undefined' ? window : globalThis);
 </script>
 <script>(function () {
@@ -2636,25 +2828,66 @@ input.dp-hid { display: none !important; }
     var h = '<div class="rec' + (open ? '' : ' closed') + '"><button class="rec-h" data-rectog aria-expanded="' + open + '"><span class="ri">' + IC.chef + '</span><b>오늘 뭐 해먹지?</b>' +
       '<span class="rec-n">' + (planToday() ? '오늘 ' + esc(planToday()) : RLIST.length ? (can ? '바로 가능 ' + can + '개' : '추천 ' + RLIST.length + '개') : '') + '</span><span class="rec-arr">' + IC.down + '</span></button>';
     if (!open) return h + '</div>';
-    h += '<div class="rec-more"><button class="btn soft" data-plan>' + IC.cal + '3일 식단 짜기</button>' + (RLIST.length || S.set.rfav.length ? '<button class="clink" data-recipes>' + (RLIST.length ? RLIST.length + '개 모두 보기' : '★ 즐겨찾는 요리') + '</button>' : '') + '</div>';
+    h += '<div class="rec-more"><button class="btn soft" data-plan>' + IC.cal + '3일 식단 짜기</button>' + '<button class="clink" data-recipes>' + (RLIST.length ? RLIST.length + '개 · 레시피 ' + window.GR.RECIPES.length + '가지 보기' : '레시피 ' + window.GR.RECIPES.length + '가지 보기') + '</button>' + '</div>';
     if (!top.length) return h + '<p class="hint" style="margin:6px 0 0">지금 있는 음식으로 맞는 요리가 없어요. 계란·두부·김치·고기 같은 재료를 등록하면 추천해 드려요.</p></div>';
     h += '<div class="rec-list">' + top.map(function (x, i) { return recipeCard(x, i); }).join('') + '</div></div>';
     return h;
   }
   function recipeCard(x, i) {
     var star = rFav(x.r.name) ? '<span class="rstar" aria-label="즐겨찾는 요리">★</span>' : '';
-    var tag = x.missing.length ? '<span class="rtag miss">' + esc(x.missing[0]) + ' 있으면 가능</span>' : '<span class="rtag ok">지금 만들 수 있어요</span>';
+    var tag = !x.missing.length ? '<span class="rtag ok">지금 만들 수 있어요</span>' : x.have.length || x.missing.length === 1 ? '<span class="rtag miss">' + esc(x.missing[0]) + (x.missing.length > 1 ? ' 외 ' + (x.missing.length - 1) + '개' : '') + ' 있으면 가능</span>' : '<span class="rtag miss">재료 ' + x.missing.length + '개 필요</span>';
     var urg = x.urgent.length ? '<span class="rtag urg">' + esc(x.urgent[0]) + (x.urgent.length > 1 ? ' 외 ' + (x.urgent.length - 1) : '') + ' 먼저 쓰기</span>' : '';
-    return '<button class="rcard" data-rc="' + i + '"><span class="rname">' + star + esc(x.r.name) + '</span><span class="rmeta">' + x.r.time + '분 · ' + esc(x.have.concat(x.extra).join(', ')) + '</span><span class="rtags">' + tag + urg + '</span></button>';
+    return '<button class="rcard" data-rc="' + i + '"><span class="rname">' + star + esc(x.r.name) + '</span><span class="rmeta">' + (x.r.kind && x.r.kind !== '한식' ? esc(x.r.kind) + ' · ' : '') + (x.r.kid ? '👶 ' : '') + x.r.time + '분' + (x.have.length || x.extra.length ? ' · ' + esc(x.have.concat(x.extra).join(', ')) : ' · ' + esc(x.r.need.join(', ')) + ' 필요') + '</span><span class="rtags">' + tag + urg + '</span></button>';
+  }
+  // 레시피 목록: 종류(한식·양식…)·아이·빨리·검색으로 거르고, 재료가 없어도 전체 둘러보기
+  var RF = { k: '', q: '', all: false };
+  function rMatch(x) {
+    var r = x.r, k = RF.k;
+    if (k === 'kid' && !r.kid) return false;
+    if (k === 'fast' && r.time > 15) return false;
+    if (k === 'snack' && !r.snack) return false;
+    if (k && k !== 'kid' && k !== 'fast' && k !== 'snack' && r.kind !== k) return false;
+    if (RF.q) { var q = RF.q.replace(/\s/g, ''); if ((r.name + r.need.join('') + r.opt.join('')).replace(/\s/g, '').indexOf(q) < 0) return false; }
+    return true;
   }
   function recipeList() {
-    var favs = rFavList();
-    openSheet('<h2>가진 음식으로 만들 요리<button data-x>닫기</button></h2>' +
-      (favs.length ? '<p class="lbl">★ 즐겨찾는 요리</p><div class="rec-list col">' + favs.map(function (x, i) { return recipeCard(x, i).replace('data-rc="' + i + '"', 'data-rf="' + i + '"'); }).join('') + '</div><p class="lbl" style="margin-top:14px">지금 재료로 추천</p>' : '') +
-      '<p class="hint" style="margin:-6px 2px 12px">기한이 가까운 재료를 쓰는 요리부터 보여드려요. ' + esc(window.GR.PANTRY) + ' 같은 기본 양념은 있다고 보고 골랐어요. 마음에 드는 요리는 ★ 즐겨찾기에 넣어 두세요.</p>' +
-      '<div class="rec-list col">' + RLIST.map(function (x, i) { return recipeCard(x, i); }).join('') + '</div>', function (el) {
-      $$('[data-rf]', el).forEach(function (b) { b.onclick = function () { openRecipe(favs[+b.dataset.rf], recipeList); }; });
-      $$('[data-rc]', el).forEach(function (b) { b.onclick = function () { openRecipe(b.dataset.rc, recipeList); }; });
+    var favs = rFavList(), R = window.GR.RECIPES;
+    var ALL = window.GR.recommend(S.items, today(), { all: true });
+    ALL.sort(function (a, b) { return (b.have.length ? 1 : 0) - (a.have.length ? 1 : 0) || a.missing.length - b.missing.length || a.r.name.localeCompare(b.r.name, 'ko'); });
+    var cnt = function (f) { return R.filter(f).length; };
+    var chips = [['', '전체', R.length]].concat(window.GR.KINDS.map(function (k) { return [k, k, cnt(function (r) { return r.kind === k; })]; }))
+      .concat([['kid', '👶 아이', cnt(function (r) { return r.kid; })], ['snack', '간식', cnt(function (r) { return r.snack; })], ['fast', '15분 이내', cnt(function (r) { return r.time <= 15; })]]);
+    var shown = [], favShown = [];
+    function body() {
+      var mine = RLIST.filter(rMatch), rest = ALL.filter(function (x) { return rMatch(x) && !RLIST.some(function (y) { return y.r === x.r; }); });
+      favShown = favs.filter(rMatch);
+      shown = mine.concat(RF.all || RF.q || !mine.length ? rest : []);
+      var h = '';
+      if (favShown.length) h += '<p class="lbl">★ 즐겨찾는 요리</p><div class="rec-list col">' + favShown.map(function (x, i) { return recipeCard(x, i).replace('data-rc="' + i + '"', 'data-rf="' + i + '"'); }).join('') + '</div>';
+      h += '<p class="lbl" style="margin-top:14px">지금 재료로 추천 <span style="font-weight:400">' + mine.length + '개</span></p>';
+      if (!mine.length) h += '<p class="hint" style="margin:0 2px 8px">' + (RLIST.length ? '이 종류에는 지금 재료로 맞는 요리가 없어요. 아래에서 다른 요리를 둘러보세요.' : '등록한 음식으로 맞는 요리가 아직 없어요. 아래에서 둘러보세요.') + '</p>';
+      h += '<div class="rec-list col">' + shown.slice(0, mine.length).map(function (x, i) { return recipeCard(x, i).replace('data-rc=', 'data-ra='); }).join('') + '</div>';
+      if (shown.length > mine.length) h += '<p class="lbl" style="margin-top:14px">' + (RF.q ? '찾은 요리' : '다른 요리 둘러보기') + ' <span style="font-weight:400">' + (shown.length - mine.length) + '개 · 없는 재료는 장보기에 담을 수 있어요</span></p><div class="rec-list col">' + shown.slice(mine.length).map(function (x, i) { return recipeCard(x, i + mine.length).replace('data-rc=', 'data-ra='); }).join('') + '</div>';
+      else if (!RF.all && rest.length) h += '<button class="btn soft block" data-rall style="margin-top:12px">' + IC.chef + '다른 요리 ' + rest.length + '가지 더 둘러보기</button>';
+      if (!shown.length && !favShown.length) h += '<p class="hint center">찾는 요리가 없어요. 다른 말로 찾아보세요.</p>';
+      return h;
+    }
+    openSheet('<h2>요리 레시피 ' + R.length + '가지<button data-x>닫기</button></h2>' +
+      '<p class="hint" style="margin:-6px 2px 8px">기한이 가까운 재료를 쓰는 요리부터 보여드려요. ' + esc(window.GR.PANTRY) + ' 같은 기본 양념은 있다고 봤어요.</p>' +
+      '<input class="inp" type="search" data-rq placeholder="요리·재료로 찾기 (예: 두부, 파스타)" maxlength="20" value="' + esc(RF.q) + '" style="width:100%;margin-bottom:2px">' +
+      '<div class="chips" role="group" aria-label="요리 종류">' + chips.map(function (c) { return '<button class="chip' + (RF.k === c[0] ? ' on' : '') + '" data-rk="' + c[0] + '" aria-pressed="' + (RF.k === c[0]) + '">' + c[1] + '<small>' + c[2] + '</small></button>'; }).join('') + '</div>' +
+      '<div data-rbody>' + body() + '</div>', function (el) {
+      var box = $('[data-rbody]', el);
+      function wire() {
+        $$('[data-rf]', box).forEach(function (b) { b.onclick = function () { openRecipe(favShown[+b.dataset.rf], recipeList); }; });
+        $$('[data-ra]', box).forEach(function (b) { b.onclick = function () { openRecipe(shown[+b.dataset.ra], recipeList); }; });
+        var ra = $('[data-rall]', box); if (ra) ra.onclick = function () { RF.all = true; redraw(); };
+      }
+      function redraw() { box.innerHTML = body(); wire(); }
+      wire();
+      $$('[data-rk]', el).forEach(function (b) { b.onclick = function () {
+        RF.k = b.dataset.rk; $$('[data-rk]', el).forEach(function (c) { var on = c.dataset.rk === RF.k; c.classList.toggle('on', on); c.setAttribute('aria-pressed', on); }); redraw(); }; });
+      var qi = $('[data-rq]', el), qt; if (qi) qi.oninput = function () { clearTimeout(qt); qt = setTimeout(function () { RF.q = qi.value.trim().slice(0, 20); redraw(); }, 150); };
     });
   }
   function openRecipe(i, back) {
@@ -5839,7 +6072,7 @@ input.dp-hid { display: none !important; }
       var tags = (x.urgent.length ? '<span class="rtag urg">' + esc(x.urgent[0]) + (x.urgent.length > 1 ? ' 외 ' + (x.urgent.length - 1) : '') + ' 먼저 쓰기</span>' : '') +
         (x.missing.length ? '<span class="rtag miss">' + esc(x.missing.join(', ')) + ' 필요</span>' : '<span class="rtag ok">재료 다 있어요</span>');
       return '<div class="plan-day"><div class="pd-h"><b>' + DN[o.day] + '</b><span>' + md(o.date) + '</span><button class="clink" data-pre="' + i + '">바꾸기</button></div>' +
-        '<button class="rcard wide" data-pr="' + i + '"><span class="rname">' + esc(x.r.name) + '</span><span class="rmeta">' + x.r.time + '분 · ' + esc(x.have.concat(x.extra).join(', ')) + '</span><span class="rtags">' + tags + '</span></button></div>';
+        '<button class="rcard wide" data-pr="' + i + '"><span class="rname">' + esc(x.r.name) + '</span><span class="rmeta">' + (x.r.kind && x.r.kind !== '한식' ? esc(x.r.kind) + ' · ' : '') + (x.r.kid ? '👶 ' : '') + x.r.time + '분' + (x.have.length || x.extra.length ? ' · ' + esc(x.have.concat(x.extra).join(', ')) : ' · ' + esc(x.r.need.join(', ')) + ' 필요') + '</span><span class="rtags">' + tags + '</span></button></div>';
     }).join('');
     if (p.missing.length) h += '<button class="btn soft block" data-pshop style="margin-top:6px">' + IC.cart + '모자란 재료 ' + p.missing.length + '개 장보기에 담기 (' + esc(p.missing.join(', ')) + ')</button>';
     h += '<p class="hint center">' + window.GR.RECIPES.length + '가지 레시피 중에서 골랐어요 · 아침 알림에도 오늘 메뉴를 알려드려요</p>';
@@ -6331,7 +6564,7 @@ input.dp-hid { display: none !important; }
 
 
 <!--APPINFO--><script>
-window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.09", "items": ["🧳 여행 짐에 👶 아이 옷이 생겼어요. 아이 옷 사이즈에 적은 아이마다 상의·하의·속옷·여벌 옷을 넉넉하게, 사이즈까지 넣어 드려요", "🏊 수영 물품(수영복·래시가드·수모·수경·비치타월·방수팩 등)과 🩴 호텔 슬리퍼를 넣었어요", "✏️ 짐 종류를 내 마음대로: 새 종류 만들기(캠핑·아기 용품·스키 등 추천을 누르면 짐까지 한 번에), 이름 고치기, 순서 바꾸기, 지우기", "챙길 종류를 눌러 켜고 꺼요 (이번에 수영 안 하면 끄기). 짐을 넣을 때 종류를 고르면 다음 여행에도 나와요"]}, {"v": "v1.27", "d": "2026.11.09", "items": ["🍳 장보기에서 '요리 재료 한 번에 담기': 불고기처럼 만들 요리를 적으면 필요한 재료가 체크 목록으로 나와요. 집에 있는 건 빼고, 양념 같은 건 직접 더 넣어요", "장보기 목록이 요리별로 묶여 보이고, 사서 체크하면 음식 탭에서도 '🍳 불고기' 묶음으로 모여요 (위쪽 칩을 누르면 그 요리 재료만)", "처음 사는 재료도 한 번에 등록돼요 (날짜는 대략으로 넣고, 나중에 눌러서 고쳐요)", "🥬 남은 양 표시: 양배추처럼 다 못 쓴 건 '½ 남음'·'조금 남음'으로 표시해요 (음식 상세에서 한 번 누르기)"]}, {"v": "v1.26", "d": "2026.11.09", "items": ["🌙 음력 기념일: '음력이에요'를 켜면 부모님 생신·제사를 해마다 양력 날짜로 바꿔 알려 드려요 (말로 '음력 8월 15일'도 돼요)", "🧳 여행 짐에 원하는 짐을 넣고 빼요. '여행 끝'으로 목록을 지워요", "💊 종합비타민·비타민D·오메가3·유산균 추천이 생겼고, 영양제는 등록하면 바로 매일 체크가 켜져요", "🛒 장보기 항목을 눌러 이름·메모(개수·브랜드)를 고치고, 내 기록이 있으면 바로 최저가를 봐요", "👕 코디 이름 바꾸기, 옷 이름을 바꾸면 코디 이름도 따라가요. '모두 빨았어요'도 되돌릴 수 있어요", "🚗 교체 기록의 비용·정비소를 나중에 고쳐요. '차 바꾸기'로 새 차를 처음부터 시작해요. 주행거리가 갑자기 많이 늘면 한 번 더 확인해요", "3일 식단 지우기, 바코드로 기억한 상품 지우기(설정 → 내 품목)", "D-day 점검·반려동물 약도 '준비물 장보기에 담기'가 돼요. 계절 안내 카드에서 바로 장보기에 담아요", "1분 냉장고 정리에 '냉동실로 옮기기'가 생겼고, 중간에 닫아도 오늘 안에는 이어서 해요", "처음 열면 세 줄 안내가 나와요. 설정에 사용 설명서와 '처음 안내 다시 보기'가 생겼어요", "아침 알림 끝에 빨 때 된 옷·오늘 먹을 약·아이 옷 사이즈를 한 줄로 알려 드려요"]}, {"v": "v1.25", "d": "2026.11.09", "items": ["🛒 장보기에서 산 것을 여러 개 체크하고 한 번에 등록해요. 전에 산 물건은 지난번 기준으로 바로 등록되고, 처음 사는 것만 날짜를 물어봐요", "같은 이름·같은 날짜 물건은 새 줄 대신 수량을 합쳐요. 기한 지난 같은 물건이 있으면 정리할지 물어봐요", "생필품에 '다 써서 목록에서 빼기'가 생겼고, 다 먹었어요·버렸어요·다 썼어요는 바로 되돌릴 수 있어요", "해지했던 구독을 다시 넣으면 지난번 금액을 채워요. 원↔$를 바꾸면 넣은 금액을 환산해요", "무료 체험 중인 구독은 고정 지출에서 빼요. 가입한 지 얼마 안 된 구독엔 '이번 달 썼어요?'를 묻지 않아요", "찾기에서 연 물건은 뒤로 가면 찾기 결과로 돌아가요. 찾기의 장보기 항목을 누르면 장보기가 열려요", "날짜 고르기는 이번 달 달력부터 열리고, 년→월→일 순서로 이어서 골라요", "'나이키 운동화'처럼 직접 적어도 신발 칸·주기를 알아서 맞춰요. 안 겹치게 골라주기는 누를 때마다 다른 조합을 보여줘요", "여행 짐·안 입는 옷 정리에서 철 지난 옷은 빼요. 여행 날짜를 바꿔도 체크가 남아요", "자동차: 교체 창을 닫으면 상세로, 같은 부품 중복 경고, 자동차세 날짜 6/30·12/31, 기본 부품을 안 고르고 누르면 안내", "버전 정보 창이 앱의 어둡게 테마를 따라요. 다 먹음 기록을 지우면 수량도 1개 돌아와요"]}, {"v": "v1.24", "d": "2026.11.09", "items": ["큰 글씨에서 자동차 카드의 주행거리(km)가 두 줄로 나뉘던 문제를 고쳤어요"]}, {"v": "v1.23", "d": "2026.11.09", "items": ["★ '내 품목'으로 이름을 통일했어요. 음식·옷·생필품·자동차·D-day 모든 탭에서 넣고 지울 수 있고, 지우면 추천·빠른 재등록·곧 떨어질 것에서도 사라져요", "기본 추천(우유·넷플릭스 등)도 ✕로 지울 수 있어요. '지운 추천 다시 보기'로 되살려요", "D-day·자동차 등록 화면에도 ★ 내 품목이 맨 앞에 나오고, 구독은 금액·주기까지 기억해요", "물건을 지울 때 장보기·내 품목·가격 기록·지난 기록까지 같이 지울지 골라요", "장보기에서 체크한 뒤 등록 창을 닫아도 장보기에서 사라지지 않고, 등록하면 같은 물건은 장보기에서 저절로 빠져요", "통계·D-day·자동차의 기록도 눌러서 지울 수 있고, D-day '했어요'·'해지했어요'·칫솔 체크는 되돌리기가 생겼어요", "자동차 교체 기록을 지우면 마지막 교체 날짜·km가 그 전으로 돌아가요. 미래 날짜와 말이 안 되는 km는 막아요", "말로 등록에서 '3만원'·'5천원'을 잘못 읽던 문제를 고쳤어요", "글자 백업이 전체 데이터를 담고 비밀번호로 잠글 수 있어요. '모두 지우기'는 정말 전부 지워요", "소비기한 지난 재료는 요리 추천에서 빼요. 다 쓴 재료 정리는 1개씩 줄여요", "수정 창을 닫으면 보던 상세로 돌아가고, 입력 중인 창은 바깥을 눌러도 안 닫혀요", "옷: 직접 고른 옷도 코디로 저장, 옷을 지우면 코디에서도 빠져요. 그 밖에 조사·날짜(먼 날짜는 연도 표시) 등 30여 가지를 고쳤어요"]}, {"v": "v1.22", "d": "2026.11.08", "items": ["🗑️ 자주 쓰는 물품·내 품목에 줄마다 '삭제' 버튼이 생겼어요. 등록 화면의 '편집·삭제'를 눌러도 바로 열려요", "🗑️ 등록했던 물건 기록도 지울 수 있어요. 다시 안 살 물건은 빠른 재등록·'곧 떨어질 것'에서 빠져요", "🗑️ 잘못 누른 '지난 기록'과 잘못 넣은 가격 기록도 한 줄씩 지워요", "✋ 지울 때는 한 번 더 물어봐요 (장보기 빼기·코디·옷 정리·주행 기록·자주 쓰는 물품). '취소'를 누르면 보던 화면으로 돌아가요"]}, {"v": "v1.21", "d": "2026.11.08", "items": ["📤 장보기·여행 짐·정리할 옷 목록을 한 번에 카톡 등으로 보내요 (복사·붙여넣기 안 해도 돼요)", "↩️ 3일 식단이나 요리 목록에서 레시피를 열었다가 뒤로 가면 원래 화면으로 돌아가요", "음식을 누르면 '다 먹었어요'·'버렸어요' 버튼이 맨 위에 바로 보여요 (보관 팁은 그 아래로)", "🧳 여행 짐을 체크하면 '몇 개 챙겼어요'가 바로 바뀌고, 다 챙기면 알려줘요", "3일 식단을 닫으면 음식 탭의 오늘 메뉴도 바로 바뀌어요"]}, {"v": "v1.20", "d": "2026.11.08", "items": ["🧊 보관 팁: 음식마다 알맞은 보관법과 냉동하면 얼마나 가는지 알려줘요", "🕐 기한 지난 음식 안내: 유통기한이 지났으면 버리기 전에 확인할 것을, 소비기한이 지났으면 버리라고 알려줘요", "🛒 장보기를 마트 코너별로: 채소·정육·우유·생활용품처럼 코너 순서로 묶어서 덜 돌아다녀요", "💊 약·영양제 매일 체크: 생필품 탭 위에서 오늘 먹었는지 누르고, 며칠째인지 보여줘요", "★ 레시피 즐겨찾기: 마음에 든 요리를 모아 두고 바로 열어요", "🧾 옷 탭에서도 영수증·바코드로 등록해요", "장보기에 같은 걸 또 적으면 '이미 목록에 있어요'라고 알려줘요", "다크 모드에서 '장보기에 담기' 버튼이 잘 보이게 고쳤어요", "🛡️ 백업 파일이 망가져 있어도 앱이 멈추지 않아요 (전에는 앱이 아예 열리지 않았어요)", "옷장으로만 관리하는 옷 상세에 '99999일 남았어요' 대신 마지막으로 입은 날이 나와요", "장보기 목록 이름표 바로잡기: 직접 담은 건 '직접 담음', 다 써서 담은 건 '다 써서 담음'", "통계 문구 '다음 달 0원에 다시 도전' → '0개에 다시 도전'", "공유받은 글이 너무 길거나 이름이 너무 길면 알맞게 잘라요"]}, {"v": "v1.19", "d": "2026.11.08", "items": ["🛒 다 먹었어요·버렸어요·교체했어요를 누르면 '장보기에 담기' 버튼이 바로 떠요. '다음부터 자동으로'를 누르면 다음엔 저절로 담겨요", "1분 냉장고 정리에서 교체한 자주 쓰는 물품도 장보기에 담겨요", "다운로드·설명서 페이지가 느린 인터넷에서도 하얀 화면 없이 바로 떠요"]}, {"v": "v1.18", "d": "2026.11.05", "items": ["세탁 체크: 옷마다 몇 번 입고 빨지 정해 두면 '빨 때 됐어요' 알려 주고, '빨았어요' 한 번이면 끝", "옷 1회 비용: 산 가격 ÷ 입은 횟수", "통계를 탭별로: 전체 · 음식 · 옷처럼 골라서 보기", "여행 짐 싸기: 떠나는 날과 며칠인지만 넣으면 내 옷장에서 짐 목록을 만들어 체크", "아이 옷 사이즈: 키·상의·하의·신발 기록, 작아질 때와 다음 사이즈 알려 주기", "보안: 백업 파일과 가족 공유를 비밀번호로 잠글 수 있어요", "보안: 앱 화면이 정해진 곳(GitHub 새 버전 확인) 말고는 인터넷에 연결하지 못하게 막음, 배포용 빌드만 올림", "아이폰·PC에서 쓰는 웹앱 주소가 생겼어요"]}, {"v": "v1.17", "d": "2026.11.05", "items": ["통계도 다른 탭처럼: 찾기·장보기 버튼, 이달 입은 옷, 기록을 누르면 그 물건 열기", "설정에서 켠 탭만 통계·결산 카드·장보기 가계부에 보여요", "보안 강화: 앱 화면은 폰의 다른 파일을 못 읽고, 업데이트는 챙김이 저장소 주소만 받고, 알림 신호를 흉내 낼 수 없게"]}, {"v": "v1.16", "d": "2026.11.05", "items": ["수정 버튼을 물건 이름 바로 옆으로 옮겼어요 (모든 탭)", "목록의 ⋮ 버튼으로 간단 수정: 이름·날짜(유통/소비기한)·메모, 냉동실로 옮기기, D-day는 금액도", "수정해서 저장하면 그 전 기록은 자세히 보기에서 안 보여요 (통계는 그대로)", "옷 탭에 상의·하의 추가, 옷 사진 찍어서 바로 등록", "오늘 입은 옷 달력: 평소엔 접어 두고, 펼치면 날마다 입은 옷 사진·이달 자주 입은 옷·안 입은 옷", "지난주에 입은 옷은 노란색으로 알려주고 '안 겹치게 골라주기'", "계절 맞춤: 옷마다 사계절·여름·봄가을·겨울, 지금 계절 옷부터 골라 줘요", "코디 저장: 자주 입는 상의+하의를 한 번에", "두 달 넘게 안 입은 옷 정리 · 기부·중고용 목록 복사", "상의·하의는 교체 주기 없이 옷장으로만 관리 (켤 수 있어요)", "아침 알림에 오늘 입을 옷 추천 한 줄"]}, {"v": "v1.15", "d": "2026.11.05", "items": ["왼쪽 아래 버전 → 내 데이터 백업: 기록을 파일로 저장했다가 새 폰에서 불러오기"]}, {"v": "v1.14", "d": "2026.11.01", "items": ["D-day 탭도 다른 탭처럼: 위쪽 지난 날·곧 다가와요·여유 요약(눌러서 거르기), 장보기 버튼, 사진 넣기, 말로 등록", "말로 D-day 등록: \"넷플릭스 만칠천 원 매달 15일\", \"엄마 생신 3월 5일\"", "기념일 선물·준비물을 장보기에 담기, 자동차 부품도 장보기에 담기", "통계 탭별에 D-day(해지·점검한 개수)도 보여요"]}, {"v": "v1.13", "d": "2026.11.01", "items": ["날짜 없이 등록하면 날짜 칸으로 바로 데려가 빨갛게 표시하고, 년도 고르기를 열어 줘요", "6개월·1년 같은 교체 주기를 달력 기준으로 계산해요 (11월 1일 + 6개월 = 5월 1일)"]}, {"v": "v1.12", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 기기에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때와, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄)만 써요.", "backup": {"keys": ["gyoche_v1"], "idb": [{"db": "gyoche_photos", "store": "p"}], "bridge": "Android"}};
+window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.11", "items": ["🍳 레시피가 113가지에서 247가지로 늘었어요: 양식(까르보나라·함박스테이크·감자 수프)·중식(탕수육·고추잡채)·일식(오야꼬동·밀푀유나베)·아시아(팟타이·쌀국수·월남쌈)·가벼운 식사(포케·두부 샐러드)·간식까지", "👶 아이가 잘 먹는 메뉴 74가지를 따로 모아 봐요 (동그랑땡·떡갈비·치킨너겟·메추리알 장조림·모양 주먹밥 등)", "레시피 목록에서 한식·양식·중식·일식·아시아·가벼운·👶 아이·간식·15분 이내로 골라 보고, 요리나 재료 이름으로 찾아요", "지금 재료로 만들 수 있는 요리 아래에 '다른 요리 둘러보기'가 생겼어요. 없는 재료는 버튼 한 번으로 장보기에 담아요", "단호박·명란·또띠아·아보카도·쌀국수·메밀면·게맛살·메추리알·연근·우엉·꽁치·갈치·삼치 등 재료 23가지를 더 알아봐요"]}, {"v": "v1.28", "d": "2026.11.09", "items": ["🧳 여행 짐에 👶 아이 옷이 생겼어요. 아이 옷 사이즈에 적은 아이마다 상의·하의·속옷·여벌 옷을 넉넉하게, 사이즈까지 넣어 드려요", "🏊 수영 물품(수영복·래시가드·수모·수경·비치타월·방수팩 등)과 🩴 호텔 슬리퍼를 넣었어요", "✏️ 짐 종류를 내 마음대로: 새 종류 만들기(캠핑·아기 용품·스키 등 추천을 누르면 짐까지 한 번에), 이름 고치기, 순서 바꾸기, 지우기", "챙길 종류를 눌러 켜고 꺼요 (이번에 수영 안 하면 끄기). 짐을 넣을 때 종류를 고르면 다음 여행에도 나와요"]}, {"v": "v1.27", "d": "2026.11.09", "items": ["🍳 장보기에서 '요리 재료 한 번에 담기': 불고기처럼 만들 요리를 적으면 필요한 재료가 체크 목록으로 나와요. 집에 있는 건 빼고, 양념 같은 건 직접 더 넣어요", "장보기 목록이 요리별로 묶여 보이고, 사서 체크하면 음식 탭에서도 '🍳 불고기' 묶음으로 모여요 (위쪽 칩을 누르면 그 요리 재료만)", "처음 사는 재료도 한 번에 등록돼요 (날짜는 대략으로 넣고, 나중에 눌러서 고쳐요)", "🥬 남은 양 표시: 양배추처럼 다 못 쓴 건 '½ 남음'·'조금 남음'으로 표시해요 (음식 상세에서 한 번 누르기)"]}, {"v": "v1.26", "d": "2026.11.09", "items": ["🌙 음력 기념일: '음력이에요'를 켜면 부모님 생신·제사를 해마다 양력 날짜로 바꿔 알려 드려요 (말로 '음력 8월 15일'도 돼요)", "🧳 여행 짐에 원하는 짐을 넣고 빼요. '여행 끝'으로 목록을 지워요", "💊 종합비타민·비타민D·오메가3·유산균 추천이 생겼고, 영양제는 등록하면 바로 매일 체크가 켜져요", "🛒 장보기 항목을 눌러 이름·메모(개수·브랜드)를 고치고, 내 기록이 있으면 바로 최저가를 봐요", "👕 코디 이름 바꾸기, 옷 이름을 바꾸면 코디 이름도 따라가요. '모두 빨았어요'도 되돌릴 수 있어요", "🚗 교체 기록의 비용·정비소를 나중에 고쳐요. '차 바꾸기'로 새 차를 처음부터 시작해요. 주행거리가 갑자기 많이 늘면 한 번 더 확인해요", "3일 식단 지우기, 바코드로 기억한 상품 지우기(설정 → 내 품목)", "D-day 점검·반려동물 약도 '준비물 장보기에 담기'가 돼요. 계절 안내 카드에서 바로 장보기에 담아요", "1분 냉장고 정리에 '냉동실로 옮기기'가 생겼고, 중간에 닫아도 오늘 안에는 이어서 해요", "처음 열면 세 줄 안내가 나와요. 설정에 사용 설명서와 '처음 안내 다시 보기'가 생겼어요", "아침 알림 끝에 빨 때 된 옷·오늘 먹을 약·아이 옷 사이즈를 한 줄로 알려 드려요"]}, {"v": "v1.25", "d": "2026.11.09", "items": ["🛒 장보기에서 산 것을 여러 개 체크하고 한 번에 등록해요. 전에 산 물건은 지난번 기준으로 바로 등록되고, 처음 사는 것만 날짜를 물어봐요", "같은 이름·같은 날짜 물건은 새 줄 대신 수량을 합쳐요. 기한 지난 같은 물건이 있으면 정리할지 물어봐요", "생필품에 '다 써서 목록에서 빼기'가 생겼고, 다 먹었어요·버렸어요·다 썼어요는 바로 되돌릴 수 있어요", "해지했던 구독을 다시 넣으면 지난번 금액을 채워요. 원↔$를 바꾸면 넣은 금액을 환산해요", "무료 체험 중인 구독은 고정 지출에서 빼요. 가입한 지 얼마 안 된 구독엔 '이번 달 썼어요?'를 묻지 않아요", "찾기에서 연 물건은 뒤로 가면 찾기 결과로 돌아가요. 찾기의 장보기 항목을 누르면 장보기가 열려요", "날짜 고르기는 이번 달 달력부터 열리고, 년→월→일 순서로 이어서 골라요", "'나이키 운동화'처럼 직접 적어도 신발 칸·주기를 알아서 맞춰요. 안 겹치게 골라주기는 누를 때마다 다른 조합을 보여줘요", "여행 짐·안 입는 옷 정리에서 철 지난 옷은 빼요. 여행 날짜를 바꿔도 체크가 남아요", "자동차: 교체 창을 닫으면 상세로, 같은 부품 중복 경고, 자동차세 날짜 6/30·12/31, 기본 부품을 안 고르고 누르면 안내", "버전 정보 창이 앱의 어둡게 테마를 따라요. 다 먹음 기록을 지우면 수량도 1개 돌아와요"]}, {"v": "v1.24", "d": "2026.11.09", "items": ["큰 글씨에서 자동차 카드의 주행거리(km)가 두 줄로 나뉘던 문제를 고쳤어요"]}, {"v": "v1.23", "d": "2026.11.09", "items": ["★ '내 품목'으로 이름을 통일했어요. 음식·옷·생필품·자동차·D-day 모든 탭에서 넣고 지울 수 있고, 지우면 추천·빠른 재등록·곧 떨어질 것에서도 사라져요", "기본 추천(우유·넷플릭스 등)도 ✕로 지울 수 있어요. '지운 추천 다시 보기'로 되살려요", "D-day·자동차 등록 화면에도 ★ 내 품목이 맨 앞에 나오고, 구독은 금액·주기까지 기억해요", "물건을 지울 때 장보기·내 품목·가격 기록·지난 기록까지 같이 지울지 골라요", "장보기에서 체크한 뒤 등록 창을 닫아도 장보기에서 사라지지 않고, 등록하면 같은 물건은 장보기에서 저절로 빠져요", "통계·D-day·자동차의 기록도 눌러서 지울 수 있고, D-day '했어요'·'해지했어요'·칫솔 체크는 되돌리기가 생겼어요", "자동차 교체 기록을 지우면 마지막 교체 날짜·km가 그 전으로 돌아가요. 미래 날짜와 말이 안 되는 km는 막아요", "말로 등록에서 '3만원'·'5천원'을 잘못 읽던 문제를 고쳤어요", "글자 백업이 전체 데이터를 담고 비밀번호로 잠글 수 있어요. '모두 지우기'는 정말 전부 지워요", "소비기한 지난 재료는 요리 추천에서 빼요. 다 쓴 재료 정리는 1개씩 줄여요", "수정 창을 닫으면 보던 상세로 돌아가고, 입력 중인 창은 바깥을 눌러도 안 닫혀요", "옷: 직접 고른 옷도 코디로 저장, 옷을 지우면 코디에서도 빠져요. 그 밖에 조사·날짜(먼 날짜는 연도 표시) 등 30여 가지를 고쳤어요"]}, {"v": "v1.22", "d": "2026.11.08", "items": ["🗑️ 자주 쓰는 물품·내 품목에 줄마다 '삭제' 버튼이 생겼어요. 등록 화면의 '편집·삭제'를 눌러도 바로 열려요", "🗑️ 등록했던 물건 기록도 지울 수 있어요. 다시 안 살 물건은 빠른 재등록·'곧 떨어질 것'에서 빠져요", "🗑️ 잘못 누른 '지난 기록'과 잘못 넣은 가격 기록도 한 줄씩 지워요", "✋ 지울 때는 한 번 더 물어봐요 (장보기 빼기·코디·옷 정리·주행 기록·자주 쓰는 물품). '취소'를 누르면 보던 화면으로 돌아가요"]}, {"v": "v1.21", "d": "2026.11.08", "items": ["📤 장보기·여행 짐·정리할 옷 목록을 한 번에 카톡 등으로 보내요 (복사·붙여넣기 안 해도 돼요)", "↩️ 3일 식단이나 요리 목록에서 레시피를 열었다가 뒤로 가면 원래 화면으로 돌아가요", "음식을 누르면 '다 먹었어요'·'버렸어요' 버튼이 맨 위에 바로 보여요 (보관 팁은 그 아래로)", "🧳 여행 짐을 체크하면 '몇 개 챙겼어요'가 바로 바뀌고, 다 챙기면 알려줘요", "3일 식단을 닫으면 음식 탭의 오늘 메뉴도 바로 바뀌어요"]}, {"v": "v1.20", "d": "2026.11.08", "items": ["🧊 보관 팁: 음식마다 알맞은 보관법과 냉동하면 얼마나 가는지 알려줘요", "🕐 기한 지난 음식 안내: 유통기한이 지났으면 버리기 전에 확인할 것을, 소비기한이 지났으면 버리라고 알려줘요", "🛒 장보기를 마트 코너별로: 채소·정육·우유·생활용품처럼 코너 순서로 묶어서 덜 돌아다녀요", "💊 약·영양제 매일 체크: 생필품 탭 위에서 오늘 먹었는지 누르고, 며칠째인지 보여줘요", "★ 레시피 즐겨찾기: 마음에 든 요리를 모아 두고 바로 열어요", "🧾 옷 탭에서도 영수증·바코드로 등록해요", "장보기에 같은 걸 또 적으면 '이미 목록에 있어요'라고 알려줘요", "다크 모드에서 '장보기에 담기' 버튼이 잘 보이게 고쳤어요", "🛡️ 백업 파일이 망가져 있어도 앱이 멈추지 않아요 (전에는 앱이 아예 열리지 않았어요)", "옷장으로만 관리하는 옷 상세에 '99999일 남았어요' 대신 마지막으로 입은 날이 나와요", "장보기 목록 이름표 바로잡기: 직접 담은 건 '직접 담음', 다 써서 담은 건 '다 써서 담음'", "통계 문구 '다음 달 0원에 다시 도전' → '0개에 다시 도전'", "공유받은 글이 너무 길거나 이름이 너무 길면 알맞게 잘라요"]}, {"v": "v1.19", "d": "2026.11.08", "items": ["🛒 다 먹었어요·버렸어요·교체했어요를 누르면 '장보기에 담기' 버튼이 바로 떠요. '다음부터 자동으로'를 누르면 다음엔 저절로 담겨요", "1분 냉장고 정리에서 교체한 자주 쓰는 물품도 장보기에 담겨요", "다운로드·설명서 페이지가 느린 인터넷에서도 하얀 화면 없이 바로 떠요"]}, {"v": "v1.18", "d": "2026.11.05", "items": ["세탁 체크: 옷마다 몇 번 입고 빨지 정해 두면 '빨 때 됐어요' 알려 주고, '빨았어요' 한 번이면 끝", "옷 1회 비용: 산 가격 ÷ 입은 횟수", "통계를 탭별로: 전체 · 음식 · 옷처럼 골라서 보기", "여행 짐 싸기: 떠나는 날과 며칠인지만 넣으면 내 옷장에서 짐 목록을 만들어 체크", "아이 옷 사이즈: 키·상의·하의·신발 기록, 작아질 때와 다음 사이즈 알려 주기", "보안: 백업 파일과 가족 공유를 비밀번호로 잠글 수 있어요", "보안: 앱 화면이 정해진 곳(GitHub 새 버전 확인) 말고는 인터넷에 연결하지 못하게 막음, 배포용 빌드만 올림", "아이폰·PC에서 쓰는 웹앱 주소가 생겼어요"]}, {"v": "v1.17", "d": "2026.11.05", "items": ["통계도 다른 탭처럼: 찾기·장보기 버튼, 이달 입은 옷, 기록을 누르면 그 물건 열기", "설정에서 켠 탭만 통계·결산 카드·장보기 가계부에 보여요", "보안 강화: 앱 화면은 폰의 다른 파일을 못 읽고, 업데이트는 챙김이 저장소 주소만 받고, 알림 신호를 흉내 낼 수 없게"]}, {"v": "v1.16", "d": "2026.11.05", "items": ["수정 버튼을 물건 이름 바로 옆으로 옮겼어요 (모든 탭)", "목록의 ⋮ 버튼으로 간단 수정: 이름·날짜(유통/소비기한)·메모, 냉동실로 옮기기, D-day는 금액도", "수정해서 저장하면 그 전 기록은 자세히 보기에서 안 보여요 (통계는 그대로)", "옷 탭에 상의·하의 추가, 옷 사진 찍어서 바로 등록", "오늘 입은 옷 달력: 평소엔 접어 두고, 펼치면 날마다 입은 옷 사진·이달 자주 입은 옷·안 입은 옷", "지난주에 입은 옷은 노란색으로 알려주고 '안 겹치게 골라주기'", "계절 맞춤: 옷마다 사계절·여름·봄가을·겨울, 지금 계절 옷부터 골라 줘요", "코디 저장: 자주 입는 상의+하의를 한 번에", "두 달 넘게 안 입은 옷 정리 · 기부·중고용 목록 복사", "상의·하의는 교체 주기 없이 옷장으로만 관리 (켤 수 있어요)", "아침 알림에 오늘 입을 옷 추천 한 줄"]}, {"v": "v1.15", "d": "2026.11.05", "items": ["왼쪽 아래 버전 → 내 데이터 백업: 기록을 파일로 저장했다가 새 폰에서 불러오기"]}, {"v": "v1.14", "d": "2026.11.01", "items": ["D-day 탭도 다른 탭처럼: 위쪽 지난 날·곧 다가와요·여유 요약(눌러서 거르기), 장보기 버튼, 사진 넣기, 말로 등록", "말로 D-day 등록: \"넷플릭스 만칠천 원 매달 15일\", \"엄마 생신 3월 5일\"", "기념일 선물·준비물을 장보기에 담기, 자동차 부품도 장보기에 담기", "통계 탭별에 D-day(해지·점검한 개수)도 보여요"]}, {"v": "v1.13", "d": "2026.11.01", "items": ["날짜 없이 등록하면 날짜 칸으로 바로 데려가 빨갛게 표시하고, 년도 고르기를 열어 줘요", "6개월·1년 같은 교체 주기를 달력 기준으로 계산해요 (11월 1일 + 6개월 = 5월 1일)"]}, {"v": "v1.12", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 기기에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때와, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄)만 써요.", "backup": {"keys": ["gyoche_v1"], "idb": [{"db": "gyoche_photos", "store": "p"}], "bridge": "Android"}};
 window.APP_INFO.online=!!(window.Android&&window.Android.version);
 window.APP_INFO.version=function(){try{return window.Android.version()}catch(e){return '1.10'}};
 </script>
