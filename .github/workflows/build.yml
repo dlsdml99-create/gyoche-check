@@ -47,9 +47,12 @@ jobs:
           cp app/build/outputs/apk/release/app-release.apk gyoche-check.apk
           # 보안: 예전 서명 키가 옛 커밋에 공개돼 있어 새 키로 넘어감(키 교체, 앱 지우지 않고 업데이트 가능)
           # 새 키는 app/gyoche2.jks.enc 에 암호화돼 있고, 비밀번호는 GitHub 비밀값 GYOCHE_KEY2 에만 있음
+          if [ -n "$KEY2" ] && [ ${#KEY2} -lt 16 ]; then
+            echo "::warning::GYOCHE_KEY2 비밀번호가 16글자보다 짧아서 새 키를 만들지 않았어요(예전 키로 서명). 16글자 이상으로 다시 넣어 주세요."
+            KEY2=""
+          fi
           if [ -n "$KEY2" ]; then
             BT="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
-            if [ ${#KEY2} -lt 16 ]; then echo "::error::GYOCHE_KEY2 비밀번호는 16글자 이상으로 정해 주세요."; exit 1; fi
             printf '%s' "$KEY2" > "$RUNNER_TEMP/k2"
             trap 'rm -f app/gyoche.jks "$RUNNER_TEMP/k2" "$RUNNER_TEMP/new.jks"' EXIT
             # 처음 한 번: 새 키를 GitHub 안에서 만들고(아무도 못 봄), 비밀번호로 암호화해 저장소에 보관
