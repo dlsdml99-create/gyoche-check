@@ -273,7 +273,7 @@ public class Reminder {
         // 오늘 옷 추천 (앱에서 입은 옷을 기록하는 사람만, 챙길 게 있어 알림이 갈 때 한 줄)
         String outfit = d.optString("outfit", "");
         if (r.count > 0 && !outfit.isEmpty()) big.append("\n\n👕 ").append(outfit);
-        // 빨 때 된 옷·약 체크·아이 사이즈 같은 짧은 한 줄 (앱에서 미리 만들어 둠)
+        // 세탁할 옷·약 체크·아이 사이즈 같은 짧은 한 줄 (앱에서 미리 만들어 둠)
         String tips = d.optString("tips", "");
         if (r.count > 0 && !tips.isEmpty()) big.append("\n\n").append(tips.length() > 200 ? tips.substring(0, 200) : tips);
         r.big = big.toString();
