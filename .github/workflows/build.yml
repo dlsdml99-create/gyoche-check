@@ -40,6 +40,14 @@ jobs:
             exit 1
           fi
           export KEY_PASS="${SIGNING%%:*}"
+          # 보안: 비밀번호가 혹시라도 로그에 찍히면 가려지게
+          echo "::add-mask::$KEY_PASS"
+          [ -n "$KEY2" ] && echo "::add-mask::$KEY2"
+          # 보안: 예전 키는 옛 커밋에 공개돼 있어, 새 키(GYOCHE_KEY2) 없이 예전 키로만 서명해 배포하지 않음
+          if [ -z "$KEY2" ] || [ ${#KEY2} -lt 16 ]; then
+            echo "::error::새 서명 키 비밀번호(GYOCHE_KEY2)가 없거나 16글자보다 짧아서 빌드를 멈췄어요. 예전 키로만 서명하면 안전하지 않아요. 저장소 Settings - Secrets and variables - Actions 에서 GYOCHE_KEY2 를 16글자 이상으로 넣어 주세요 (이미 넣었다면 지우지 말고 그대로 두세요)."
+            exit 1
+          fi
           echo "${SIGNING#*:}" | base64 -d > app/gyoche.jks
           # 보안: 배포용(release) 빌드만 올림. 실패하면 디버그 빌드(내부를 들여다볼 수 있음)로 대신하지 않고 멈춤
           trap 'rm -f app/gyoche.jks' EXIT
@@ -47,10 +55,6 @@ jobs:
           cp app/build/outputs/apk/release/app-release.apk gyoche-check.apk
           # 보안: 예전 서명 키가 옛 커밋에 공개돼 있어 새 키로 넘어감(키 교체, 앱 지우지 않고 업데이트 가능)
           # 새 키는 app/gyoche2.jks.enc 에 암호화돼 있고, 비밀번호는 GitHub 비밀값 GYOCHE_KEY2 에만 있음
-          if [ -n "$KEY2" ] && [ ${#KEY2} -lt 16 ]; then
-            echo "::warning::GYOCHE_KEY2 비밀번호가 16글자보다 짧아서 새 키를 만들지 않았어요(예전 키로 서명). 16글자 이상으로 다시 넣어 주세요."
-            KEY2=""
-          fi
           if [ -n "$KEY2" ]; then
             BT="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
             printf '%s' "$KEY2" > "$RUNNER_TEMP/k2"
@@ -69,7 +73,7 @@ jobs:
             openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in app/gyoche2.jks.enc -out "$RUNNER_TEMP/new.jks" -pass file:"$RUNNER_TEMP/k2" \
               || { echo "::error::GYOCHE_KEY2 비밀번호가 맞지 않아요."; exit 1; }
             "$BT/apksigner" rotate --out "$RUNNER_TEMP/lineage" \
-              --old-signer --ks app/gyoche.jks --ks-key-alias gyoche --ks-pass env:KEY_PASS \
+              --old-signer --ks app/gyoche.jks --ks-key-alias gyoche --ks-pass env:KEY_PASS --set-rollback false \
               --new-signer --ks "$RUNNER_TEMP/new.jks" --ks-key-alias gyoche2 --ks-pass file:"$RUNNER_TEMP/kp"
             "$BT/apksigner" sign --lineage "$RUNNER_TEMP/lineage" --rotation-min-sdk-version 28 \
               --ks app/gyoche.jks --ks-key-alias gyoche --ks-pass env:KEY_PASS \
@@ -77,7 +81,7 @@ jobs:
               gyoche-check.apk
             "$BT/apksigner" verify -v --print-certs gyoche-check.apk | grep -E "Verified|SHA-256|lineage" || true
           else
-            echo "::warning::새 서명 키를 쓰지 않아 예전 키로만 서명했어요."
+            echo "::error::새 서명 키로 서명하지 못했어요."; exit 1
           fi
           ls -la gyoche-check.apk
       - name: Publish APK
@@ -91,6 +95,10 @@ jobs:
           gh release create "v${{ github.run_number }}" gyoche-check.apk --latest --title "챙김이 v1.${{ github.run_number }}" --notes-file notes.md
       - name: Build download page
         run: |
+          # 다운로드 페이지 QR: 바깥 CDN 대신 npm에서 받아 지문(sha256)을 확인한 뒤 같은 사이트에 둠
+          (cd "$RUNNER_TEMP" && npm pack qrcode-generator@1.4.4 --silent >/dev/null && tar -xzf qrcode-generator-1.4.4.tgz)
+          cp "$RUNNER_TEMP/package/qrcode.js" site/qrcode.js
+          echo "18ae399f81182bc9de916e9c77b195df20cc58d6f2d55a62b085a299f1bf1780  site/qrcode.js" | sha256sum -c -
           python3 .github/webapp.py "${{ github.run_number }}"
           sed -i "s/__N__/${{ github.run_number }}/g; s/__MB__/$(du -m gyoche-check.apk | cut -f1)/g" site/index.html site/guide.html
       - uses: actions/upload-pages-artifact@v5

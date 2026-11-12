@@ -14,9 +14,12 @@ assert '<title>챙김이</title>' in s
 s = s.replace('<title>챙김이</title>', '<title>챙김이</title>' + head, 1)
 # 웹앱 아이콘은 같은 주소(github.io)에서만 읽음
 s = s.replace("img-src data: blob:;", "img-src 'self' data: blob:;", 1)
-# 버전 표시: 웹앱은 열 때마다 최신이라 버전 번호만 보여줌
-a = "window.APP_INFO.version=function(){try{return window.Android.version()}catch(e){return '1.10'}};"
-assert a in s
-s = s.replace(a, "window.APP_INFO.web=true;window.APP_INFO.version='1.%s';" % (n if n.isdigit() else '0'), 1)
+# 버전 표시: 웹앱은 열 때마다 최신이라, 빌드 번호(앱·다운로드 페이지와 같은 실제 번호)를 그대로 넣음
+i = s.index("window.APP_INFO.version=function(){try{return window.Android.version()}")
+j = s.index("}};", i) + 3
+a = s[i:j]
+assert a.count('function') >= 2 and len(a) < 400
+assert n.isdigit(), '릴리스 번호가 필요해요'
+s = s.replace(a, "window.APP_INFO.web=true;window.APP_INFO.version='1.%s';" % n, 1)
 open('site/app.html', 'w', encoding='utf-8').write(s)
 print('site/app.html', len(s.encode()), 'bytes, v1.' + n)

@@ -101,7 +101,8 @@ public class MainActivity extends Activity {
                 Uri u = req.getUrl();
                 // 앱 안 화면(assets)만 이 창에서 열고, 다른 파일 주소는 막음. 바깥 링크는 브라우저로
                 if ("file".equals(u.getScheme())) return !String.valueOf(u.getPath()).startsWith("/android_asset/");
-                try { startActivity(new Intent(Intent.ACTION_VIEW, u)); } catch (Exception ignored) {}
+                // 바깥 링크는 https + 정해 둔 주소(챙김이 GitHub·다운로드 페이지)만 브라우저로 엶. 그 밖의 주소 형식(intent:, tel:, javascript: 등)은 무시
+                if (safeLink(u)) { try { startActivity(new Intent(Intent.ACTION_VIEW, u)); } catch (Exception ignored) {} }
                 return true;
             }
         });
@@ -133,7 +134,8 @@ public class MainActivity extends Activity {
             js("window.onSharedText&&window.onSharedText(" + JSONObject.quote(t) + ")");
         } else if (type.startsWith("image/")) {
             Uri u = i.getParcelableExtra(Intent.EXTRA_STREAM);
-            if (u == null) return;
+            // 보안: 다른 앱이 보낸 사진은 content:// 주소만 받음 (file:// 로 앱 안쪽 파일을 가리키지 못하게)
+            if (u == null || !"content".equals(u.getScheme())) return;
             mode = "receipt";
             recognize(u, "receipt");
         }
@@ -656,13 +658,23 @@ public class MainActivity extends Activity {
         }
     }
 
+    // 바깥으로 여는 링크 허용 목록: https 이고 챙김이 저장소·다운로드 페이지일 때만
+    static boolean safeLink(Uri u) {
+        if (u == null || !"https".equals(u.getScheme()) || u.getUserInfo() != null) return false;
+        String h = String.valueOf(u.getHost()).toLowerCase(java.util.Locale.ROOT), p = String.valueOf(u.getPath());
+        if ("github.com".equals(h)) return p.startsWith("/dlsdml99-create/gyoche-check/");
+        if ("dlsdml99-create.github.io".equals(h)) return p.startsWith("/gyoche-check/");
+        return false;
+    }
+
     private void showUpdate(long latest, String url) {
         if (isFinishing()) return;
         new AlertDialog.Builder(this)
             .setTitle("새 버전이 있어요")
             .setMessage("v1." + latest + " 업데이트가 나왔어요.\n'업데이트'를 누르면 파일이 받아져요. 다 받으면 파일을 눌러 설치하세요. 등록한 물건은 그대로 남아요.")
             .setPositiveButton("업데이트", (d, w) -> {
-                try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url))); } catch (Exception ignored) {}
+                Uri uu = Uri.parse(url);
+                if (safeLink(uu)) { try { startActivity(new Intent(Intent.ACTION_VIEW, uu)); } catch (Exception ignored) {} }
             })
             .setNegativeButton("나중에", null)
             .show();

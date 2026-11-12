@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>챙김이 다운로드</title>
 <meta name="description" content="유통기한·교체 주기를 대신 기억했다가 알려주는 안드로이드 앱">
 <meta property="og:title" content="챙김이 — 유통기한·교체 주기 알림">
 <meta property="og:description" content="유통기한·교체 주기를 대신 기억했다가 알려주는 안드로이드 앱. 무료 · 광고 없음">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
 <style>
 /* 레이아웃: 위에 앱 두 장(받기 버튼 + 폰으로 찍는 QR), 아래로 앱별 설명 → 설치 방법 → 안전 정보 → 자주 묻는 질문 */
 :root {
@@ -96,6 +96,7 @@ details { background: var(--surface); border-radius: 14px; box-shadow: var(--sha
 details + details { margin-top: 8px; }
 summary { cursor: pointer; font-weight: 700; padding: 12px 0; list-style-position: outside; }
 details p { padding: 0 0 14px; color: var(--sub); }
+footer a { display: inline-block; padding: 12px 2px; } .ios-link { font-weight: 700; color: var(--ink); }
 footer { color: var(--sub); font-size: 14px; border-top: 1px solid var(--line); padding-top: 20px; }
 @media (max-width: 420px) { .qr { display: none; } }
 @media (prefers-reduced-motion: no-preference) { .btn { transition: transform .12s; } .btn:active { transform: scale(.98); } }
@@ -153,7 +154,7 @@ footer { color: var(--sub); font-size: 14px; border-top: 1px solid var(--line); 
     <div><div class="app-name">챙김이</div><p class="app-tag">유통기한·교체 주기 알림</p></div>
     <div class="facts"><span class="fact">v1.__N__</span><span class="fact">__MB__MB</span><span class="fact">안드로이드 7.0 이상</span><span class="fact">무료 · 광고 없음</span></div>
     <a class="btn cg" href="https://github.com/dlsdml99-create/gyoche-check/releases/download/v__N__/gyoche-check.apk"><svg><use href="#ic-down"/></svg>챙김이 다운로드</a>
-    <a class="small-link" href="#install-h">설치가 처음이라면 아래 설치하는 법을 봐주세요</a>
+    <a class="small-link" href="#install-h">설치가 처음이라면 아래 설치하는 법을 봐 주세요</a>
     <a class="small-link" href="guide.html"><b>사용 설명서 보기</b> · 탭별 쓰는 법</a>
     <div class="qr pc-only"><div class="code" id="qr-cg"></div>PC로 보고 있다면 폰 카메라로 찍으세요</div>
   </section>
@@ -195,6 +196,8 @@ footer { color: var(--sub); font-size: 14px; border-top: 1px solid var(--line); 
   </section>
   <section class="detail" aria-labelledby="cg-new">
     <div class="detail-head"><svg class="icon" aria-hidden="true"><use href="#ic-cg"/></svg><h2 id="cg-new">v1.__N__ 업데이트 내용</h2></div>
+    <ul class="feat cgx"><li><span>🚗 자동차 탭도 다른 탭처럼: + 버튼에서 '말로 기록'("엔진오일 오늘 갈았어 5만 2천 키로")과 '정비 영수증 찍기'로 바꾼 부품·주행거리·비용을 한 번에 기록해요. 위쪽에 가격 비교도 생겼어요</span></li><li><span>🎙 음식·생필품 빈 화면에도 '말로' 버튼이 생겼어요. 빈 화면 바로가기를 모든 탭에서 찍기 → 말로 → 직접 입력 순서로 맞췄어요</span></li><li><span>★ 내 품목·추천(우유 등)을 고르면 보통 기한이 바로 들어가서, 날짜를 한 번 더 누르지 않아도 등록돼요</span></li><li><span>👀 처음 쓰는 분은 빈 화면의 '예시로 둘러보기'로 미리 써 볼 수 있어요. 예시는 내 기록과 섞이지 않아요</span></li><li><span>🔎 찾기에서 '우유 이마트'처럼 띄어 쓰면 둘 다 맞는 것만 보여요. 목록은 기한순·이름순·최근 등록순으로 바꿀 수 있어요</span></li><li><span>⚡ 물건이 수천 개여도 탭이 빨리 바뀌어요</span></li><li><span>✏️ 문구·띄어쓰기를 다듬고, 닫기·칩·위쪽 버튼을 누르기 쉽게 키우고, 밝은 화면 글자를 더 진하게 했어요</span></li><li><span>🔐 보안: 백업·가족 공유 비밀번호는 6글자 이상(예전 백업도 그대로 열려요), 폰 자동 백업에서 앱 기록 빼기, 바깥 링크는 챙김이 주소만 열기, 이 페이지도 바깥 스크립트·글꼴 없이 열려요</span></li></ul>
+    <h3 style="margin:14px 0 6px;font-size:15px">v1.40</h3>
     <ul class="feat cgx"><li><span>✏️ 문구 다듬기: 같은 일을 다르게 부르던 말을 맞췄어요. 편집·삭제·수정 → 고치기·지우기, ⋮ 간단 수정 → 빠르게 고치기</span></li><li><span>💬 '점검하세요'·'등록하세요'처럼 시키는 말투를 '점검해 주세요'처럼 부드럽게 바꾸고, 띄어쓰기(알려 드려요)를 맞췄어요</span></li></ul>
     <h3 style="margin:14px 0 6px;font-size:15px">v1.39</h3>
     <ul class="feat cgx"><li><span>🔐 보안: 가족 공유·백업 글에 화면 코드가 섞여 들어와도 실행되지 않게 막았어요(테스터가 찾은 문제). 받은 글은 안전한 글자만 남기고 정리해요</span></li><li><span>🛡 백업 붙여넣기 전에 지금 기록과 백업의 물건·기록 개수를 보여 주고 한 번 더 물어봐요. 바꾼 뒤에도 '되돌리기'로 원래 기록으로 돌아갈 수 있어요</span></li><li><span>망가졌거나 빈 백업 파일은 불러오지 않아요(기록이 0개가 되던 문제). 폰 저장 공간이 부족해 저장이 안 되면 알려 드려요</span></li><li><span>생필품·옷을 '새로 사서 바꿨어요' 뒤에도 '비용 적기'가 나와요. 놓쳤다면 물건을 열어 지난 기록 옆 '비용 적기'로 나중에 적어요</span></li><li><span>자동차 부품 '교체했어요'도 바로 되돌릴 수 있고, 부품 고르기에서 주행거리 칸에 숫자가 이어 써지던 문제를 고쳤어요(지금보다 큰 값은 막아요)</span></li><li><span>같은 물건을 합치면 금액도 합쳐져서 버린 금액과 장보기 가계부가 서로 맞아요. '1개 먹었어요·버렸어요'도 되돌릴 수 있어요</span></li><li><span>식단표: 재료를 먼저 다 먹은 끼니는 '⚠ 재료 없음'으로 보여 주고, 손질할 때 '어디에 쓸지' 적은 재료는 그 요리에 먼저 써요</span></li><li><span>영양제처럼 기한이 있는 생필품도 여러 개면 '1개 다 써서 새것 뜯었어요'로 수량을 줄여요. 세탁소에 맡긴 옷은 '세탁소에서 찾았어요'로 보여요</span></li><li><span>좁은 화면·큰 글씨에서 목록 둘째 줄(날짜)이 잘리지 않고, 글자가 단어 중간에서 끊기지 않게 했어요. 장보기에 '파스'처럼 적으면 생필품으로 들어가요</span></li></ul>
@@ -266,6 +269,7 @@ footer { color: var(--sub); font-size: 14px; border-top: 1px solid var(--line); 
       </ol>
     </div>
     <p class="note"><b>Play 프로텍트 경고가 뜨면</b> · 플레이스토어를 거치지 않은 앱이라 "알 수 없는 개발자" 안내가 나올 수 있어요. <b>세부정보 더보기 → 무시하고 설치</b>를 누르면 돼요. 이 페이지의 링크로 받은 파일만 설치하세요.</p>
+    <p class="note"><b>안드로이드 7·8 폰이라면</b> · 새 서명 키는 안드로이드 9 이상에서 적용돼요. 7·8 폰에서는 꼭 이 페이지(github.com/dlsdml99-create)의 링크로 받은 파일만 설치해 주세요. 다른 곳에서 받은 "챙김이 업데이트" 파일은 설치하지 마세요.</p>
   </section>
   <section class="detail" aria-labelledby="safe-h">
     <h2 id="safe-h">안심하고 쓰세요</h2>
@@ -277,12 +281,12 @@ footer { color: var(--sub); font-size: 14px; border-top: 1px solid var(--line); 
         <tr><td>인터넷으로 하는 일</td><td>바코드 숫자로 상품 이름 찾기, 새 버전 확인 (앱 화면은 그 밖의 곳에 연결하지 못하게 막아 둠)</td></tr><tr><td>백업 · 가족 공유</td><td>비밀번호를 넣으면 AES-256으로 잠가요. 비밀번호는 어디에도 저장하지 않아요</td></tr>
         <tr><td>밖으로 보내는 내 정보</td><td class="ok">없음</td></tr>
         <tr><td>광고 · 추적</td><td class="ok">없음</td></tr>
-        <tr><td>서명 지문</td><td class="mono">SHA-256 9D:77:B8:D5:CB:F4:4B:15…</td></tr>
+        <tr><td>서명 키</td><td>2026년 11월 더 안전한 새 키로 바꿨어요(안드로이드 9 이상). 앱을 지우지 않고 그대로 업데이트돼요</td></tr>
       </tbody></table></div>
   </section>
-  <footer>아이폰·PC는 <a href="https://dlsdml99-create.github.io/gyoche-check/app.html">웹앱</a>으로 · <a href="https://dlsdml99-create.github.io/gyoche-check/privacy.html">개인정보처리방침</a> · 만든 사람 <a href="https://github.com/dlsdml99-create">dlsdml99-create</a></footer>
+  <footer><a class="ios-link" href="https://dlsdml99-create.github.io/gyoche-check/app.html">아이폰·PC에서 쓰기(웹앱)</a> · <a href="https://dlsdml99-create.github.io/gyoche-check/privacy.html">개인정보처리방침</a> · 만든 사람 <a href="https://github.com/dlsdml99-create">dlsdml99-create</a></footer>
 </main>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="qrcode.js"></script>
 <script>
 (function () {
   function draw(id, url) {
