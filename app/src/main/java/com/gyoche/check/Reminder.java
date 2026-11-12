@@ -348,7 +348,7 @@ public class Reminder {
         String title = r.title, text = r.text, big = r.big;
         if (r.count == 0) {
             if (r.season != null) { title = "챙김이 계절 알림"; text = r.season; big = r.season; }
-            else { text = "기한이 다가오면 이렇게 알려드려요."; big = text; }
+            else { text = "기한이 다가오면 이렇게 알려 드려요."; big = text; }
         }
 
         Intent open = new Intent(c, MainActivity.class).putExtra("fromNotify", true)
