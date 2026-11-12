@@ -54,11 +54,13 @@ jobs:
           if [ -n "$KEY2" ]; then
             BT="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
             printf '%s' "$KEY2" > "$RUNNER_TEMP/k2"
-            trap 'rm -f app/gyoche.jks "$RUNNER_TEMP/k2" "$RUNNER_TEMP/new.jks"' EXIT
+            # 키 도구는 영어·숫자 암호만 받아서, 정한 암호(한글 가능)를 SHA-256으로 바꿔 키 암호로 씀
+            printf '%s' "$KEY2" | sha256sum | cut -c1-64 > "$RUNNER_TEMP/kp"
+            trap 'rm -f app/gyoche.jks "$RUNNER_TEMP/k2" "$RUNNER_TEMP/kp" "$RUNNER_TEMP/new.jks"' EXIT
             # 처음 한 번: 새 키를 GitHub 안에서 만들고(아무도 못 봄), 비밀번호로 암호화해 저장소에 보관
             if [ ! -f app/gyoche2.jks.enc ]; then
               keytool -genkeypair -keystore "$RUNNER_TEMP/new.jks" -storetype PKCS12 -alias gyoche2 -keyalg RSA -keysize 4096 -validity 36500 \
-                -storepass:file "$RUNNER_TEMP/k2" -keypass:file "$RUNNER_TEMP/k2" -dname "CN=Gyoche Check, O=dlsdml99-create"
+                -storepass:file "$RUNNER_TEMP/kp" -keypass:file "$RUNNER_TEMP/kp" -dname "CN=Gyoche Check, O=dlsdml99-create"
               openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -salt -in "$RUNNER_TEMP/new.jks" -out app/gyoche2.jks.enc -pass file:"$RUNNER_TEMP/k2"
               rm -f "$RUNNER_TEMP/new.jks"
               git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -68,14 +70,14 @@ jobs:
               || { echo "::error::GYOCHE_KEY2 비밀번호가 맞지 않아요."; exit 1; }
             "$BT/apksigner" rotate --out "$RUNNER_TEMP/lineage" \
               --old-signer --ks app/gyoche.jks --ks-key-alias gyoche --ks-pass env:KEY_PASS \
-              --new-signer --ks "$RUNNER_TEMP/new.jks" --ks-key-alias gyoche2 --ks-pass file:"$RUNNER_TEMP/k2"
+              --new-signer --ks "$RUNNER_TEMP/new.jks" --ks-key-alias gyoche2 --ks-pass file:"$RUNNER_TEMP/kp"
             "$BT/apksigner" sign --lineage "$RUNNER_TEMP/lineage" --rotation-min-sdk-version 28 \
               --ks app/gyoche.jks --ks-key-alias gyoche --ks-pass env:KEY_PASS \
-              --next-signer --ks "$RUNNER_TEMP/new.jks" --ks-key-alias gyoche2 --ks-pass file:"$RUNNER_TEMP/k2" \
+              --next-signer --ks "$RUNNER_TEMP/new.jks" --ks-key-alias gyoche2 --ks-pass file:"$RUNNER_TEMP/kp" \
               gyoche-check.apk
             "$BT/apksigner" verify -v --print-certs gyoche-check.apk | grep -E "Verified|SHA-256|lineage" || true
           else
-            echo "::warning::새 서명 키 비밀번호(GYOCHE_KEY2)가 아직 없어 예전 키로만 서명했어요."
+            echo "::warning::새 서명 키를 쓰지 않아 예전 키로만 서명했어요."
           fi
           ls -la gyoche-check.apk
       - name: Publish APK
