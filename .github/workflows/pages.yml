@@ -15,7 +15,7 @@ jobs:
   site:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - name: 최신 버전 번호로 페이지 채우기
         env: { GH_TOKEN: '${{ github.token }}' }
         run: |
@@ -27,7 +27,7 @@ jobs:
           echo "18ae399f81182bc9de916e9c77b195df20cc58d6f2d55a62b085a299f1bf1780  site/qrcode.js" | sha256sum -c -
           python3 .github/webapp.py "$N"
           sed -i "s/__N__/$N/g; s/__MB__/$MB/g" site/index.html site/guide.html
-      - uses: actions/upload-pages-artifact@v5
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
         with: { path: site }
   pages:
     needs: site
@@ -35,4 +35,4 @@ jobs:
     environment: { name: github-pages, url: '${{ steps.deploy.outputs.page_url }}' }
     steps:
       - id: deploy
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5

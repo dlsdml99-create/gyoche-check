@@ -31,7 +31,7 @@ h1 { font-size: 22px; margin: 0; letter-spacing: -0.4px; }
 .sum { background: var(--card); border-radius: 14px; padding: 10px 12px; box-shadow: var(--shadow); text-align: left; }
 .sum b { display: block; font-size: 22px; line-height: 1.1; }
 .sum span { font-size: 12px; color: var(--sub); }
-.sum.over b { color: var(--over); } .sum.soon b { color: var(--soon); } .sum.ok b { color: var(--ok); }
+.sum.over b { color: var(--over-t); } .sum.soon b { color: var(--soon-t); } .sum.ok b { color: var(--ok-t); }
 .sum.on { outline: 2px solid var(--ink); }
 
 /* 탭 칩 */
@@ -55,7 +55,7 @@ h1 { font-size: 22px; margin: 0; letter-spacing: -0.4px; }
 .bar { height: 4px; border-radius: 4px; background: var(--line); margin-top: 7px; overflow: hidden; }
 .bar i { display: block; height: 100%; border-radius: 4px; }
 .dd { flex: none; min-width: 58px; text-align: center; font-weight: 700; font-size: 14px; padding: 6px 8px; border-radius: 10px; }
-.dd.ok { background: var(--ok-soft); color: var(--ok); } .dd.soon { background: var(--soon-soft); color: var(--soon); } .dd.over { background: var(--over-soft); color: var(--over); }
+.dd.ok { background: var(--ok-soft); color: var(--ok-t); } .dd.soon { background: var(--soon-soft); color: var(--soon-t); } .dd.over { background: var(--over-soft); color: var(--over-t); }
 .group-h { font-size: 13px; color: var(--sub); margin: 14px 2px 2px; font-weight: 600; }
 
 .empty { text-align: center; padding: 48px 20px; color: var(--sub); }
@@ -65,7 +65,7 @@ h1 { font-size: 22px; margin: 0; letter-spacing: -0.4px; }
 /* 버튼 */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 12px 16px; border-radius: 12px; font-weight: 600; background: var(--card); border: 1px solid var(--line); }
 .btn.pri { background: var(--brand); color: #fff; border-color: var(--brand); }
-.btn.warn { background: var(--over-soft); color: var(--over); border-color: transparent; }
+.btn.warn { background: var(--over-soft); color: var(--over-t); border-color: transparent; }
 .btn.soft { background: var(--brand-soft); color: var(--brand); border-color: transparent; }
 .btn.block { width: 100%; }
 .btn svg { width: 18px; height: 18px; }
@@ -172,7 +172,7 @@ details.more summary { color: var(--sub); font-size: 13.5px; margin: 12px 2px 8p
 .sc .v { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-top: 2px; }
 .sc .v small { font-size: 14px; font-weight: 600; color: var(--sub); margin-left: 2px; }
 .sc .d { font-size: 12.5px; margin-top: 2px; }
-.up { color: var(--over); } .down { color: var(--ok); } .same { color: var(--sub); }
+.up { color: var(--over-t); } .down { color: var(--ok-t); } .same { color: var(--sub); }
 .panel { background: var(--card); border-radius: 16px; padding: 14px; box-shadow: var(--shadow); margin-bottom: 10px; }
 .panel h3 { font-size: 15px; margin: 0 0 12px; }
 .trend { display: flex; align-items: flex-end; gap: 10px; height: 140px; padding-top: 8px; }
@@ -192,7 +192,7 @@ details.more summary { color: var(--sub); font-size: 13.5px; margin: 12px 2px 8p
 .log li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
 .log li:last-child { border-bottom: 0; }
 .log .tag { font-size: 12px; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
-.tag.discard { background: var(--over-soft); color: var(--over); } .tag.eaten { background: var(--ok-soft); color: var(--ok); } .tag.replace { background: var(--clothes-soft); color: var(--clothes); }
+.tag.discard { background: var(--over-soft); color: var(--over-t); } .tag.eaten { background: var(--ok-soft); color: var(--ok-t); } .tag.replace { background: var(--clothes-soft); color: var(--clothes); }
 ul { list-style: none; padding: 0; margin: 0; }
 
 /* 설정 */
@@ -285,12 +285,12 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px s
 .rmeta { font-size: 12.5px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rtags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
 .rtag { font-size: 11.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px; }
-.rtag.ok { background: var(--ok-soft); color: var(--ok); } .rtag.miss { background: var(--line); color: var(--sub); } .rtag.urg { background: var(--soon-soft); color: var(--soon); }
+.rtag.ok { background: var(--ok-soft); color: var(--ok-t); } .rtag.miss { background: var(--line); color: var(--sub); } .rtag.urg { background: var(--soon-soft); color: var(--soon-t); }
 .rsteps { margin: 0 0 0 20px; padding: 0; display: grid; gap: 8px; font-size: 15px; }
 .used { display: grid; gap: 6px; }
 .fvl { display: grid; gap: 6px; } .fvl .urow span { flex: 1; min-width: 0; } .fvl .urow svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; }
 .fvl .urow { padding: 6px 8px 6px 14px; }
-.btn.fdel { flex: none; padding: 7px 14px; color: var(--over); background: var(--over-soft); }
+.btn.fdel { flex: none; padding: 7px 14px; color: var(--over-t); background: var(--over-soft); }
 .urow { display: flex; align-items: center; gap: 10px; background: var(--card); border-radius: 12px; padding: 10px 12px; box-shadow: var(--shadow); }
 .urow input { width: 20px; height: 20px; accent-color: var(--brand); flex: none; }
 .urow span:nth-child(2) { flex: 1; min-width: 0; }
@@ -301,7 +301,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px s
 @media (prefers-reduced-motion: reduce) { .dp.need { animation: none; } }
 .ver { position: fixed; left: max(10px, env(safe-area-inset-left, 0px)); bottom: calc(64px + env(safe-area-inset-bottom, 0px)); z-index: 14; font-size: 11px; color: var(--sub); background: var(--veil); border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; }
 .ver b { font-weight: 700; color: var(--ink); }
-.ver .ok { color: var(--ok); font-weight: 700; } .ver .new { color: var(--soon); font-weight: 700; }
+.ver .ok { color: var(--ok-t); font-weight: 700; } .ver .new { color: var(--soon-t); font-weight: 700; }
 .ver.has-new { border-color: var(--soon); }
 
 /* ── v1.3: 장보기·계절·팁·넓은 통계 카드 ── */
@@ -309,7 +309,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px s
 .icon-btn { position: relative; }
 .bdg { position: absolute; top: -5px; right: -5px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--over); color: #fff; font-size: 11px; font-weight: 700; line-height: 18px; text-align: center; }
 .season { display: flex; gap: 10px; align-items: center; background: var(--ok-soft); color: var(--ink); border-radius: 14px; padding: 10px 12px; margin: 10px 0 0; font-size: 13.5px; }
-.season .si { width: 26px; height: 26px; border-radius: 8px; background: var(--card); color: var(--ok); display: grid; place-items: center; flex: none; }
+.season .si { width: 26px; height: 26px; border-radius: 8px; background: var(--card); color: var(--ok-t); display: grid; place-items: center; flex: none; }
 .season .si svg { width: 16px; height: 16px; }
 .season span:nth-child(2) { flex: 1; min-width: 0; }
 .season .clink { margin: 0; flex: none; }
@@ -351,9 +351,9 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px s
 .toast .tacts button { border: 1px solid rgba(255,255,255,.5); background: rgba(255,255,255,.12); color: #fff; border-radius: 999px; padding: 7px 12px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
 .ico.dday { background: var(--dday-soft); color: var(--dday); }
 nav.tabs button[data-v=dday].on { color: var(--dday); }
-.tag.cancel { background: var(--dday-soft); color: var(--dday); }
+.tag.cancel { background: var(--dday-soft); color: var(--dday-t); }
 .qty { display: inline-block; font-size: 12px; font-weight: 700; color: var(--sub); background: var(--seg); border-radius: 7px; padding: 1px 6px; vertical-align: 1px; }
-.favm svg { width: 13px; height: 13px; color: var(--soon); vertical-align: -1px; }
+.favm svg { width: 13px; height: 13px; color: var(--soon-t); vertical-align: -1px; }
 .step { display: inline-flex; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 12px; flex: none; }
 .step button { width: 38px; height: 44px; font-size: 20px; color: var(--ink); }
 .step b { min-width: 22px; text-align: center; font-size: 16px; }
@@ -369,15 +369,15 @@ nav.tabs button[data-v=dday].on { color: var(--dday); }
 .pbox[open] summary svg, .cgroup[open] summary svg { transform: rotate(180deg); }
 .per { font-size: 13.5px; margin-top: 8px; color: var(--sub); }
 .per b { color: var(--ink); }
-.good { color: var(--ok); font-weight: 700; }
+.good { color: var(--ok-t); font-weight: 700; }
 .fixed { background: var(--card); border-radius: 16px; padding: 14px; box-shadow: var(--shadow); margin: 12px 0 4px; }
 .fx-h { display: flex; justify-content: space-between; align-items: baseline; }
 .fx-h span { color: var(--sub); font-size: 13.5px; font-weight: 600; }
-.fx-h b { font-size: 24px; color: var(--dday); }
+.fx-h b { font-size: 24px; color: var(--dday-t); }
 .fx-h small { font-size: 14px; margin-left: 2px; }
 .fx-s { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .fx-s span { font-size: 12.5px; background: var(--seg); border-radius: 8px; padding: 3px 8px; color: var(--sub); }
-.fx-s .sv { background: var(--ok-soft); color: var(--ok); font-weight: 600; }
+.fx-s .sv { background: var(--ok-soft); color: var(--ok-t); font-weight: 600; }
 .trial { display: grid; gap: 3px; width: 100%; text-align: left; background: var(--soon-soft); border-radius: 14px; padding: 12px 14px; margin-top: 10px; font-size: 13.5px; }
 .trial b { font-size: 14.5px; }
 .swrow { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 11px 12px; margin-bottom: 8px; font-size: 14.5px; }
@@ -385,7 +385,7 @@ nav.tabs button[data-v=dday].on { color: var(--dday); }
 .cmprow { display: grid; grid-template-columns: 26px 1fr 1fr 70px; gap: 6px; align-items: center; margin-bottom: 6px; border-radius: 12px; }
 .cmprow .inp { padding: 10px; }
 .cmprow .cl { font-weight: 800; text-align: center; color: var(--sub); }
-.cmprow.win .cl { color: var(--ok); }
+.cmprow.win .cl { color: var(--ok-t); }
 .cmprow.win .inp { border-color: var(--ok); }
 .cmpres { display: grid; gap: 2px; background: var(--brand-soft); border-radius: 14px; padding: 12px 14px; margin-top: 10px; font-size: 14px; }
 .cmpres b { font-size: 16px; color: var(--brand); }
@@ -398,7 +398,7 @@ nav.tabs button[data-v=dday].on { color: var(--dday); }
 .clist small { display: block; color: var(--sub); font-size: 12px; }
 .clist .cu { text-align: right; font-size: 12px; color: var(--sub); flex: none; }
 .clist .cu b { font-size: 14px; color: var(--ink); }
-.best { font-style: normal; background: var(--ok-soft); color: var(--ok); font-weight: 700; border-radius: 6px; padding: 1px 6px; margin-right: 4px; }
+.best { font-style: normal; background: var(--ok-soft); color: var(--ok-t); font-weight: 700; border-radius: 6px; padding: 1px 6px; margin-right: 4px; }
 .rec-h { width: 100%; text-align: left; }
 .rec.closed { padding: 10px 14px; }
 .rec-n { margin-left: auto; font-size: 12.5px; color: var(--sub); }
@@ -407,9 +407,9 @@ nav.tabs button[data-v=dday].on { color: var(--dday); }
 .rec-more { display: flex; justify-content: flex-end; margin-top: 2px; }
 .rec-more .clink { margin: 0; }
 .links button svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 3px; }
-.links button.faved { color: var(--soon); text-decoration: none; font-weight: 700; }
+.links button.faved { color: var(--soon-t); text-decoration: none; font-weight: 700; }
 .chip.fav.on { background: var(--soon); border-color: var(--soon); color: #fff; }
-.lbl svg { width: 14px; height: 14px; color: var(--soon); vertical-align: -2px; }
+.lbl svg { width: 14px; height: 14px; color: var(--soon-t); vertical-align: -2px; }
 .chip svg { width: 13px; height: 13px; vertical-align: -2px; margin-right: 2px; }
 .tabsel .tl { display: flex; align-items: center; gap: 10px; }
 .tabsel .ico { width: 34px; height: 34px; border-radius: 10px; }
@@ -421,7 +421,7 @@ nav.tabs button { min-width: 0; }
 .zc { display: flex; gap: 12px; align-items: center; background: var(--card); border-radius: 16px; padding: 12px 14px; box-shadow: var(--shadow); margin: 6px 0 10px; font-size: 14px; }
 .zc.ok { background: var(--soon-soft); }
 .zc small { display: block; color: var(--sub); font-size: 12.5px; margin-top: 2px; }
-.zc .zi { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: var(--card); color: var(--soon); flex: none; }
+.zc .zi { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: var(--card); color: var(--soon-t); flex: none; }
 .zc .zi svg { width: 22px; height: 22px; }
 .yearbtn { width: 100%; display: flex; align-items: center; gap: 12px; text-align: left; background: var(--brand-soft); color: var(--ink); border-radius: 16px; padding: 13px 14px; margin-bottom: 10px; }
 .yearbtn > svg:first-child { width: 22px; height: 22px; color: var(--brand); flex: none; }
@@ -435,15 +435,15 @@ nav.tabs button { min-width: 0; }
 .shop-g { font-weight: 700; font-size: 14px; margin: 14px 2px 6px; }
 .shop-g small { font-weight: 400; color: var(--sub); font-size: 12px; }
 .item { contain: layout paint; }
-.tag.check { background: var(--dday-soft); color: var(--dday); }
+.tag.check { background: var(--dday-soft); color: var(--dday-t); }
 
 /* ── v1.6: 메모·내 품목·직접 만든 음식·가족 공유 ── */
 .item .memo { font-size: 12px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
 .item .memo svg { width: 11px; height: 11px; vertical-align: -1px; margin-right: 3px; }
 .memobox { display: flex; gap: 8px; align-items: flex-start; background: var(--soon-soft); border-radius: 12px; padding: 10px 12px; margin-bottom: 12px; font-size: 14px; white-space: pre-line; }
-.memobox svg { width: 15px; height: 15px; flex: none; margin-top: 2px; color: var(--soon); }
+.memobox svg { width: 15px; height: 15px; flex: none; margin-top: 2px; color: var(--soon-t); }
 .chip.mine { border-color: var(--soon); }
-.chip.mine svg { color: var(--soon); }
+.chip.mine svg { color: var(--soon-t); }
 .chip.add { border-style: dashed; color: var(--sub); }
 #f-hm .chip small { opacity: .65; }
 .fam { display: grid; gap: 8px; }
@@ -452,10 +452,10 @@ nav.tabs button { min-width: 0; }
 
 /* ── v1.8: 정리·찾기·가계부·구독·식단·새 기능 ── */
 .ck-strip { margin-top: 6px; }
-.ck-strip .ck-i { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 7px; background: var(--ok-soft); color: var(--ok); margin-right: 6px; vertical-align: -6px; }
+.ck-strip .ck-i { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 7px; background: var(--ok-soft); color: var(--ok-t); margin-right: 6px; vertical-align: -6px; }
 .ck-strip .ck-i svg { width: 14px; height: 14px; }
 .ck-strip.due { background: var(--soon-soft); }
-.ck-strip.due .ck-i { background: var(--card); color: var(--soon); }
+.ck-strip.due .ck-i { background: var(--card); color: var(--soon-t); }
 .ck-n { font-size: 13px; color: var(--sub); font-weight: 600; margin-left: 6px; }
 .ck-bar { height: 4px; background: var(--line); border-radius: 4px; overflow: hidden; margin: -4px 0 14px; }
 .ck-bar i { display: block; height: 100%; background: var(--brand); transition: width .2s; }
@@ -469,7 +469,7 @@ nav.tabs button { min-width: 0; }
 .ck-qty { font-size: 13.5px; color: var(--sub); display: flex; gap: 8px; align-items: center; }
 .ck-memo { font-size: 13px; background: var(--soon-soft); border-radius: 10px; padding: 6px 10px; }
 .ck-tag { position: absolute; top: 14px; font-weight: 800; font-size: 13px; padding: 4px 10px; border-radius: 8px; opacity: 0; transition: opacity .1s; }
-.ck-tag.l { left: 14px; background: var(--ok-soft); color: var(--ok); }
+.ck-tag.l { left: 14px; background: var(--ok-soft); color: var(--ok-t); }
 .ck-tag.r { right: 14px; background: var(--brand-soft); color: var(--brand); }
 .ck-card.go-l .ck-tag.l, .ck-card.go-r .ck-tag.r { opacity: 1; }
 .ck-btns { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 8px; margin-top: 4px; }
@@ -506,7 +506,7 @@ nav.tabs button { min-width: 0; }
 .nw .ico { width: 36px; height: 36px; border-radius: 11px; background: var(--brand-soft); color: var(--brand); }
 .nw .ico svg { width: 20px; height: 20px; }
 .nw small { display: block; color: var(--sub); font-size: 12.5px; margin-top: 2px; }
-.sheet h2 svg { width: 20px; height: 20px; vertical-align: -3px; color: var(--soon); }
+.sheet h2 svg { width: 20px; height: 20px; vertical-align: -3px; color: var(--soon-t); }
 body { word-break: keep-all; overflow-wrap: anywhere; }
 .title-row > div:first-child { min-width: 0; }
 .title-row .today { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -545,7 +545,7 @@ input.dp-hid { display: none !important; }
 .dpgrid button.now { box-shadow: inset 0 0 0 1.5px var(--brand); }
 .dpgrid button.on { background: var(--brand); color: #fff; font-weight: 700; }
 .dpgrid .wd { text-align: center; font-size: 12px; color: var(--sub); padding: 2px 0; }
-.dpgrid .wd.sun { color: var(--over); } .dpgrid .wd.sat { color: #4A7BD0; }
+.dpgrid .wd.sun { color: var(--over-t); } .dpgrid .wd.sat { color: #4A7BD0; }
 .dpfoot { display: flex; justify-content: space-between; margin-top: 10px; }
 .dpfoot button { padding: 10px 14px; border-radius: 10px; font-size: 15px; font-weight: 600; color: var(--brand); }
 /* v1.16: 이름 옆 수정 · ⋮ 간단 수정 · 오늘 입은 옷 */
@@ -575,7 +575,7 @@ input.dp-hid { display: none !important; }
 .wcal-h button svg { width: 18px; height: 18px; }
 .wcal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 3px; }
 .wcal .wh { text-align: center; font-size: 11px; color: var(--sub); padding-bottom: 2px; }
-.wcal .wh.sun { color: var(--over); }
+.wcal .wh.sun { color: var(--over-t); }
 .wcal button { position: relative; min-width: 0; aspect-ratio: 3 / 4; border-radius: 9px; padding: 3px 2px 2px; display: flex; flex-direction: column; align-items: stretch; gap: 2px; background: var(--bg); text-align: left; }
 .wcal button:disabled { background: none; opacity: .35; }
 .wcal button.out { visibility: hidden; }
@@ -604,7 +604,7 @@ input.dp-hid { display: none !important; }
 .wtile .wi svg { width: 30px; height: 30px; color: var(--clothes); }
 .wtile .wn { display: block; font-size: 13px; font-weight: 600; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .wtile .ws { display: block; font-size: 11.5px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.wtile .ws.rep { color: var(--soon); font-weight: 700; }
+.wtile .ws.rep { color: var(--soon-t); font-weight: 700; }
 .wtile .ck { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%; background: var(--brand); color: #fff; display: none; place-items: center; font-size: 13px; font-weight: 700; }
 .wtile.on .ck { display: grid; }
 .wx { display: flex; align-items: center; gap: 8px; background: var(--brand-soft); color: var(--ink); border-radius: 12px; padding: 9px 12px; font-size: 13.5px; margin: 0 0 12px; }
@@ -620,7 +620,7 @@ input.dp-hid { display: none !important; }
 .ofit .ox svg { width: 13px; height: 13px; }
 .ofit .ox { width: 22px; height: 22px; border-radius: 50%; color: var(--sub); font-size: 15px; line-height: 1; }
 .tidy { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--soon-soft); color: var(--ink); border-radius: 12px; padding: 10px 12px; font-size: 13.5px; margin-top: 10px; text-align: left; }
-.tidy svg { color: var(--soon); flex: none; }
+.tidy svg { color: var(--soon-t); flex: none; }
 .tidyrow { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
 .tidyrow:last-child { border-bottom: 0; }
 .tidyrow .ti { width: 46px; height: 46px; border-radius: 10px; overflow: hidden; background: var(--bg); flex: none; display: grid; place-items: center; }
@@ -675,12 +675,12 @@ input.dp-hid { display: none !important; }
 .kid .ks b { display: block; font-size: 16px; font-variant-numeric: tabular-nums; }
 .kid .ks span { font-size: 11.5px; color: var(--sub); }
 .kid .kh { font-size: 13px; margin-top: 8px; }
-.kid .kh.warn { color: var(--soon); font-weight: 600; }
+.kid .kh.warn { color: var(--soon-t); font-weight: 600; }
 .wtile .ws.wsh { color: var(--brand); font-weight: 700; }
 
 /* v1.41 글자 대비(4.5:1 이상)·누르기 쉬운 크기(44px)·큰 글씨에서 겹침 막기 */
-:root { --sub: #626965; --soon-t: #9A5C00; --ok-t: #217A52; --food-t: #B4531B; --clothes-t: #3F62B8; --daily-t: #1E7474; --car-t: #6B4FC8; --dday-t: #B23A64; }
-:root[data-theme="dark"] { --sub: #A3ABA5; --soon-t: var(--soon); --ok-t: var(--ok); --food-t: var(--food); --clothes-t: var(--clothes); --daily-t: var(--daily); --car-t: var(--car); --dday-t: var(--dday); }
+:root { --sub: #626965; --soon-t: #9A5C00; --ok-t: #217A52; --over-t: #B3261E; --food-t: #B4531B; --clothes-t: #3F62B8; --daily-t: #1E7474; --car-t: #6B4FC8; --dday-t: #B23A64; }
+:root[data-theme="dark"] { --sub: #A3ABA5; --soon-t: var(--soon); --ok-t: var(--ok); --over-t: var(--over); --food-t: var(--food); --clothes-t: var(--clothes); --daily-t: var(--daily); --car-t: var(--car); --dday-t: var(--dday); }
 .sum.soon b { color: var(--soon-t); } .sum.ok b { color: var(--ok-t); }
 nav.tabs button[data-v=food].on { color: var(--food-t); } nav.tabs button[data-v=clothes].on { color: var(--clothes-t); } nav.tabs button[data-v=daily].on { color: var(--daily-t); }
 nav.tabs button[data-v=car].on { color: var(--car-t); } nav.tabs button[data-v=dday].on { color: var(--dday-t); } nav.tabs button.on { color: var(--brand); }
@@ -693,8 +693,18 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
 .season .clink, .clink.pedit, .clink.demo-b { min-height: 44px; padding: 0 8px; display: inline-flex; align-items: center; }
 .season .clink { text-decoration: none; font-weight: 700; color: var(--ok-t); background: var(--card); border-radius: 10px; }
 .clink.demo-b { margin: 14px auto 0; font-size: 14.5px; font-weight: 600; color: var(--brand); }
-.ver { min-height: 30px; }
-.ver::before { content: ''; position: absolute; inset: -8px -6px; }
+.ver { min-height: 44px; min-width: 44px; border: 7px solid transparent; background-clip: padding-box; box-shadow: inset 0 0 0 1px var(--line); left: max(3px, calc(env(safe-area-inset-left, 0px) - 7px)); bottom: calc(57px + env(safe-area-inset-bottom, 0px)); }
+.ver.has-new { border-color: transparent; box-shadow: inset 0 0 0 1px var(--soon); }
+/* 작은 글자 버튼도 손가락으로 누르기 쉽게 (높이 44px) */
+.links button, .sheet .clink, .carcard .clink, .welcome-more a { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+.sheet .mlink .clink, .sheet .dishbar .clink, .sheet .pd-h .clink { margin-top: 0; margin-bottom: 0; padding: 0 6px; }
+.welcome-more { margin-top: 4px; } .welcome-more a { padding: 0 12px; }
+.sheet h2 .h2edit { min-height: 44px; border: 8px solid transparent; background-clip: padding-box; margin: -8px 0; }
+.step.sm button { min-width: 44px; min-height: 44px; }
+.leftseg .seg button { min-height: 44px; }
+.actions .leftseg, .actions .dishbar { grid-column: 1 / -1; }
+:root[data-theme="dark"] .bdg, :root[data-theme="dark"] nav.tabs .dot { background: #B3261E; color: #fff; }
+:root:not([data-theme="dark"]) .btn.soft { color: #23694B; }
 /* 옆으로 더 있는 칩 줄: 오른쪽 끝을 흐리게 */
 .chips { -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent); padding-right: 24px; }
 .empty .btns .btn { min-height: 44px; }
@@ -1539,6 +1549,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     });
     return o;
   }
+  var YMD_RE = { test: function (v) { return typeof v === 'string' && /^\d{4}-\d{2}-\d{2}/.test(v) && !isNaN(Date.parse(v.slice(0, 10))); } };
   function parseFamily(text) {
     var i = String(text || '').indexOf('GYOFAM1:');
     if (i < 0) return null;
@@ -1552,16 +1563,16 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
       v: 1, from: typeof o.from === 'string' ? o.from.slice(0, 20) : '', at: +o.at || 0, cats: Array.isArray(o.cats) ? o.cats.filter(function (c) { return CATS_OK[c] || c === 'shop'; }) : [],
       items: o.items.slice(0, 2000).map(cleanItem).filter(Boolean),
       del: o.del && typeof o.del === 'object' ? Object.keys(o.del).slice(0, 5000).reduce(function (m, k) { if (typeof k === 'string' && k.length <= 40 && isFinite(+o.del[k])) m[k] = +o.del[k]; return m; }, {}) : {},
-      events: Array.isArray(o.events) ? o.events.slice(0, 3000).map(function (e) { return e && typeof e.id === 'string' && typeof e.name === 'string' && typeof e.type === 'string' && typeof e.date === 'string' ? cleanItem(Object.assign({}, e, { cat: CATS_OK[e.cat] ? e.cat : 'food' })) : null; }).filter(Boolean) : [],
+      events: Array.isArray(o.events) ? o.events.slice(0, 3000).map(function (e) { return e && typeof e.id === 'string' && typeof e.name === 'string' && typeof e.type === 'string' && YMD_RE.test(e.date) ? cleanItem(Object.assign({}, e, { cat: CATS_OK[e.cat] ? e.cat : 'food' })) : null; }).filter(Boolean) : [],
       shop: Array.isArray(o.shop) ? o.shop.slice(0, 300).filter(function (x) { return x && typeof x.id === 'string' && typeof x.name === 'string' && x.name.length <= 100; }).map(function (x) { return { id: x.id, name: x.name, cat: CATS_OK[x.cat] ? x.cat : 'food', from: 'family', at: typeof x.at === 'string' ? x.at : '' }; }) : null,
-      prices: Array.isArray(o.prices) ? o.prices.slice(0, 400).map(function (r) { return r && typeof r.id === 'string' && typeof r.name === 'string' && isFinite(+r.price) ? cleanItem(Object.assign({}, r, { cat: CATS_OK[r.cat] ? r.cat : 'food' })) : null; }).filter(Boolean) : [],
+      prices: Array.isArray(o.prices) ? o.prices.slice(0, 400).map(function (r) { return r && typeof r.id === 'string' && typeof r.name === 'string' && isFinite(+r.price) && +r.price > 0 && YMD_RE.test(r.date) ? cleanItem(Object.assign({}, r, { cat: CATS_OK[r.cat] ? r.cat : 'food' })) : null; }).filter(Boolean) : [],
       barcodes: o.barcodes && typeof o.barcodes === 'object' ? Object.keys(o.barcodes).slice(0, 3000).reduce(function (m, k) {
         var b = o.barcodes[k];
         if (/^\d{6,14}$/.test(k) && b && typeof b.name === 'string' && b.name.length <= 100 && CATS_OK[b.cat]) m[k] = cleanItem(Object.assign({ id: 'b' + k }, b, { cat: b.cat }));
         if (m[k]) delete m[k].id;
         return m;
       }, {}) : {},
-      car: o.car && typeof o.car === 'object' && Array.isArray(o.car.log) ? { name: String(o.car.name || '내 차').slice(0, 30), km: isFinite(+o.car.km) ? +o.car.km : null, fuel: cleanFuel(o.car.fuel), log: o.car.log.filter(function (l) { return l && typeof l.date === 'string' && isFinite(+l.km); }).map(function (l) { return { date: l.date.slice(0, 10), km: +l.km }; }).slice(0, 500) } : null
+      car: o.car && typeof o.car === 'object' && Array.isArray(o.car.log) ? { name: String(o.car.name || '내 차').slice(0, 30), km: isFinite(+o.car.km) ? +o.car.km : null, fuel: cleanFuel(o.car.fuel), log: o.car.log.filter(function (l) { return l && YMD_RE.test(l.date) && isFinite(+l.km); }).map(function (l) { return { date: l.date.slice(0, 10), km: +l.km }; }).slice(0, 500) } : null
     };
   }
   function famMerge(L, inc) {
@@ -1740,8 +1751,16 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     if (km) { var kt = tail(km[1]); r.km = kt.n; t = t.replace(km[0], ' ' + kt.rest + ' '); }
     var pr = t.match(new RegExp(NUM + '\\s*원'));
     if (pr) { var pt = tail(pr[1]); r.price = pt.n; t = t.replace(pr[0], ' ' + pt.rest + ' '); }
-    if (/그저께|그제/.test(t)) r.date = addDays(today, -2);
+    if (/그저께|그제|이틀\s*전/.test(t)) r.date = addDays(today, -2);
     else if (/어제/.test(t)) r.date = addDays(today, -1);
+    var KD = { '사흘': 3, '나흘': 4, '닷새': 5, '엿새': 6, '이레': 7, '열흘': 10, '보름': 15 };
+    var kd = t.match(/(사흘|나흘|닷새|엿새|이레|열흘|보름)\s*전/); if (kd) r.date = addDays(today, -KD[kd[1]]);
+    if (/지지난\s*주/.test(t)) r.date = addDays(today, -14);
+    else if (/지난\s*주|저번\s*주|일주일\s*전|한\s*주\s*전/.test(t)) r.date = addDays(today, -7);
+    var wk = t.match(/(\d+|두|세|네)\s*주\s*(?:일\s*)?전/); if (wk) r.date = addDays(today, -7 * ({ '두': 2, '세': 3, '네': 4 }[wk[1]] || +wk[1]));
+    var mo = /지난\s*달|저번\s*달|한\s*달\s*전/.test(t) ? 1 : 0, mm = t.match(/(\d+|두|세|네|다섯|여섯)\s*(?:달|개월)\s*전/);
+    if (mm) mo = { '두': 2, '세': 3, '네': 4, '다섯': 5, '여섯': 6 }[mm[1]] || +mm[1];
+    if (mo && mo < 37) r.date = addMonths(today, -mo);
     var ago = t.match(/(\d+)\s*일\s*전/); if (ago) r.date = addDays(today, -ago[1]);
     var dm = t.match(/(\d{1,2})\s*월\s*(\d{1,2})\s*일/);
     if (dm) { var y = +today.slice(0, 4), c = y + '-' + pad(+dm[1]) + '-' + pad(+dm[2]); if (c > today) c = (y - 1) + c.slice(4); r.date = c; }
@@ -2512,7 +2531,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     DV++; STC = {};
     if (DEMO) return; // 예시로 둘러보는 중: 내 기록에 저장하지 않음
     stampChanges();
-    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { if (!persist.warned) { persist.warned = 1; setTimeout(function () { toast('폰 저장 공간이 부족해 저장하지 못했어요. 백업한 뒤 사진을 정리해 주세요', 5000); }, 300); } }
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { saveFail(); }
     if (syncT) clearTimeout(syncT);
     syncT = setTimeout(function () { syncT = null; syncNative(); }, 400);
   }
@@ -2820,7 +2839,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     if (it.mode === 'car') {
       var parts = [];
       if (s.nextKm != null) parts.push(num(s.nextKm) + 'km');
-      if (s.dateDue) parts.push(md(s.dateDue));
+      if (s.dateDue) parts.push(dt(s.dateDue));
       meta = parts.length ? '다음 ' + parts.join(' 또는 ') : '주기를 넣어 주세요';
       pct = Math.max(0, Math.min(100, s.frac * 100));
     } else if (it.mode === 'dday') {
@@ -2856,7 +2875,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
   var SORTS = [['due', '기한 가까운 순'], ['name', '이름순'], ['new', '최근 등록순']];
   function sortRows(rows) {
     var k = S.set.sort || 'due';
-    rows.sort(k === 'name' ? function (a, b) { return a.it.name.localeCompare(b.it.name, 'ko') || a.s.left - b.s.left; }
+    rows.sort(k === 'name' ? function (a, b) { return a.it.name.localeCompare(b.it.name, 'ko', { numeric: true }) || a.s.left - b.s.left; }
       : k === 'new' ? function (a, b) { var x = String(a.it.created || ''), y = String(b.it.created || ''); return x < y ? 1 : x > y ? -1 : String(b.it.id).localeCompare(String(a.it.id)); }
       : function (a, b) { return a.s.left - b.s.left || a.it.name.localeCompare(b.it.name); });
     return rows;
@@ -2914,7 +2933,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     if (cat === 'daily') h += medPanel();
     if (cat === 'food') {
       var ms = G.monthStats(S.events, t.slice(0, 7), fxRate());
-      h += '<button class="strip" data-go="stats"><span>이번 달 버린 음식 <b style="color:var(--over)">' + ms.discard + '개' + (ms.wasteWon ? ' · ' + moneyK(ms.wasteWon) : '') + '</b> · 다 먹은 <b style="color:var(--ok)">' + ms.eaten + '개</b></span>' + IC.right + '</button>';
+      h += '<button class="strip" data-go="stats"><span>이번 달 버린 음식 <b style="color:var(--over-t)">' + ms.discard + '개' + (ms.wasteWon ? ' · ' + moneyK(ms.wasteWon) : '') + '</b> · 다 먹은 <b style="color:var(--ok-t)">' + ms.eaten + '개</b></span>' + IC.right + '</button>';
       h += recipeStrip(t);
     }
     var locs = G.LOCS[cat];
@@ -3103,7 +3122,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     var h = '<h2>' + esc(r.name) + '<button data-x>' + (back ? '← 뒤로' : '닫기') + '</button></h2>';
     h += '<button class="rfav' + (rFav(r.name) ? ' on' : '') + '" data-rfav aria-pressed="' + rFav(r.name) + '">' + IC.star + (rFav(r.name) ? '즐겨찾는 요리' : '즐겨찾기에 넣기') + '</button>';
     h += '<p class="hint" style="margin:-6px 2px 12px">약 ' + r.time + '분 · 기본 양념(' + esc(window.GR.PANTRY) + ')은 있다고 봤어요.</p>';
-    h += '<div class="kv"><div><span>꼭 필요한 재료</span><span style="text-align:right">' + r.need.map(function (k) { return (x.missing.indexOf(k) >= 0 ? '<b style="color:var(--over)">' + esc(k) + ' (없음)</b>' : esc(k) + ' ✓'); }).join(', ') + '</span></div>' +
+    h += '<div class="kv"><div><span>꼭 필요한 재료</span><span style="text-align:right">' + r.need.map(function (k) { return (x.missing.indexOf(k) >= 0 ? '<b style="color:var(--over-t)">' + esc(k) + ' (없음)</b>' : esc(k) + ' ✓'); }).join(', ') + '</span></div>' +
       (r.opt.length ? '<div><span>있으면 좋은 재료</span><span style="text-align:right">' + r.opt.map(function (k) { return x.extra.indexOf(k) >= 0 ? esc(k) + ' ✓' : '<span style="color:var(--sub)">' + esc(k) + '</span>'; }).join(', ') + '</span></div>' : '') + '</div>';
     if (x.missing.length) h += '<button class="btn soft block" data-rshop style="margin-bottom:12px">' + IC.cart + esc(x.missing.join(', ')) + ' 장보기에 담기</button>';
     h += '<p class="lbl">만드는 법</p><ol class="rsteps">' + r.steps.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ol>';
@@ -3735,8 +3754,9 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     }).join('') + '</span>';
   }
   function moneyInput(id, v, cur, phK, phU, extra) {
-    return '<div class="row"><input class="inp" id="' + esc(id) + '" type="number" step="any" inputmode="' + (cur === 'USD' ? 'decimal' : 'numeric') + '" data-phk="' + esc(phK || '') + '" data-phu="' + esc(phU || '') + '" placeholder="' + esc((cur === 'USD' ? phU : phK) || '') + '" value="' + (v || '') + '">' + curSeg(id, cur) + (extra || '') + '</div><small class="cv" id="' + id + '-cv"></small>';
+    return '<div class="row"><input class="inp" id="' + esc(id) + '" type="number" min="0" step="any" inputmode="' + (cur === 'USD' ? 'decimal' : 'numeric') + '" data-phk="' + esc(phK || '') + '" data-phu="' + esc(phU || '') + '" placeholder="' + esc((cur === 'USD' ? phU : phK) || '') + '" value="' + (v || '') + '">' + curSeg(id, cur) + (extra || '') + '</div><small class="cv" id="' + id + '-cv"></small>';
   }
+  function badPriceMsg(id) { toast('금액은 0보다 큰 숫자로 넣어 주세요'); var x = document.getElementById(id || 'f-price'); if (x) { var b = x.closest('details'); if (b) b.open = true; x.focus(); } }
   function curOf(el, id) { var b = $('[data-cfor="' + esc(id) + '"] .on', el); return b && b.dataset.c === 'USD' ? 'USD' : 'KRW'; }
   function bindMoney(el, id, onChange) {
     var inp = $('#' + id, el); if (!inp) return;
@@ -3796,7 +3816,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
   }
   function syncPrice(el, d) {
     var p = $('#f-price', el); if (!p) return;
-    d.price = +p.value || null; d.cur = curOf(el, 'f-price');
+    var pv = +p.value; d.badPrice = p.value !== '' && !(pv >= 0); d.price = pv > 0 ? pv : null; d.cur = curOf(el, 'f-price');
     var v = +$('#f-amt', el).value;
     var c = v > 0 ? unitConv(v, $('#f-u2', el).value) : null;
     d.amt = c ? c.amt : null; d.unit = c ? c.unit : null;
@@ -3927,12 +3947,14 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
 
   function saveDraft(d) {
     if (!d.name) { toast('이름을 넣어 주세요'); return; }
+    if (d.badPrice) { badPriceMsg(); return; }
     // 직접 적은 이름으로 칸·주기 맞추기 ("나이키 운동화" → 신발 · 1년), 사용자가 칸을 고른 경우는 그대로
     if (!d.id && !d.preset && !d.locTouched && d.cat !== 'food') {
       var gx = G.guess(d.name);
       if (gx && gx.cat === d.cat && gx.loc && gx.loc !== d.loc) { d.loc = gx.loc; if (gx.days && d.mode === 'cycle') d.days = gx.days; if (d.cat === 'clothes' && WEAR_LOCS.indexOf(gx.loc) < 0) delete d.noCycle; d.autoLoc = gx.loc; }
     }
     if (d.mode === 'expiry' && !d.due) { needDate('날짜를 넣어 주세요. 날짜 칸을 열어 둘게요.'); return; }
+    if (!d.id && d.mode === 'expiry' && d.due < today() && d.pastOk !== d.due) { d.pastOk = d.due; toast('날짜(' + dt(d.due) + ')가 이미 지났어요. 맞으면 \'등록하기\'를 한 번 더 눌러 주세요', 4500); return; }
     if (d.mode === 'cycle' && (!d.start || !d.days)) { toast('시작일과 주기를 넣어 주세요'); return; }
     var it = d.id ? S.items.filter(function (x) { return x.id === d.id; })[0] : null;
     var before = it && !d.renew ? editSnap(it) : null;
@@ -4362,7 +4384,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     if (now.length) {
       h += '<span class="wb-ic">' + now.slice(0, 2).map(function (id) { return PH[id] ? '<img alt="" src="' + PH[id] + '">' : '<i>' + IC.clothes + '</i>'; }).join('') + '</span>';
       var rep = now.some(function (id) { var l = lastWorn(id, t); return l && G.diffDays(t, l) < 7; });
-      h += '<span class="wb-t"><b>오늘</b> ' + esc(now.map(nameOf).join(' · ')) + (rep ? '<small style="color:var(--soon)">이번 주에 입은 옷</small>' : '') + '</span>';
+      h += '<span class="wb-t"><b>오늘</b> ' + esc(now.map(nameOf).join(' · ')) + (rep ? '<small style="color:var(--soon-t)">이번 주에 입은 옷</small>' : '') + '</span>';
     } else {
       h += '<span class="wb-t"><b>오늘 입은 옷</b><small>기록하기 · 달력</small></span>';
     }
@@ -4924,7 +4946,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
   function washRows(it) {
     if (it.cat !== 'clothes' || WEAR_LOCS.indexOf(it.loc) < 0) return '';
     var n = wearsSince(it), e = washEvery(it), all = wearsAll(it);
-    var h = '<div><span>세탁</span><span style="text-align:right' + (n >= e ? ';color:var(--soon);font-weight:700' : '') + '">' + (n >= e ? '세탁할 때예요 · ' : '') + '세탁 후 ' + n + '번 입었어요 · ' + e + '번 입으면 알려 드려요</span></div>';
+    var h = '<div><span>세탁</span><span style="text-align:right' + (n >= e ? ';color:var(--soon-t);font-weight:700' : '') + '">' + (n >= e ? '세탁할 때예요 · ' : '') + '세탁 후 ' + n + '번 입었어요 · ' + e + '번 입으면 알려 드려요</span></div>';
     if (it.price) h += '<div><span>1번 입을 때</span><span style="text-align:right">' + (all ? '약 ' + money(it.price / all, it.cur) + ' (' + all + '번 입음)' : '아직 입은 기록이 없어요') + '</span></div>';
     return h;
   }
@@ -4977,7 +4999,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
       if (it.loc !== '냉동') h += '<button class="btn full" data-a="freeze">' + IC.snow + '냉동실로 옮기기 (기한 늘리기)</button>';
       if (it.prep && PREP[it.prep]) h += '<div class="mlink full">🔪 <b>' + PREP[it.prep] + '</b>' + (it.prepAt ? ' · ' + md(it.prepAt) + '에 손질' : '') + ' · ' + md(it.due) + '까지 쓰기</div>';
       h += '<button class="btn full" data-a="prep">🔪 손질해 뒀어요 (다짐·썰기·데침)</button>';
-      var mfd = mealFor(it.id); h += mfd ? '<div class="mlink full">🗓 <b>' + esc(mealLabel(mfd.d, mfd.k)) + '</b> ' + esc(mfd.m.name) + '에 써요' + (G.itemDue(it) < mfd.d ? ' <span style="color:var(--over)">· 그 전에 기한이 끝나요</span>' : '') + '<button class="clink" data-a="meal">식단표</button></div>' : '<button class="clink full" data-a="meal" style="justify-self:start">🗓 식단표에 넣기</button>';
+      var mfd = mealFor(it.id); h += mfd ? '<div class="mlink full">🗓 <b>' + esc(mealLabel(mfd.d, mfd.k)) + '</b> ' + esc(mfd.m.name) + '에 써요' + (G.itemDue(it) < mfd.d ? ' <span style="color:var(--over-t)">· 그 전에 기한이 끝나요</span>' : '') + '<button class="clink" data-a="meal">식단표</button></div>' : '<button class="clink full" data-a="meal" style="justify-self:start">🗓 식단표에 넣기</button>';
     } else if (it.noCycle) {
       h += cstSeg(it);
       if (wearsSince(it) > 0 || it.cst === 'wash' || it.cst === 'cleaner') h += '<button class="btn soft full" data-a="wash">' + (it.cst === 'cleaner' ? '🧺 세탁소에서 찾았어요' : '🧺 세탁했어요') + '</button>';
@@ -5579,7 +5601,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
   var RGROUPS = { car: '자동차', home: '집 관리', pet: '반려동물' };
   var CONTRACTS = ['휴대폰 약정', '인터넷·TV 약정', '정수기 렌탈', '헬스장 회원권'];
   function monthsText(m) { return m % 12 === 0 ? (m / 12) + '년' : m + '개월'; }
-  function dt(s) { var m = md(s); return s.slice(0, 4) === today().slice(0, 4) || m.indexOf(s.slice(0, 4) + '.') === 0 ? m : s.slice(0, 4) + '.' + m; }
+  function dt(s) { s = String(s || ''); if (!/^\d{4}-\d{2}-\d{2}/.test(s)) return ''; var m = md(s); return s.slice(0, 4) === today().slice(0, 4) || m.indexOf(s.slice(0, 4) + '.') === 0 ? m : s.slice(0, 4) + '.' + m; }
   function ddayMeta(it, f) {
     f = f || G.ddayInfo(it, today());
     if (it.kind === 'sub') return f.trial ? '무료 체험 끝 ' + dt(f.due) + ' · 전에 해지하면 무료' : '다음 결제 ' + dt(f.due) + (it.price ? ' · ' + (it.cycle === 'year' ? '연 ' : '월 ') + money(it.price, it.cur) : '');
@@ -5736,7 +5758,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     openSheet(h, function (el) {
       function sync() {
         d.name = $('#d-name', el).value.trim();
-        var pr = $('#d-price', el); if (pr) { d.price = +pr.value || null; d.cur = curOf(el, 'd-price'); }
+        var pr = $('#d-price', el); if (pr) { var pv = +pr.value; d.badPrice = pr.value !== '' && !(pv >= 0); d.price = pv > 0 ? pv : null; d.cur = curOf(el, 'd-price'); }
         var st = $('#d-start', el); if (st) d.start = st.value;
         var te = $('#d-tend', el); if (te) d.trialEnd = te.value || d.trialEnd;
         var dd = $('#d-date', el); if (dd) d.date = dd.value;
@@ -5774,6 +5796,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
       $('[data-save]', el).onclick = function () {
         sync();
         if (!d.name) { toast('이름을 넣어 주세요'); return; }
+        if (d.badPrice) { badPriceMsg('d-price'); return; }
         if (k === 'anniv' || k === 'repeat' ? !d.date : !d.start) { needDate('날짜를 넣어 주세요. 날짜 칸을 열어 둘게요.'); return; }
         if (k === 'sub' && d.trialEnd && d.trialEnd < d.start) { toast('무료 체험 끝나는 날이 가입한 날보다 빨라요'); return; }
         if (!d.id && !d.dupOk && S.items.some(function (x) { return x.mode === 'dday' && x.kind === k && String(x.name).replace(/\s/g, '') === String(d.name).replace(/\s/g, ''); })) { d.dupOk = true; toast(eul(d.name) + ' 이미 있어요. 그래도 넣으려면 한 번 더 누르세요', 3200); return; }
@@ -6090,11 +6113,11 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     var tcs = tabsOn().filter(function (c) { return c !== 'stats'; });
     if (tcs.length > 1) h += '<div class="scats"><button class="chip' + (!statCat ? ' on' : '') + '" data-scat="">전체</button>' + tcs.map(function (c) { return '<button class="chip' + (statCat === c ? ' on' : '') + '" data-scat="' + c + '">' + TITLES[c] + '</button>'; }).join('') + '</div>';
     h += '<div class="stat-cards">' + (onF ?
-      '<div class="sc"><div class="k">버린 음식</div><div class="v" style="color:var(--over)">' + s.discard + '<small>개</small></div>' + delta(s.discard, prev.discard, true) + '</div>' +
+      '<div class="sc"><div class="k">버린 음식</div><div class="v" style="color:var(--over-t)">' + s.discard + '<small>개</small></div>' + delta(s.discard, prev.discard, true) + '</div>' +
       '' : '') + (onR ? '<div class="sc"><div class="k">교체한 물건</div><div class="v" style="color:var(--clothes)">' + s.replace + '<small>개</small></div>' + delta(s.replace, prev.replace, false) + '</div>' : '') + (onF ?
-      '<div class="sc"><div class="k">다 먹은 음식</div><div class="v" style="color:var(--ok)">' + s.eaten + '<small>개</small></div></div>' +
+      '<div class="sc"><div class="k">다 먹은 음식</div><div class="v" style="color:var(--ok-t)">' + s.eaten + '<small>개</small></div></div>' +
       '<div class="sc"><div class="k">음식 버린 비율</div><div class="v">' + (s.wasteRate == null ? '–' : s.wasteRate + '<small>%</small>') + '</div><div class="d same">산 음식 중 버린 비율</div></div>' +
-      '<div class="sc wide"><div class="k">버린 음식 금액</div><div class="v" style="color:var(--over)">' + bigMoney(s.wasteWon) + '</div>' +
+      '<div class="sc wide"><div class="k">버린 음식 금액</div><div class="v" style="color:var(--over-t)">' + bigMoney(s.wasteWon) + '</div>' +
         '<div class="d ' + (s.wasteWon > prev.wasteWon ? 'up' : s.wasteWon < prev.wasteWon ? 'down' : 'same') + '">' + (prev.wasteWon || s.wasteWon ? '지난달 ' + moneyK(prev.wasteWon, true) + ' · ' : '') + (s.discard ? '버린 ' + s.discard + '개 중 가격 있는 ' + s.wastePriced + '개 기준' : '등록할 때 가격을 넣으면 금액으로 보여 드려요') + '</div></div>' : '') +
       (s.carWon ? '<div class="sc wide"><div class="k">자동차 정비비</div><div class="v" style="color:var(--car)">' + bigMoney(s.carWon) + '</div></div>' : '') +
       (s.repWon ? '<div class="sc wide"><div class="k">생필품·옷 교체 비용</div><div class="v">' + bigMoney(s.repWon) + '</div></div>' : '') +
@@ -6103,7 +6126,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
         if (!sOn('dday')) return '';
         var fc = G.fixedCost(S.items, today(), fxRate());
         if (!fc.total && !s.savedWon) return '';
-        return '<div class="sc wide"><div class="k">구독·약정 (한 달)</div><div class="v" style="color:var(--dday)">' + bigMoney(fc.total) + '</div><div class="d same">' +
+        return '<div class="sc wide"><div class="k">구독·약정 (한 달)</div><div class="v" style="color:var(--dday-t)">' + bigMoney(fc.total) + '</div><div class="d same">' +
           (fc.nSub ? '구독 ' + fc.nSub + '개 ' + moneyK(fc.subs, true) : '') + (fc.contract ? (fc.nSub ? ' · ' : '') + '약정 ' + moneyK(fc.contract, true) : '') + (s.savedWon ? ' · 이달 해지로 ' + moneyK(s.savedWon, true) + ' 아낌' : '') + '</div></div>';
       })() +
       '</div>';
@@ -6135,28 +6158,37 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     return h + '</div>';
   }
 
-  /* 비밀번호 잠금: 비밀번호로 만든 열쇠(PBKDF2 20만 번)로 AES-GCM 256 암호화. 비밀번호와 열쇠는 어디에도 저장하지 않음 */
+  /* 비밀번호 잠금: 비밀번호로 만든 열쇠(PBKDF2-SHA256 60만 번, 파일의 it 칸에 적음 · 칸이 없는 예전 파일은 20만 번)로 AES-GCM 256 암호화. 비밀번호와 열쇠는 어디에도 저장하지 않음 */
   var LOCK = (function () {
     function ok() { return !!(window.crypto && crypto.subtle && crypto.getRandomValues && window.TextEncoder && window.TextDecoder); }
     function b64(u8) { var t = ''; for (var i = 0; i < u8.length; i += 0x8000) t += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(t); }
     function unb64(t) { var b = atob(String(t || '')), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
-    function key(pw, salt) {
+    var IT = 600000;
+    function key(pw, salt, it) {
       return crypto.subtle.importKey('raw', new TextEncoder().encode(String(pw)), 'PBKDF2', false, ['deriveKey']).then(function (k) {
-        return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: salt, iterations: 200000, hash: 'SHA-256' }, k, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+        return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: salt, iterations: it, hash: 'SHA-256' }, k, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
       });
     }
     function seal(text, pw) {
       var salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
-      return key(pw, salt).then(function (k) { return crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, k, new TextEncoder().encode(text)); })
-        .then(function (ct) { return { v: 1, s: b64(salt), i: b64(iv), d: b64(new Uint8Array(ct)) }; });
+      return key(pw, salt, IT).then(function (k) { return crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, k, new TextEncoder().encode(text)); })
+        .then(function (ct) { return { v: 1, it: IT, s: b64(salt), i: b64(iv), d: b64(new Uint8Array(ct)) }; });
     }
     function open(o, pw) {
       if (!o || typeof o.s !== 'string' || typeof o.i !== 'string' || typeof o.d !== 'string') return Promise.reject(new Error('bad'));
-      return key(pw, unb64(o.s)).then(function (k) { return crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(o.i) }, k, unb64(o.d)); })
+      var it = o.it == null ? 200000 : +o.it;
+      if (!(it >= 100000 && it <= 5000000 && it % 1 === 0)) return Promise.reject(new Error('bad'));
+      return key(pw, unb64(o.s), it).then(function (k) { return crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(o.i) }, k, unb64(o.d)); })
         .then(function (pt) { return new TextDecoder().decode(pt); });
     }
     return { ok: ok, seal: seal, open: open };
   })();
+  // 새 비밀번호: 8글자 이상, 숫자만이면 한 번 더 확인 (막지는 않음)
+  function pwOk(pw, el) {
+    if (pw.length < 8) { toast('비밀번호는 8글자 이상으로 해 주세요'); return false; }
+    if (/^\d+$/.test(pw) && el.dataset.numOk !== pw) { el.dataset.numOk = pw; toast('숫자만 쓰면 쉽게 풀릴 수 있어요. 글자를 섞어 주세요. 그대로 쓰려면 한 번 더 눌러 주세요', 5000); return false; }
+    return true;
+  }
   // ── 가족 공유: 목록을 글자로 보내고, 받은 쪽은 합치기 ──
   function famSend() {
     var cats = ['food', 'clothes', 'daily', 'car', 'dday'].filter(isOn);
@@ -6169,7 +6201,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     var nb = Object.keys(S.barcodes || {}).length;
     if (nb) h += '<p class="hint" style="margin:8px 2px 0">바코드로 이름을 넣은 상품 ' + nb + '개도 같이 보내요. 가족이 같은 상품을 찍으면 이름이 바로 나와요.</p>';
     h += '<div class="field" style="margin-top:12px"><label for="fam-name">보내는 사람 <span style="font-weight:400">(선택)</span></label><input class="inp" id="fam-name" maxlength="20" placeholder="예: 엄마" value="' + esc(S.set.famName || '') + '"></div>';
-    if (LOCK.ok()) h += '<div class="field"><label for="fam-pw">비밀번호 <span style="font-weight:400">(추천 · 넣으면 비밀번호를 아는 가족만 열 수 있어요)</span></label><input class="inp" id="fam-pw" type="password" autocomplete="new-password" maxlength="40" placeholder="6글자 이상 · 가족에게는 따로 말로 알려 주세요"></div>';
+    if (LOCK.ok()) h += '<div class="field"><label for="fam-pw">비밀번호 <span style="font-weight:400">(추천 · 넣으면 비밀번호를 아는 가족만 열 수 있어요)</span></label><input class="inp" id="fam-pw" type="password" autocomplete="new-password" maxlength="40" placeholder="8글자 이상 · 가족에게는 따로 말로 알려 주세요"></div>';
     h += '<button class="btn pri block" id="fam-go">' + IC.share + '카톡 등으로 보내기</button>';
     openSheet(h, function (el) {
       $('#fam-go', el).onclick = function () {
@@ -6185,7 +6217,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
         if (pick.indexOf('shop') >= 0) payload.shop = S.shop.filter(function (x) { return !x.done; });
         if (ic.indexOf('car') >= 0) payload.car = S.car;
         var pwEl = $('#fam-pw', el), pw = pwEl ? pwEl.value : '';
-        if (pw && pw.length < 6) { toast('비밀번호는 6글자 이상 넣어 주세요'); return; }
+        if (pw && !pwOk(pw, el)) return;
         var head = '[챙김이 가족 공유] ' + (S.set.famName ? S.set.famName + '님이 ' : '') + pick.map(function (c) { return c === 'shop' ? '장보기' : TITLES[c]; }).join('·') + ' 목록을 보냈어요.\n이 메시지를 길게 눌러 공유 → 챙김이를 고르면 합쳐져요. (또는 복사해서 챙김이 설정 → 가족이 보낸 것 받기)\n앱 받기: https://dlsdml99-create.github.io/gyoche-check/\n\n';
         closeSheet(true);
         if (pw) {
@@ -6277,7 +6309,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     var lc = S.set.chk[cat], ago = lc ? G.diffDays(t, lc) : null;
     var due = cat === 'food' ? (lc ? ago >= 7 : checkOverdue()) : false;
     return '<button class="strip ck-strip' + (due ? ' due' : '') + '" data-check="' + cat + '"><span><span class="ck-i">' + IC.check + '</span><b>1분 ' + (cat === 'food' ? '냉장고' : TITLES[cat]) + ' 정리</b> · ' +
-      (ago == null ? '옆으로 밀어서 다 먹은 건 지워요' : ago === 0 ? '오늘 정리했어요' : ago + '일 전에 정리') + '</span>' + IC.right + '</button>';
+      (ago == null ? (cat === 'food' ? '옆으로 밀어서 다 먹은 건 지워요' : '옆으로 밀어서 바꾼 건 기록해요') : ago === 0 ? '오늘 정리했어요' : ago + '일 전에 정리') + '</span>' + IC.right + '</button>';
   }
   function checkMode(cat) {
     var list = listOf(cat, today()).filter(function (x) { return !x.it.noCycle; }).sort(function (a, b) { return a.s.left - b.s.left; }).map(function (x) { return x.it.id; });
@@ -6545,7 +6577,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
       '<p class="lbl" style="margin-top:12px">쓸 재료 <span style="font-weight:400">· 고르면 그 날까지 기한을 챙겨요</span></p>' +
       (foods.length ? '<div class="used" id="me-items">' + foods.map(function (it) {
         var f = mealFor(it.id), other = f && !(f.d === d && f.k === k) && sel.indexOf(it.id) < 0 ? f : null, s = stat(it), late = G.itemDue(it) < d;
-        return '<label class="urow"><input type="checkbox" value="' + esc(it.id) + '"' + (sel.indexOf(it.id) >= 0 ? ' checked' : '') + '><span>' + esc(it.name) + (other ? ' <small style="color:var(--sub)">· ' + esc(mealLabel(other.d, other.k)) + '에 씀</small>' : '') + (late ? ' <small style="color:var(--over)">· 그 전에 기한 끝</small>' : '') + '</span><span class="dd ' + s.state + '" style="min-width:0;font-size:12px;padding:3px 8px">' + s.label + '</span></label>';
+        return '<label class="urow"><input type="checkbox" value="' + esc(it.id) + '"' + (sel.indexOf(it.id) >= 0 ? ' checked' : '') + '><span>' + esc(it.name) + (other ? ' <small style="color:var(--sub)">· ' + esc(mealLabel(other.d, other.k)) + '에 씀</small>' : '') + (late ? ' <small style="color:var(--over-t)">· 그 전에 기한 끝</small>' : '') + '</span><span class="dd ' + s.state + '" style="min-width:0;font-size:12px;padding:3px 8px">' + s.label + '</span></label>';
       }).join('') + '</div>' : '<p class="hint">음식 탭에 재료를 등록하면 여기서 고를 수 있어요.</p>') +
       '<button class="btn pri block" id="me-go" style="margin-top:12px">저장</button>' +
       (m.name && d <= t ? '<div class="row" style="gap:8px;margin-top:8px"><button class="btn soft" style="flex:1" data-mst="done">먹었어요</button><button class="btn" style="flex:1" data-mst="skip">못 먹었어요</button></div>' : '') +
@@ -6631,7 +6663,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
       '<p class="lbl" style="margin-top:12px">어디에 보관해요</p><div class="seg" id="pp-loc"><button data-loc="냉장" class="' + (loc0 === '냉장' ? 'on' : '') + '">냉장 (2일 안에)</button><button data-loc="냉동" class="' + (loc0 === '냉동' ? 'on' : '') + '">냉동 (한 달 안에)</button></div>' +
       '<p class="lbl" style="margin-top:12px">어디에 쓸 거예요 <span style="font-weight:400">· 선택</span></p><input class="inp" id="pp-dish" maxlength="30" placeholder="예: 계란말이" value="' + esc(it.dish || '') + '">' +
       (alt.length ? '<div class="presets" style="margin-top:6px">' + alt.map(function (n) { return '<button class="chip" data-pdish="' + esc(n) + '">' + esc(n) + '</button>'; }).join('') + '</div>' : '') +
-      (past ? '<p class="hint" style="color:var(--over)">기한이 지난 재료예요. 냄새·색을 확인하고 괜찮을 때만 보관해 주세요. 냉동해도 기한은 내일까지로 잡을게요.</p>' : '<p class="hint">손질한 재료는 상하기 쉬워서 냉장은 2일(원래 기한이 더 빠르면 그날), 냉동은 한 달 안에 쓰도록 기한을 바꿔요.</p>') +
+      (past ? '<p class="hint" style="color:var(--over-t)">기한이 지난 재료예요. 냄새·색을 확인하고 괜찮을 때만 보관해 주세요. 냉동해도 기한은 내일까지로 잡을게요.</p>' : '<p class="hint">손질한 재료는 상하기 쉬워서 냉장은 2일(원래 기한이 더 빠르면 그날), 냉동은 한 달 안에 쓰도록 기한을 바꿔요.</p>') +
       '<button class="btn pri block" id="pp-go">저장</button>';
     openSheet(h, function (el) {
       var loc = loc0;
@@ -6729,10 +6761,10 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
   function showWelcome() {
     S.set.welcomed = true; persist();
     openSheet('<h2>챙김이에 오신 걸 환영해요<button data-x>닫기</button></h2>' +
-      '<div class="news"><div class="nw"><span class="ico">' + IC.plus + '</span><span><b>1. 아래 탭을 고르고 + 를 눌러 등록</b><small>우유·칫솔·양말처럼 바꾸거나 먹어야 할 것을 넣어요. 영수증·바코드로 한 번에 넣을 수도 있어요.</small></span></div>' +
+      '<div class="news"><div class="nw"><span class="ico">' + IC.plus + '</span><span><b>1. 아래 탭을 고르고 화면 가운데 버튼으로 등록</b><small>우유·칫솔·양말처럼 바꾸거나 먹어야 할 것을 넣어요. \'직접 입력\'으로 적거나 \'영수증\'·\'바코드\'·\'말로\'로 한 번에 넣어요.</small></span></div>' +
       '<div class="nw"><span class="ico">' + IC.cal + '</span><span><b>2. 때가 되면 알려 드려요</b><small>기한이 다가오면 아침에 알림이 와요. 다 먹거나 바꾸면 눌러서 기록해 주세요.</small></span></div>' +
-      '<div class="nw"><span class="ico">' + IC.star + '</span><span><b>3. 자주 사는 건 ★ 내 품목에</b><small>다음부터 + 버튼에서 여러 개를 한 번에 등록해요.</small></span></div></div>' +
-      '<button class="btn pri block" data-x2 style="margin-top:12px">시작하기</button><p class="hint center"><a href="' + GUIDE_URL + '">설명서 자세히 보기</a></p>', function (el) {
+      '<div class="nw"><span class="ico">' + IC.star + '</span><span><b>3. 자주 사는 건 ★ 내 품목에</b><small>하나 넣은 뒤에는 오른쪽 아래 \'등록\' 버튼에서 여러 개를 한 번에 등록해요.</small></span></div></div>' +
+      '<button class="btn pri block" data-x2 style="margin-top:12px">시작하기</button><p class="hint center welcome-more"><a href="' + GUIDE_URL + '">설명서 자세히 보기</a></p>', function (el) {
       $('[data-x2]', el).onclick = function () { closeSheet(); };
     });
   }
@@ -6833,10 +6865,10 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     h += '<p class="sec-h">화면</p><div class="set"><div><span>글자 크기<small>부모님과 같이 쓸 때 크게</small></span><div class="seg" id="s-font" style="width:210px">' +
       [[1, '보통'], [1.15, '크게'], [1.3, '아주 크게']].map(function (x) { return '<button data-fs="' + x[0] + '" class="' + ((S.set.font || 1) === x[0] ? 'on' : '') + '">' + x[1] + '</button>'; }).join('') + '</div></div>' +
       '<div><span>새로 생긴 기능<small>이번 업데이트에서 바뀐 것</small></span><button class="btn" id="s-news">보기</button></div></div>';
-    h += '<div class="set"><div><span>테마</span><div class="seg" id="s-theme" style="width:210px">' +
-      [['auto', '자동'], ['light', '밝게'], ['dark', '어둡게']].map(function (x) { return '<button data-th="' + x[0] + '" class="' + (S.set.theme === x[0] ? 'on' : '') + '">' + x[1] + '</button>'; }).join('') + '</div></div></div>';
+    h += '<div class="set"><div><span>화면 색</span><div class="seg" id="s-theme" style="width:240px">' +
+      [['auto', '폰 설정 따라'], ['light', '밝게'], ['dark', '어둡게']].map(function (x) { return '<button data-th="' + x[0] + '" class="' + (S.set.theme === x[0] ? 'on' : '') + '">' + x[1] + '</button>'; }).join('') + '</div></div></div>';
     h += '<p class="sec-h">데이터</p><div class="set">' +
-      '<div><span>백업 복사<small>글자로 복사해 카톡 나와의 채팅 등에 보관 (사진 제외)</small></span><button class="btn" id="s-exp">복사</button></div>' +
+      '<div><span>백업 복사<small>글자로 복사해 카톡 나와의 채팅 등에 보관 (사진 제외) · 사진까지 남기려면 왼쪽 아래 버전 → \'백업 파일로 저장\'</small></span><button class="btn" id="s-exp">복사</button></div>' +
       '<div><span>복사한 백업 붙여넣기<small>복사해 둔 내용을 붙여넣어 되살려요</small></span><button class="btn" id="s-imp">붙여넣기</button></div>' +
       '<div><span>등록 ' + S.items.length + '개 · 기록 ' + S.events.length + '개</span><button class="btn warn" id="s-reset">모두 지우기</button></div></div>';
     h += '<p class="sec-h">도움말</p><div class="set"><div><span>사용 설명서<small>탭마다 쓰는 법·자주 묻는 질문</small></span><a class="btn" href="' + GUIDE_URL + '">열기</a></div><div><span>처음 안내 다시 보기</span><button class="btn" id="s-welcome">보기</button></div></div>';
@@ -6875,13 +6907,13 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     // 글자 백업: 전체 데이터(사진 빼고) · 비밀번호를 넣으면 잠가서 복사
     $('#s-exp').onclick = function () {
       openSheet('<h2>백업 복사<button data-x>닫기</button></h2><p class="hint" style="margin:-6px 2px 10px">등록한 물건·기록·장보기·내 품목·옷 기록·설정까지 모두 글자로 복사해요 (사진 제외). 카톡 나와의 채팅 등에 붙여넣어 두세요.</p>' +
-        '<div class="field"><label for="bx-pw">비밀번호 <span style="font-weight:400">(권장 · 6글자 이상)</span></label><input class="inp" id="bx-pw" type="password" autocomplete="new-password" maxlength="40" placeholder="비우면 잠그지 않아요"></div>' +
+        '<div class="field"><label for="bx-pw">비밀번호 <span style="font-weight:400">(선택, 8글자 이상)</span></label><input class="inp" id="bx-pw" type="password" autocomplete="new-password" maxlength="40" placeholder="비우면 잠그지 않아요"></div>' +
         '<button class="btn pri block" id="bx-go">복사하기</button><p class="hint">비밀번호를 잊으면 열 수 없어요. 잠그지 않으면 누구나 내용을 볼 수 있어요.</p>', function (el) {
         $('#bx-go', el).onclick = function () {
           var pw = $('#bx-pw', el).value, raw = JSON.stringify(S);
           var done = function (txt) { closeSheet(true); if (A && A.copy) { A.copy(txt); toast('복사했어요. 안전한 곳에 붙여넣어 두세요.'); } else if (navigator.clipboard) navigator.clipboard.writeText(txt).then(function () { toast('복사했어요'); }, function () { showText('백업 내용', txt); }); else showText('백업 내용', txt); };
           if (!pw) { done('GYOCHE2:' + raw); return; }
-          if (pw.length < 6) { toast('비밀번호는 6글자 이상 넣어 주세요'); return; }
+          if (!pwOk(pw, el)) return;
           if (!LOCK.ok()) { toast('이 폰에서는 잠글 수 없어요'); return; }
           LOCK.seal(raw, pw).then(function (o) { done('GYOCHE2L:' + JSON.stringify(o)); }, function () { toast('잠그지 못했어요'); });
         };
@@ -7070,12 +7102,13 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     S.tpl['휴지 30롤'] = { name: '휴지 30롤', cat: 'daily', mode: 'cycle', loc: '욕실', alert: 7, days: 30, n: 3, last: a(-58), hist: [a(-118), a(-88), a(-58)], store: '쿠팡' };
     S.fav = ['서울우유 1L', '계란 10구', '풀무원 두부', '신라면 5입', '칫솔', '수세미'];
     S.barcodes = {};
-    if (!DEMO) try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { if (!persist.warned) { persist.warned = 1; setTimeout(function () { toast('폰 저장 공간이 부족해 저장하지 못했어요. 백업한 뒤 사진을 정리해 주세요', 5000); }, 300); } }
+    if (!DEMO) try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { saveFail(); }
   }
 
   // ── 예시로 둘러보기: 내 기록과 섞이지 않게 따로 보여 주고, 닫으면 원래대로 (예시는 저장하지 않아요) ──
   var DEMO = false, REAL = null, DEMOV = null;
   function demoBtn() { return !DEMO && !PV && !S.items.length ? '<button class="clink demo-b" data-demo>예시로 둘러보기</button>' : ''; }
+  function saveFail() { var n = Date.now(); if (persist.warned && n - persist.warned < 30000) return; persist.warned = n; setTimeout(function () { toast('앱 저장 공간이 가득 차서 저장하지 못했어요. 오래된 기록을 지우거나 백업한 뒤 정리해 주세요', 6000); }, 300); }
   function enterDemo() {
     if (DEMO) return;
     REAL = S; DEMO = true; DEMOV = view;
@@ -7083,7 +7116,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
     demoData();
     document.body.insertAdjacentHTML('afterbegin', '<div class="pv" id="demo-bar" role="status"><span><b>예시를 보고 있어요</b> · 내 기록에는 저장되지 않아요</span><button id="demo-x">예시 닫기</button></div>');
     $('#demo-x').onclick = exitDemo;
-    var due = dueNow(); go(due.length ? due[0].it.cat : view);
+    go(view);
     toast('예시로 채운 화면이에요. 마음껏 눌러 보세요');
   }
   function exitDemo() {
@@ -7202,7 +7235,7 @@ nav.tabs button { font-size: 12px; min-height: 52px; }
 
 
 <!--APPINFO--><script>
-window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.13", "items": ["🚗 자동차 탭도 다른 탭처럼: + 버튼에서 '말로 기록'(\"엔진오일 오늘 갈았어 5만 2천 키로\")과 '정비 영수증 찍기'로 바꾼 부품·주행거리·비용을 한 번에 기록해요. 위쪽에 가격 비교도 생겼어요", "🎙 음식·생필품 빈 화면에도 '말로' 버튼이 생겼어요. 빈 화면 바로가기를 모든 탭에서 찍기 → 말로 → 직접 입력 순서로 맞췄어요", "★ 내 품목·추천(우유 등)을 고르면 보통 기한이 바로 들어가서, 날짜를 한 번 더 누르지 않아도 등록돼요. 포장지 날짜가 다르면 그때만 고쳐요", "👀 처음 쓰는 분은 빈 화면의 '예시로 둘러보기'로 미리 써 볼 수 있어요. 예시는 내 기록과 섞이지 않고, '예시 닫기'를 누르면 원래 화면으로 돌아와요", "🔎 찾기에서 '우유 이마트'처럼 띄어 쓰면 둘 다 맞는 것만 보여요. 목록이 5개 넘으면 기한순·이름순·최근 등록순으로 바꿔 봐요", "⚡ 물건이 수천 개여도 탭이 빨리 바뀌게 목록을 나눠서 그려요. 아래로 내리면 이어서 나와요", "✏️ 문구 다듬기: '을(를)' 같은 표기를 없애고 띄어쓰기를 맞췄어요(넣어 주세요·챙겨 드려요). '만든 지 0일' → '오늘 만듦', 등록 버튼은 모두 '등록하기'로", "👆 닫기·칩·위쪽 버튼을 누르기 쉽게 키우고, 밝은 화면의 주황·초록 글자를 더 진하게 했어요. '아주 크게' 글씨에서 + 버튼이 빈 화면 안내를 가리지 않아요", "🔐 보안: 백업·가족 공유 비밀번호는 이제 6글자 이상(예전 4글자 백업도 그대로 열려요). 폰 자동 백업에서 앱 기록을 빼고, 바깥 링크는 챙김이 주소만 열어요"]}, {"v": "v1.40", "d": "2026.11.12", "items": ["✏️ 문구 다듬기: 같은 일을 다르게 부르던 말을 맞췄어요. 편집·삭제·수정 → 고치기·지우기, ⋮ 간단 수정 → 빠르게 고치기", "💬 '점검하세요'·'등록하세요'처럼 시키는 말투를 '점검해 주세요'처럼 부드럽게 바꾸고, 띄어쓰기(알려 드려요)를 맞췄어요"]}, {"v": "v1.39", "d": "2026.11.12", "items": ["🔐 보안: 가족 공유·백업 글에 화면 코드가 섞여 들어와도 실행되지 않게 막았어요(테스터가 찾은 문제). 받은 글은 안전한 글자만 남기고 정리해요", "🛡 백업 붙여넣기 전에 지금 기록과 백업의 물건·기록 개수를 보여 주고 한 번 더 물어봐요. 바꾼 뒤에도 '되돌리기'로 원래 기록으로 돌아갈 수 있어요", "망가졌거나 빈 백업 파일은 불러오지 않아요(기록이 0개가 되던 문제). 폰 저장 공간이 부족해 저장이 안 되면 알려 드려요", "생필품·옷을 '새로 사서 바꿨어요' 뒤에도 '비용 적기'가 나와요. 놓쳤다면 물건을 열어 지난 기록 옆 '비용 적기'로 나중에 적어요", "자동차 부품 '교체했어요'도 바로 되돌릴 수 있고, 부품 고르기에서 주행거리 칸에 숫자가 이어 써지던 문제를 고쳤어요(지금보다 큰 값은 막아요)", "같은 물건을 합치면 금액도 합쳐져서 버린 금액과 장보기 가계부가 서로 맞아요. '1개 먹었어요·버렸어요'도 되돌릴 수 있어요", "식단표: 재료를 먼저 다 먹은 끼니는 '⚠ 재료 없음'으로 보여 주고, 손질할 때 '어디에 쓸지' 적은 재료는 그 요리에 먼저 써요", "영양제처럼 기한이 있는 생필품도 여러 개면 '1개 다 써서 새것 뜯었어요'로 수량을 줄여요. 세탁소에 맡긴 옷은 '세탁소에서 찾았어요'로 보여요", "좁은 화면·큰 글씨에서 목록 둘째 줄(날짜)이 잘리지 않고, 글자가 단어 중간에서 끊기지 않게 했어요. 장보기에 '파스'처럼 적으면 생필품으로 들어가요"]}, {"v": "v1.33", "d": "2026.11.11", "items": ["🗓 식단표에서 '먹었어요'를 누르면 그 끼니에 쓴 재료가 한 번에 나와요. 다 먹음·조금 남음·그대로만 고르면 음식 목록이 정리되고, 되돌릴 수도 있어요", "🪥 생필품을 여러 개 사 뒀다면 '예비에서 꺼내 바꿨어요'를 눌러요. 수량이 하나 줄고, 마지막 예비를 꺼내면 장보기에 저절로 담겨요", "생필품·옷을 바꾼 뒤 '비용 적기'로 얼마 들었는지 남기면 통계와 연말 결산에 모여요. '오늘 새 걸로 바꿨어요'도 바로 되돌릴 수 있어요", "⋮ 간단 수정에서 수량을 바로 고치고, 자동차 부품은 지금 주행거리도 고쳐요", "좁은 화면에서 '아주 크게' 글씨를 써도 제목·자동차 주행거리·물건 이름이 잘리지 않게 줄을 나눴어요", "🔐 보안: 앱 서명 키를 더 안전한 새 키로 바꿀 준비를 했어요 (앱을 지우지 않고 그대로 업데이트돼요)"]}, {"v": "v1.32", "d": "2026.11.11", "items": ["테스터 5명 점검 반영: 식단표·못 먹은 끼니·음식 묶음에서 '레시피 보기'가 안 열리던 문제를 고쳤어요", "빈 저녁 알아서 채우기가 같은 재료를 여러 끼에 쓰지 않고, 그날까지 기한이 남은 재료만 써요. 비운 칸은 되돌릴 수 있어요", "손질해 뒀어요: 원래 기한보다 늘어나지 않게 했고(냉장은 2일과 원래 기한 중 빠른 날), 기한 지난 재료는 냉동해도 내일까지로 잡아요. 음식 자세히 보기에도 손질한 날이 보여요", "주유 기록: 금액만 적은 주유도 1km당 기름값에 넣고, 이전·이후 기록과 안 맞는 주행거리는 막아요. 지운 주유 기록이 가족 공유로 되살아나지 않고, 연말 결산에 기름값이 빠지지 않아요", "세탁소·빌려준 옷은 목록 오른쪽에도 그 상태로 보여요. '어제 입었어요'처럼 쉬운 말로 바꿨어요"]}, {"v": "v1.31", "d": "2026.11.11", "items": ["🗓 식단표: 1주일 점심·도시락·저녁(아침도 켤 수 있어요) 칸에 메뉴와 쓸 재료를 넣어요. '숙주나물'처럼 적으면 숙주를 저절로 골라 주고, 재료 기한이 그날보다 먼저 끝나면 ⚠로 알려 줘요", "빈 저녁 알아서 채우기(급한 재료 먼저)와 이번 주 모자란 재료 장보기에 담기가 돼요. 식단에 넣은 재료는 음식 목록에 '🗓 수 저녁 숙주나물'처럼 보여요", "끼니가 지나면 '드셨어요?'를 물어봐요. 못 먹었으면 다른 날로 옮기거나, 그 재료로 만들 다른 요리를 바로 골라요", "🔪 손질해 뒀어요: 다짐·썰기·데침·양념을 기록하고, 어디에 쓸지(예: 계란말이) 적어 둬요. 냉장은 2일, 냉동은 한 달로 기한을 바꾸고 목록에 '🔪 다져 둠'으로 보여요"]}, {"v": "v1.30", "d": "2026.11.11", "items": ["⛽ 주유 기록: 자동차 탭에서 '주유 기록하기'를 누르고 금액만 넣으면 돼요. 주행거리와 리터를 넣으면 연비와 1km당 기름값을 계산하고, 이번 달·올해 기름값을 통계와 결산에 모아 보여 드려요", "👕 옷이 지금 어디 있는지 표시해요: 옷장에 있어요·세탁 중·세탁소·빌려줬어요. 입을 수 없는 옷은 '안 겹치게 골라주기'·여행 짐·아침 옷 추천에서 빼요", "세탁소에 맡긴 지 5일, 빌려준 지 30일이 지나면 아침 알림으로 알려 드려요. 그 옷을 입거나 '세탁했어요'를 누르면 다시 옷장에 있는 걸로 바뀌어요", "📝 표현을 다듬었어요: '빨았어요'→'세탁했어요', '빨 때 됐어요'→'세탁할 때예요' 등 누구나 헷갈리지 않는 말로 바꿨어요"]}, {"v": "v1.29", "d": "2026.11.11", "items": ["🍳 레시피가 113가지에서 247가지로 늘었어요: 양식(까르보나라·함박스테이크·감자 수프)·중식(탕수육·고추잡채)·일식(오야꼬동·밀푀유나베)·아시아(팟타이·쌀국수·월남쌈)·가벼운 식사(포케·두부 샐러드)·간식까지", "👶 아이가 잘 먹는 메뉴 74가지를 따로 모아 봐요 (동그랑땡·떡갈비·치킨너겟·메추리알 장조림·모양 주먹밥 등)", "레시피 목록에서 한식·양식·중식·일식·아시아·가벼운·👶 아이·간식·15분 이내로 골라 보고, 요리나 재료 이름으로 찾아요", "지금 재료로 만들 수 있는 요리 아래에 '다른 요리 둘러보기'가 생겼어요. 없는 재료는 버튼 한 번으로 장보기에 담아요", "단호박·명란·또띠아·아보카도·쌀국수·메밀면·게맛살·메추리알·연근·우엉·꽁치·갈치·삼치 등 재료 23가지를 더 알아봐요"]}, {"v": "v1.28", "d": "2026.11.09", "items": ["🧳 여행 짐에 👶 아이 옷이 생겼어요. 아이 옷 사이즈에 적은 아이마다 상의·하의·속옷·여벌 옷을 넉넉하게, 사이즈까지 넣어 드려요", "🏊 수영 물품(수영복·래시가드·수모·수경·비치타월·방수팩 등)과 🩴 호텔 슬리퍼를 넣었어요", "✏️ 짐 종류를 내 마음대로: 새 종류 만들기(캠핑·아기 용품·스키 등 추천을 누르면 짐까지 한 번에), 이름 고치기, 순서 바꾸기, 지우기", "챙길 종류를 눌러 켜고 꺼요 (이번에 수영 안 하면 끄기). 짐을 넣을 때 종류를 고르면 다음 여행에도 나와요"]}, {"v": "v1.27", "d": "2026.11.09", "items": ["🍳 장보기에서 '요리 재료 한 번에 담기': 불고기처럼 만들 요리를 적으면 필요한 재료가 체크 목록으로 나와요. 집에 있는 건 빼고, 양념 같은 건 직접 더 넣어요", "장보기 목록이 요리별로 묶여 보이고, 사서 체크하면 음식 탭에서도 '🍳 불고기' 묶음으로 모여요 (위쪽 칩을 누르면 그 요리 재료만)", "처음 사는 재료도 한 번에 등록돼요 (날짜는 대략으로 넣고, 나중에 눌러서 고쳐요)", "🥬 남은 양 표시: 양배추처럼 다 못 쓴 건 '½ 남음'·'조금 남음'으로 표시해요 (음식 상세에서 한 번 누르기)"]}, {"v": "v1.26", "d": "2026.11.09", "items": ["🌙 음력 기념일: '음력이에요'를 켜면 부모님 생신·제사를 해마다 양력 날짜로 바꿔 알려 드려요 (말로 '음력 8월 15일'도 돼요)", "🧳 여행 짐에 원하는 짐을 넣고 빼요. '여행 끝'으로 목록을 지워요", "💊 종합비타민·비타민D·오메가3·유산균 추천이 생겼고, 영양제는 등록하면 바로 매일 체크가 켜져요", "🛒 장보기 항목을 눌러 이름·메모(개수·브랜드)를 고치고, 내 기록이 있으면 바로 최저가를 봐요", "👕 코디 이름 바꾸기, 옷 이름을 바꾸면 코디 이름도 따라가요. '모두 세탁했어요'도 되돌릴 수 있어요", "🚗 교체 기록의 비용·정비소를 나중에 고쳐요. '차 바꾸기'로 새 차를 처음부터 시작해요. 주행거리가 갑자기 많이 늘면 한 번 더 확인해요", "3일 식단 지우기, 바코드로 기억한 상품 지우기(설정 → 내 품목)", "D-day 점검·반려동물 약도 '준비물 장보기에 담기'가 돼요. 계절 안내 카드에서 바로 장보기에 담아요", "1분 냉장고 정리에 '냉동실로 옮기기'가 생겼고, 중간에 닫아도 오늘 안에는 이어서 해요", "처음 열면 세 줄 안내가 나와요. 설정에 사용 설명서와 '처음 안내 다시 보기'가 생겼어요", "아침 알림 끝에 세탁할 옷·오늘 먹을 약·아이 옷 사이즈를 한 줄로 알려 드려요"]}, {"v": "v1.25", "d": "2026.11.09", "items": ["🛒 장보기에서 산 것을 여러 개 체크하고 한 번에 등록해요. 전에 산 물건은 지난번 기준으로 바로 등록되고, 처음 사는 것만 날짜를 물어봐요", "같은 이름·같은 날짜 물건은 새 줄 대신 수량을 합쳐요. 기한 지난 같은 물건이 있으면 정리할지 물어봐요", "생필품에 '다 써서 목록에서 빼기'가 생겼고, 다 먹었어요·버렸어요·다 썼어요는 바로 되돌릴 수 있어요", "해지했던 구독을 다시 넣으면 지난번 금액을 채워요. 원↔$를 바꾸면 넣은 금액을 환산해요", "무료 체험 중인 구독은 고정 지출에서 빼요. 가입한 지 얼마 안 된 구독엔 '이번 달 썼어요?'를 묻지 않아요", "찾기에서 연 물건은 뒤로 가면 찾기 결과로 돌아가요. 찾기의 장보기 항목을 누르면 장보기가 열려요", "날짜 고르기는 이번 달 달력부터 열리고, 년→월→일 순서로 이어서 골라요", "'나이키 운동화'처럼 직접 적어도 신발 칸·주기를 알아서 맞춰요. 안 겹치게 골라주기는 누를 때마다 다른 조합을 보여줘요", "여행 짐·안 입는 옷 정리에서 철 지난 옷은 빼요. 여행 날짜를 바꿔도 체크가 남아요", "자동차: 교체 창을 닫으면 상세로, 같은 부품 중복 경고, 자동차세 날짜 6/30·12/31, 기본 부품을 안 고르고 누르면 안내", "버전 정보 창이 앱의 어둡게 테마를 따라요. 다 먹음 기록을 지우면 수량도 1개 돌아와요"]}, {"v": "v1.24", "d": "2026.11.09", "items": ["큰 글씨에서 자동차 카드의 주행거리(km)가 두 줄로 나뉘던 문제를 고쳤어요"]}, {"v": "v1.23", "d": "2026.11.09", "items": ["★ '내 품목'으로 이름을 통일했어요. 음식·옷·생필품·자동차·D-day 모든 탭에서 넣고 지울 수 있고, 지우면 추천·빠른 재등록·곧 떨어질 것에서도 사라져요", "기본 추천(우유·넷플릭스 등)도 ✕로 지울 수 있어요. '지운 추천 다시 보기'로 되살려요", "D-day·자동차 등록 화면에도 ★ 내 품목이 맨 앞에 나오고, 구독은 금액·주기까지 기억해요", "물건을 지울 때 장보기·내 품목·가격 기록·지난 기록까지 같이 지울지 골라요", "장보기에서 체크한 뒤 등록 창을 닫아도 장보기에서 사라지지 않고, 등록하면 같은 물건은 장보기에서 저절로 빠져요", "통계·D-day·자동차의 기록도 눌러서 지울 수 있고, D-day '했어요'·'해지했어요'·칫솔 체크는 되돌리기가 생겼어요", "자동차 교체 기록을 지우면 마지막 교체 날짜·km가 그 전으로 돌아가요. 미래 날짜와 말이 안 되는 km는 막아요", "말로 등록에서 '3만원'·'5천원'을 잘못 읽던 문제를 고쳤어요", "글자 백업이 전체 데이터를 담고 비밀번호로 잠글 수 있어요. '모두 지우기'는 정말 전부 지워요", "소비기한 지난 재료는 요리 추천에서 빼요. 다 쓴 재료 정리는 1개씩 줄여요", "수정 창을 닫으면 보던 상세로 돌아가고, 입력 중인 창은 바깥을 눌러도 안 닫혀요", "옷: 직접 고른 옷도 코디로 저장, 옷을 지우면 코디에서도 빠져요. 그 밖에 조사·날짜(먼 날짜는 연도 표시) 등 30여 가지를 고쳤어요"]}, {"v": "v1.22", "d": "2026.11.08", "items": ["🗑️ 자주 쓰는 물품·내 품목에 줄마다 '삭제' 버튼이 생겼어요. 등록 화면의 '편집·삭제'를 눌러도 바로 열려요", "🗑️ 등록했던 물건 기록도 지울 수 있어요. 다시 안 살 물건은 빠른 재등록·'곧 떨어질 것'에서 빠져요", "🗑️ 잘못 누른 '지난 기록'과 잘못 넣은 가격 기록도 한 줄씩 지워요", "✋ 지울 때는 한 번 더 물어봐요 (장보기 빼기·코디·옷 정리·주행 기록·자주 쓰는 물품). '취소'를 누르면 보던 화면으로 돌아가요"]}, {"v": "v1.21", "d": "2026.11.08", "items": ["📤 장보기·여행 짐·정리할 옷 목록을 한 번에 카톡 등으로 보내요 (복사·붙여넣기 안 해도 돼요)", "↩️ 3일 식단이나 요리 목록에서 레시피를 열었다가 뒤로 가면 원래 화면으로 돌아가요", "음식을 누르면 '다 먹었어요'·'버렸어요' 버튼이 맨 위에 바로 보여요 (보관 팁은 그 아래로)", "🧳 여행 짐을 체크하면 '몇 개 챙겼어요'가 바로 바뀌고, 다 챙기면 알려줘요", "3일 식단을 닫으면 음식 탭의 오늘 메뉴도 바로 바뀌어요"]}, {"v": "v1.20", "d": "2026.11.08", "items": ["🧊 보관 팁: 음식마다 알맞은 보관법과 냉동하면 얼마나 가는지 알려줘요", "🕐 기한 지난 음식 안내: 유통기한이 지났으면 버리기 전에 확인할 것을, 소비기한이 지났으면 버리라고 알려줘요", "🛒 장보기를 마트 코너별로: 채소·정육·우유·생활용품처럼 코너 순서로 묶어서 덜 돌아다녀요", "💊 약·영양제 매일 체크: 생필품 탭 위에서 오늘 먹었는지 누르고, 며칠째인지 보여줘요", "★ 레시피 즐겨찾기: 마음에 든 요리를 모아 두고 바로 열어요", "🧾 옷 탭에서도 영수증·바코드로 등록해요", "장보기에 같은 걸 또 적으면 '이미 목록에 있어요'라고 알려줘요", "다크 모드에서 '장보기에 담기' 버튼이 잘 보이게 고쳤어요", "🛡️ 백업 파일이 망가져 있어도 앱이 멈추지 않아요 (전에는 앱이 아예 열리지 않았어요)", "옷장으로만 관리하는 옷 상세에 '99999일 남았어요' 대신 마지막으로 입은 날이 나와요", "장보기 목록 이름표 바로잡기: 직접 담은 건 '직접 담음', 다 써서 담은 건 '다 써서 담음'", "통계 문구 '다음 달 0원에 다시 도전' → '0개에 다시 도전'", "공유받은 글이 너무 길거나 이름이 너무 길면 알맞게 잘라요"]}, {"v": "v1.19", "d": "2026.11.08", "items": ["🛒 다 먹었어요·버렸어요·교체했어요를 누르면 '장보기에 담기' 버튼이 바로 떠요. '다음부터 자동으로'를 누르면 다음엔 저절로 담겨요", "1분 냉장고 정리에서 교체한 자주 쓰는 물품도 장보기에 담겨요", "다운로드·설명서 페이지가 느린 인터넷에서도 하얀 화면 없이 바로 떠요"]}, {"v": "v1.18", "d": "2026.11.05", "items": ["세탁 체크: 옷마다 몇 번 입고 세탁할지 정해 두면 '세탁할 때예요'라고 알려 주고, '세탁했어요' 한 번이면 끝", "옷 1회 비용: 산 가격 ÷ 입은 횟수", "통계를 탭별로: 전체 · 음식 · 옷처럼 골라서 보기", "여행 짐 싸기: 떠나는 날과 며칠인지만 넣으면 내 옷장에서 짐 목록을 만들어 체크", "아이 옷 사이즈: 키·상의·하의·신발 기록, 작아질 때와 다음 사이즈 알려 주기", "보안: 백업 파일과 가족 공유를 비밀번호로 잠글 수 있어요", "보안: 앱 화면이 정해진 곳(GitHub 새 버전 확인) 말고는 인터넷에 연결하지 못하게 막음, 배포용 빌드만 올림", "아이폰·PC에서 쓰는 웹앱 주소가 생겼어요"]}, {"v": "v1.17", "d": "2026.11.05", "items": ["통계도 다른 탭처럼: 찾기·장보기 버튼, 이달 입은 옷, 기록을 누르면 그 물건 열기", "설정에서 켠 탭만 통계·결산 카드·장보기 가계부에 보여요", "보안 강화: 앱 화면은 폰의 다른 파일을 못 읽고, 업데이트는 챙김이 저장소 주소만 받고, 알림 신호를 흉내 낼 수 없게"]}, {"v": "v1.16", "d": "2026.11.05", "items": ["수정 버튼을 물건 이름 바로 옆으로 옮겼어요 (모든 탭)", "목록의 ⋮ 버튼으로 간단 수정: 이름·날짜(유통/소비기한)·메모, 냉동실로 옮기기, D-day는 금액도", "수정해서 저장하면 그 전 기록은 자세히 보기에서 안 보여요 (통계는 그대로)", "옷 탭에 상의·하의 추가, 옷 사진 찍어서 바로 등록", "오늘 입은 옷 달력: 평소엔 접어 두고, 펼치면 날마다 입은 옷 사진·이달 자주 입은 옷·안 입은 옷", "지난주에 입은 옷은 노란색으로 알려주고 '안 겹치게 골라주기'", "계절 맞춤: 옷마다 사계절·여름·봄가을·겨울, 지금 계절 옷부터 골라 줘요", "코디 저장: 자주 입는 상의+하의를 한 번에", "두 달 넘게 안 입은 옷 정리 · 기부·중고용 목록 복사", "상의·하의는 교체 주기 없이 옷장으로만 관리 (켤 수 있어요)", "아침 알림에 오늘 입을 옷 추천 한 줄"]}, {"v": "v1.15", "d": "2026.11.05", "items": ["왼쪽 아래 버전 → 내 데이터 백업: 기록을 파일로 저장했다가 새 폰에서 불러오기"]}, {"v": "v1.14", "d": "2026.11.01", "items": ["D-day 탭도 다른 탭처럼: 위쪽 지난 날·곧 다가와요·여유 요약(눌러서 거르기), 장보기 버튼, 사진 넣기, 말로 등록", "말로 D-day 등록: \"넷플릭스 만칠천 원 매달 15일\", \"엄마 생신 3월 5일\"", "기념일 선물·준비물을 장보기에 담기, 자동차 부품도 장보기에 담기", "통계 탭별에 D-day(해지·점검한 개수)도 보여요"]}, {"v": "v1.13", "d": "2026.11.01", "items": ["날짜 없이 등록하면 날짜 칸으로 바로 데려가 빨갛게 표시하고, 년도 고르기를 열어 줘요", "6개월·1년 같은 교체 주기를 달력 기준으로 계산해요 (11월 1일 + 6개월 = 5월 1일)"]}, {"v": "v1.12", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 폰에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때와, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄)만 써요.", "backup": {"keys": ["gyoche_v1"], "idb": [{"db": "gyoche_photos", "store": "p"}], "bridge": "Android"}};
+window.APP_INFO={"name": "챙김이", "repo": "dlsdml99-create/gyoche-check", "version": "", "mount": "#ver", "notes": [{"v": "current", "d": "2026.11.13", "items": ["🚗 자동차 탭도 다른 탭처럼: + 버튼에서 '말로 기록'(\"엔진오일 오늘 갈았어 5만 2천 키로\")과 '정비 영수증 찍기'로 바꾼 부품·주행거리·비용을 한 번에 기록해요. 위쪽에 가격 비교도 생겼어요", "🎙 음식·생필품 빈 화면에도 '말로' 버튼이 생겼어요. 빈 화면 바로가기를 모든 탭에서 찍기 → 말로 → 직접 입력 순서로 맞췄어요", "★ 내 품목·추천(우유 등)을 고르면 보통 기한이 바로 들어가서, 날짜를 한 번 더 누르지 않아도 등록돼요. 포장지 날짜가 다르면 그때만 고쳐요", "👀 처음 쓰는 분은 빈 화면의 '예시로 둘러보기'로 미리 써 볼 수 있어요. 예시는 내 기록과 섞이지 않고, '예시 닫기'를 누르면 원래 화면으로 돌아와요", "🔎 찾기에서 '우유 이마트'처럼 띄어 쓰면 둘 다 맞는 것만 보여요. 목록이 5개 넘으면 기한순·이름순·최근 등록순으로 바꿔 봐요", "⚡ 물건이 수천 개여도 탭이 빨리 바뀌게 목록을 나눠서 그려요. 아래로 내리면 이어서 나와요", "✏️ 문구 다듬기: '을(를)' 같은 표기를 없애고 띄어쓰기를 맞췄어요(넣어 주세요·챙겨 드려요). '만든 지 0일' → '오늘 만듦', 등록 버튼은 모두 '등록하기'로", "👆 닫기·칩·위쪽 버튼을 누르기 쉽게 키우고, 밝은 화면의 주황·초록 글자를 더 진하게 했어요. '아주 크게' 글씨에서 + 버튼이 빈 화면 안내를 가리지 않아요", "👀 '예시로 둘러보기'를 누르면 지금 보던 탭의 예시가 열려요 (전에는 어느 탭에서 눌러도 자동차 탭으로 넘어갔어요)", "💰 금액 칸에 마이너스 숫자를 넣으면 알려 드리고 저장하지 않아요. 지난 날짜로 음식을 등록하면 한 번 더 물어봐요", "🚗 다음 교체일이 내년이면 연도까지 보여요(예: 2027.5.13). 말로 기록에서 '이틀 전·사흘 전·지난주·지난달·2주 전'도 알아들어요", "🔤 이름순 정렬에서 숫자를 크기대로 줄 세워요(우유 2L → 우유 10L). 옷·생필품의 '1분 정리' 안내를 그 탭에 맞는 말로 고쳤어요", "👆 물건 자세히 보기의 고치기·수량 −/+·남은 양 버튼과 작은 글자 버튼, 왼쪽 아래 버전 글씨를 누르기 쉽게 키웠어요. 처음 안내 창도 지금 화면에 맞게 고쳤어요", "💾 앱 저장 공간이 가득 차서 저장하지 못하면, 한 번만이 아니라 다시 실패할 때마다 알려 드려요", "✏️ 설정 '테마'를 '화면 색(폰 설정 따라·밝게·어둡게)'으로 바꾸고, 앱 정보 창 글자가 단어 중간에서 끊기지 않게 했어요. 사용 설명서의 옛말(삭제·편집·수정)도 고치기·지우기로 맞췄어요", "🔐 보안: 백업·가족 공유 비밀번호는 이제 8글자 이상이고 더 튼튼하게 잠가요(예전 백업도 그대로 열려요). 숫자만 쓰면 한 번 더 알려 드려요. 가족이 보낸 글에 잘못된 날짜가 섞여 있으면 빼고 받아요. 폰 자동 백업에서 앱 기록을 빼고, 바깥 링크는 챙김이 주소만 열어요"]}, {"v": "v1.40", "d": "2026.11.12", "items": ["✏️ 문구 다듬기: 같은 일을 다르게 부르던 말을 맞췄어요. 편집·삭제·수정 → 고치기·지우기, ⋮ 간단 수정 → 빠르게 고치기", "💬 '점검하세요'·'등록하세요'처럼 시키는 말투를 '점검해 주세요'처럼 부드럽게 바꾸고, 띄어쓰기(알려 드려요)를 맞췄어요"]}, {"v": "v1.39", "d": "2026.11.12", "items": ["🔐 보안: 가족 공유·백업 글에 화면 코드가 섞여 들어와도 실행되지 않게 막았어요(테스터가 찾은 문제). 받은 글은 안전한 글자만 남기고 정리해요", "🛡 백업 붙여넣기 전에 지금 기록과 백업의 물건·기록 개수를 보여 주고 한 번 더 물어봐요. 바꾼 뒤에도 '되돌리기'로 원래 기록으로 돌아갈 수 있어요", "망가졌거나 빈 백업 파일은 불러오지 않아요(기록이 0개가 되던 문제). 폰 저장 공간이 부족해 저장이 안 되면 알려 드려요", "생필품·옷을 '새로 사서 바꿨어요' 뒤에도 '비용 적기'가 나와요. 놓쳤다면 물건을 열어 지난 기록 옆 '비용 적기'로 나중에 적어요", "자동차 부품 '교체했어요'도 바로 되돌릴 수 있고, 부품 고르기에서 주행거리 칸에 숫자가 이어 써지던 문제를 고쳤어요(지금보다 큰 값은 막아요)", "같은 물건을 합치면 금액도 합쳐져서 버린 금액과 장보기 가계부가 서로 맞아요. '1개 먹었어요·버렸어요'도 되돌릴 수 있어요", "식단표: 재료를 먼저 다 먹은 끼니는 '⚠ 재료 없음'으로 보여 주고, 손질할 때 '어디에 쓸지' 적은 재료는 그 요리에 먼저 써요", "영양제처럼 기한이 있는 생필품도 여러 개면 '1개 다 써서 새것 뜯었어요'로 수량을 줄여요. 세탁소에 맡긴 옷은 '세탁소에서 찾았어요'로 보여요", "좁은 화면·큰 글씨에서 목록 둘째 줄(날짜)이 잘리지 않고, 글자가 단어 중간에서 끊기지 않게 했어요. 장보기에 '파스'처럼 적으면 생필품으로 들어가요"]}, {"v": "v1.33", "d": "2026.11.11", "items": ["🗓 식단표에서 '먹었어요'를 누르면 그 끼니에 쓴 재료가 한 번에 나와요. 다 먹음·조금 남음·그대로만 고르면 음식 목록이 정리되고, 되돌릴 수도 있어요", "🪥 생필품을 여러 개 사 뒀다면 '예비에서 꺼내 바꿨어요'를 눌러요. 수량이 하나 줄고, 마지막 예비를 꺼내면 장보기에 저절로 담겨요", "생필품·옷을 바꾼 뒤 '비용 적기'로 얼마 들었는지 남기면 통계와 연말 결산에 모여요. '오늘 새 걸로 바꿨어요'도 바로 되돌릴 수 있어요", "⋮ 간단 수정에서 수량을 바로 고치고, 자동차 부품은 지금 주행거리도 고쳐요", "좁은 화면에서 '아주 크게' 글씨를 써도 제목·자동차 주행거리·물건 이름이 잘리지 않게 줄을 나눴어요", "🔐 보안: 앱 서명 키를 더 안전한 새 키로 바꿀 준비를 했어요 (앱을 지우지 않고 그대로 업데이트돼요)"]}, {"v": "v1.32", "d": "2026.11.11", "items": ["테스터 5명 점검 반영: 식단표·못 먹은 끼니·음식 묶음에서 '레시피 보기'가 안 열리던 문제를 고쳤어요", "빈 저녁 알아서 채우기가 같은 재료를 여러 끼에 쓰지 않고, 그날까지 기한이 남은 재료만 써요. 비운 칸은 되돌릴 수 있어요", "손질해 뒀어요: 원래 기한보다 늘어나지 않게 했고(냉장은 2일과 원래 기한 중 빠른 날), 기한 지난 재료는 냉동해도 내일까지로 잡아요. 음식 자세히 보기에도 손질한 날이 보여요", "주유 기록: 금액만 적은 주유도 1km당 기름값에 넣고, 이전·이후 기록과 안 맞는 주행거리는 막아요. 지운 주유 기록이 가족 공유로 되살아나지 않고, 연말 결산에 기름값이 빠지지 않아요", "세탁소·빌려준 옷은 목록 오른쪽에도 그 상태로 보여요. '어제 입었어요'처럼 쉬운 말로 바꿨어요"]}, {"v": "v1.31", "d": "2026.11.11", "items": ["🗓 식단표: 1주일 점심·도시락·저녁(아침도 켤 수 있어요) 칸에 메뉴와 쓸 재료를 넣어요. '숙주나물'처럼 적으면 숙주를 저절로 골라 주고, 재료 기한이 그날보다 먼저 끝나면 ⚠로 알려 줘요", "빈 저녁 알아서 채우기(급한 재료 먼저)와 이번 주 모자란 재료 장보기에 담기가 돼요. 식단에 넣은 재료는 음식 목록에 '🗓 수 저녁 숙주나물'처럼 보여요", "끼니가 지나면 '드셨어요?'를 물어봐요. 못 먹었으면 다른 날로 옮기거나, 그 재료로 만들 다른 요리를 바로 골라요", "🔪 손질해 뒀어요: 다짐·썰기·데침·양념을 기록하고, 어디에 쓸지(예: 계란말이) 적어 둬요. 냉장은 2일, 냉동은 한 달로 기한을 바꾸고 목록에 '🔪 다져 둠'으로 보여요"]}, {"v": "v1.30", "d": "2026.11.11", "items": ["⛽ 주유 기록: 자동차 탭에서 '주유 기록하기'를 누르고 금액만 넣으면 돼요. 주행거리와 리터를 넣으면 연비와 1km당 기름값을 계산하고, 이번 달·올해 기름값을 통계와 결산에 모아 보여 드려요", "👕 옷이 지금 어디 있는지 표시해요: 옷장에 있어요·세탁 중·세탁소·빌려줬어요. 입을 수 없는 옷은 '안 겹치게 골라주기'·여행 짐·아침 옷 추천에서 빼요", "세탁소에 맡긴 지 5일, 빌려준 지 30일이 지나면 아침 알림으로 알려 드려요. 그 옷을 입거나 '세탁했어요'를 누르면 다시 옷장에 있는 걸로 바뀌어요", "📝 표현을 다듬었어요: '빨았어요'→'세탁했어요', '빨 때 됐어요'→'세탁할 때예요' 등 누구나 헷갈리지 않는 말로 바꿨어요"]}, {"v": "v1.29", "d": "2026.11.11", "items": ["🍳 레시피가 113가지에서 247가지로 늘었어요: 양식(까르보나라·함박스테이크·감자 수프)·중식(탕수육·고추잡채)·일식(오야꼬동·밀푀유나베)·아시아(팟타이·쌀국수·월남쌈)·가벼운 식사(포케·두부 샐러드)·간식까지", "👶 아이가 잘 먹는 메뉴 74가지를 따로 모아 봐요 (동그랑땡·떡갈비·치킨너겟·메추리알 장조림·모양 주먹밥 등)", "레시피 목록에서 한식·양식·중식·일식·아시아·가벼운·👶 아이·간식·15분 이내로 골라 보고, 요리나 재료 이름으로 찾아요", "지금 재료로 만들 수 있는 요리 아래에 '다른 요리 둘러보기'가 생겼어요. 없는 재료는 버튼 한 번으로 장보기에 담아요", "단호박·명란·또띠아·아보카도·쌀국수·메밀면·게맛살·메추리알·연근·우엉·꽁치·갈치·삼치 등 재료 23가지를 더 알아봐요"]}, {"v": "v1.28", "d": "2026.11.09", "items": ["🧳 여행 짐에 👶 아이 옷이 생겼어요. 아이 옷 사이즈에 적은 아이마다 상의·하의·속옷·여벌 옷을 넉넉하게, 사이즈까지 넣어 드려요", "🏊 수영 물품(수영복·래시가드·수모·수경·비치타월·방수팩 등)과 🩴 호텔 슬리퍼를 넣었어요", "✏️ 짐 종류를 내 마음대로: 새 종류 만들기(캠핑·아기 용품·스키 등 추천을 누르면 짐까지 한 번에), 이름 고치기, 순서 바꾸기, 지우기", "챙길 종류를 눌러 켜고 꺼요 (이번에 수영 안 하면 끄기). 짐을 넣을 때 종류를 고르면 다음 여행에도 나와요"]}, {"v": "v1.27", "d": "2026.11.09", "items": ["🍳 장보기에서 '요리 재료 한 번에 담기': 불고기처럼 만들 요리를 적으면 필요한 재료가 체크 목록으로 나와요. 집에 있는 건 빼고, 양념 같은 건 직접 더 넣어요", "장보기 목록이 요리별로 묶여 보이고, 사서 체크하면 음식 탭에서도 '🍳 불고기' 묶음으로 모여요 (위쪽 칩을 누르면 그 요리 재료만)", "처음 사는 재료도 한 번에 등록돼요 (날짜는 대략으로 넣고, 나중에 눌러서 고쳐요)", "🥬 남은 양 표시: 양배추처럼 다 못 쓴 건 '½ 남음'·'조금 남음'으로 표시해요 (음식 상세에서 한 번 누르기)"]}, {"v": "v1.26", "d": "2026.11.09", "items": ["🌙 음력 기념일: '음력이에요'를 켜면 부모님 생신·제사를 해마다 양력 날짜로 바꿔 알려 드려요 (말로 '음력 8월 15일'도 돼요)", "🧳 여행 짐에 원하는 짐을 넣고 빼요. '여행 끝'으로 목록을 지워요", "💊 종합비타민·비타민D·오메가3·유산균 추천이 생겼고, 영양제는 등록하면 바로 매일 체크가 켜져요", "🛒 장보기 항목을 눌러 이름·메모(개수·브랜드)를 고치고, 내 기록이 있으면 바로 최저가를 봐요", "👕 코디 이름 바꾸기, 옷 이름을 바꾸면 코디 이름도 따라가요. '모두 세탁했어요'도 되돌릴 수 있어요", "🚗 교체 기록의 비용·정비소를 나중에 고쳐요. '차 바꾸기'로 새 차를 처음부터 시작해요. 주행거리가 갑자기 많이 늘면 한 번 더 확인해요", "3일 식단 지우기, 바코드로 기억한 상품 지우기(설정 → 내 품목)", "D-day 점검·반려동물 약도 '준비물 장보기에 담기'가 돼요. 계절 안내 카드에서 바로 장보기에 담아요", "1분 냉장고 정리에 '냉동실로 옮기기'가 생겼고, 중간에 닫아도 오늘 안에는 이어서 해요", "처음 열면 세 줄 안내가 나와요. 설정에 사용 설명서와 '처음 안내 다시 보기'가 생겼어요", "아침 알림 끝에 세탁할 옷·오늘 먹을 약·아이 옷 사이즈를 한 줄로 알려 드려요"]}, {"v": "v1.25", "d": "2026.11.09", "items": ["🛒 장보기에서 산 것을 여러 개 체크하고 한 번에 등록해요. 전에 산 물건은 지난번 기준으로 바로 등록되고, 처음 사는 것만 날짜를 물어봐요", "같은 이름·같은 날짜 물건은 새 줄 대신 수량을 합쳐요. 기한 지난 같은 물건이 있으면 정리할지 물어봐요", "생필품에 '다 써서 목록에서 빼기'가 생겼고, 다 먹었어요·버렸어요·다 썼어요는 바로 되돌릴 수 있어요", "해지했던 구독을 다시 넣으면 지난번 금액을 채워요. 원↔$를 바꾸면 넣은 금액을 환산해요", "무료 체험 중인 구독은 고정 지출에서 빼요. 가입한 지 얼마 안 된 구독엔 '이번 달 썼어요?'를 묻지 않아요", "찾기에서 연 물건은 뒤로 가면 찾기 결과로 돌아가요. 찾기의 장보기 항목을 누르면 장보기가 열려요", "날짜 고르기는 이번 달 달력부터 열리고, 년→월→일 순서로 이어서 골라요", "'나이키 운동화'처럼 직접 적어도 신발 칸·주기를 알아서 맞춰요. 안 겹치게 골라주기는 누를 때마다 다른 조합을 보여줘요", "여행 짐·안 입는 옷 정리에서 철 지난 옷은 빼요. 여행 날짜를 바꿔도 체크가 남아요", "자동차: 교체 창을 닫으면 상세로, 같은 부품 중복 경고, 자동차세 날짜 6/30·12/31, 기본 부품을 안 고르고 누르면 안내", "버전 정보 창이 앱의 어둡게 테마를 따라요. 다 먹음 기록을 지우면 수량도 1개 돌아와요"]}, {"v": "v1.24", "d": "2026.11.09", "items": ["큰 글씨에서 자동차 카드의 주행거리(km)가 두 줄로 나뉘던 문제를 고쳤어요"]}, {"v": "v1.23", "d": "2026.11.09", "items": ["★ '내 품목'으로 이름을 통일했어요. 음식·옷·생필품·자동차·D-day 모든 탭에서 넣고 지울 수 있고, 지우면 추천·빠른 재등록·곧 떨어질 것에서도 사라져요", "기본 추천(우유·넷플릭스 등)도 ✕로 지울 수 있어요. '지운 추천 다시 보기'로 되살려요", "D-day·자동차 등록 화면에도 ★ 내 품목이 맨 앞에 나오고, 구독은 금액·주기까지 기억해요", "물건을 지울 때 장보기·내 품목·가격 기록·지난 기록까지 같이 지울지 골라요", "장보기에서 체크한 뒤 등록 창을 닫아도 장보기에서 사라지지 않고, 등록하면 같은 물건은 장보기에서 저절로 빠져요", "통계·D-day·자동차의 기록도 눌러서 지울 수 있고, D-day '했어요'·'해지했어요'·칫솔 체크는 되돌리기가 생겼어요", "자동차 교체 기록을 지우면 마지막 교체 날짜·km가 그 전으로 돌아가요. 미래 날짜와 말이 안 되는 km는 막아요", "말로 등록에서 '3만원'·'5천원'을 잘못 읽던 문제를 고쳤어요", "글자 백업이 전체 데이터를 담고 비밀번호로 잠글 수 있어요. '모두 지우기'는 정말 전부 지워요", "소비기한 지난 재료는 요리 추천에서 빼요. 다 쓴 재료 정리는 1개씩 줄여요", "수정 창을 닫으면 보던 상세로 돌아가고, 입력 중인 창은 바깥을 눌러도 안 닫혀요", "옷: 직접 고른 옷도 코디로 저장, 옷을 지우면 코디에서도 빠져요. 그 밖에 조사·날짜(먼 날짜는 연도 표시) 등 30여 가지를 고쳤어요"]}, {"v": "v1.22", "d": "2026.11.08", "items": ["🗑️ 자주 쓰는 물품·내 품목에 줄마다 '삭제' 버튼이 생겼어요. 등록 화면의 '편집·삭제'를 눌러도 바로 열려요", "🗑️ 등록했던 물건 기록도 지울 수 있어요. 다시 안 살 물건은 빠른 재등록·'곧 떨어질 것'에서 빠져요", "🗑️ 잘못 누른 '지난 기록'과 잘못 넣은 가격 기록도 한 줄씩 지워요", "✋ 지울 때는 한 번 더 물어봐요 (장보기 빼기·코디·옷 정리·주행 기록·자주 쓰는 물품). '취소'를 누르면 보던 화면으로 돌아가요"]}, {"v": "v1.21", "d": "2026.11.08", "items": ["📤 장보기·여행 짐·정리할 옷 목록을 한 번에 카톡 등으로 보내요 (복사·붙여넣기 안 해도 돼요)", "↩️ 3일 식단이나 요리 목록에서 레시피를 열었다가 뒤로 가면 원래 화면으로 돌아가요", "음식을 누르면 '다 먹었어요'·'버렸어요' 버튼이 맨 위에 바로 보여요 (보관 팁은 그 아래로)", "🧳 여행 짐을 체크하면 '몇 개 챙겼어요'가 바로 바뀌고, 다 챙기면 알려줘요", "3일 식단을 닫으면 음식 탭의 오늘 메뉴도 바로 바뀌어요"]}, {"v": "v1.20", "d": "2026.11.08", "items": ["🧊 보관 팁: 음식마다 알맞은 보관법과 냉동하면 얼마나 가는지 알려줘요", "🕐 기한 지난 음식 안내: 유통기한이 지났으면 버리기 전에 확인할 것을, 소비기한이 지났으면 버리라고 알려줘요", "🛒 장보기를 마트 코너별로: 채소·정육·우유·생활용품처럼 코너 순서로 묶어서 덜 돌아다녀요", "💊 약·영양제 매일 체크: 생필품 탭 위에서 오늘 먹었는지 누르고, 며칠째인지 보여줘요", "★ 레시피 즐겨찾기: 마음에 든 요리를 모아 두고 바로 열어요", "🧾 옷 탭에서도 영수증·바코드로 등록해요", "장보기에 같은 걸 또 적으면 '이미 목록에 있어요'라고 알려줘요", "다크 모드에서 '장보기에 담기' 버튼이 잘 보이게 고쳤어요", "🛡️ 백업 파일이 망가져 있어도 앱이 멈추지 않아요 (전에는 앱이 아예 열리지 않았어요)", "옷장으로만 관리하는 옷 상세에 '99999일 남았어요' 대신 마지막으로 입은 날이 나와요", "장보기 목록 이름표 바로잡기: 직접 담은 건 '직접 담음', 다 써서 담은 건 '다 써서 담음'", "통계 문구 '다음 달 0원에 다시 도전' → '0개에 다시 도전'", "공유받은 글이 너무 길거나 이름이 너무 길면 알맞게 잘라요"]}, {"v": "v1.19", "d": "2026.11.08", "items": ["🛒 다 먹었어요·버렸어요·교체했어요를 누르면 '장보기에 담기' 버튼이 바로 떠요. '다음부터 자동으로'를 누르면 다음엔 저절로 담겨요", "1분 냉장고 정리에서 교체한 자주 쓰는 물품도 장보기에 담겨요", "다운로드·설명서 페이지가 느린 인터넷에서도 하얀 화면 없이 바로 떠요"]}, {"v": "v1.18", "d": "2026.11.05", "items": ["세탁 체크: 옷마다 몇 번 입고 세탁할지 정해 두면 '세탁할 때예요'라고 알려 주고, '세탁했어요' 한 번이면 끝", "옷 1회 비용: 산 가격 ÷ 입은 횟수", "통계를 탭별로: 전체 · 음식 · 옷처럼 골라서 보기", "여행 짐 싸기: 떠나는 날과 며칠인지만 넣으면 내 옷장에서 짐 목록을 만들어 체크", "아이 옷 사이즈: 키·상의·하의·신발 기록, 작아질 때와 다음 사이즈 알려 주기", "보안: 백업 파일과 가족 공유를 비밀번호로 잠글 수 있어요", "보안: 앱 화면이 정해진 곳(GitHub 새 버전 확인) 말고는 인터넷에 연결하지 못하게 막음, 배포용 빌드만 올림", "아이폰·PC에서 쓰는 웹앱 주소가 생겼어요"]}, {"v": "v1.17", "d": "2026.11.05", "items": ["통계도 다른 탭처럼: 찾기·장보기 버튼, 이달 입은 옷, 기록을 누르면 그 물건 열기", "설정에서 켠 탭만 통계·결산 카드·장보기 가계부에 보여요", "보안 강화: 앱 화면은 폰의 다른 파일을 못 읽고, 업데이트는 챙김이 저장소 주소만 받고, 알림 신호를 흉내 낼 수 없게"]}, {"v": "v1.16", "d": "2026.11.05", "items": ["수정 버튼을 물건 이름 바로 옆으로 옮겼어요 (모든 탭)", "목록의 ⋮ 버튼으로 간단 수정: 이름·날짜(유통/소비기한)·메모, 냉동실로 옮기기, D-day는 금액도", "수정해서 저장하면 그 전 기록은 자세히 보기에서 안 보여요 (통계는 그대로)", "옷 탭에 상의·하의 추가, 옷 사진 찍어서 바로 등록", "오늘 입은 옷 달력: 평소엔 접어 두고, 펼치면 날마다 입은 옷 사진·이달 자주 입은 옷·안 입은 옷", "지난주에 입은 옷은 노란색으로 알려주고 '안 겹치게 골라주기'", "계절 맞춤: 옷마다 사계절·여름·봄가을·겨울, 지금 계절 옷부터 골라 줘요", "코디 저장: 자주 입는 상의+하의를 한 번에", "두 달 넘게 안 입은 옷 정리 · 기부·중고용 목록 복사", "상의·하의는 교체 주기 없이 옷장으로만 관리 (켤 수 있어요)", "아침 알림에 오늘 입을 옷 추천 한 줄"]}, {"v": "v1.15", "d": "2026.11.05", "items": ["왼쪽 아래 버전 → 내 데이터 백업: 기록을 파일로 저장했다가 새 폰에서 불러오기"]}, {"v": "v1.14", "d": "2026.11.01", "items": ["D-day 탭도 다른 탭처럼: 위쪽 지난 날·곧 다가와요·여유 요약(눌러서 거르기), 장보기 버튼, 사진 넣기, 말로 등록", "말로 D-day 등록: \"넷플릭스 만칠천 원 매달 15일\", \"엄마 생신 3월 5일\"", "기념일 선물·준비물을 장보기에 담기, 자동차 부품도 장보기에 담기", "통계 탭별에 D-day(해지·점검한 개수)도 보여요"]}, {"v": "v1.13", "d": "2026.11.01", "items": ["날짜 없이 등록하면 날짜 칸으로 바로 데려가 빨갛게 표시하고, 년도 고르기를 열어 줘요", "6개월·1년 같은 교체 주기를 달력 기준으로 계산해요 (11월 1일 + 6개월 = 5월 1일)"]}, {"v": "v1.12", "d": "2026.11.01", "items": ["왼쪽 아래 버전을 누르면 앱 정보·업데이트 내용·개인정보를 볼 수 있어요", "새 버전이 나오면 버전 글씨가 노란색으로 바뀌어요"]}, {"v": "v1.10", "d": "2026.11.01", "items": ["날짜를 년·월·일 따로 고르기", "포장지 날짜 인식 개선 (261103, 2026.11.03, NOV 등 여러 모양)", "날짜를 못 읽었을 때 읽은 글자를 보여줘요"]}, {"v": "v1.9", "d": "2026.10.29", "items": ["달러로 넣은 금액도 환율로 계산", "달러 환율 직접 입력, 기본 화폐 고르기, 두 화폐 같이 보기"]}, {"v": "v1.8", "d": "2026.10.29", "items": ["1분 냉장고 정리, 3일 식단 짜기", "장보기 가계부, 안 쓰는 구독 찾기"]}, {"v": "v1.7", "d": "2026.10.29", "items": ["물건마다 메모, 가족과 함께 쓰기", "며칠 안에 먹기, 만든 음식 보관 기간"]}, {"v": "v1.5", "d": "2026.10.25", "items": ["장보기 목록, 냉동실로 옮기기, 버린 음식 금액", "아침 알림 속 요리 제안과 계절 알림"]}], "privacy": "등록한 물건·사진·기록은 이 폰에만 저장돼요. 바코드·영수증 글자 인식은 폰 안에서 해요. 인터넷은 새 버전을 확인할 때와, 바코드 번호로 상품 이름을 찾을 때(Open Food Facts, 번호만 보냄)만 써요.", "backup": {"keys": ["gyoche_v1"], "idb": [{"db": "gyoche_photos", "store": "p"}], "bridge": "Android"}};
 window.APP_INFO.online=!!(window.Android&&window.Android.version);
 window.APP_INFO.version=function(){try{return window.Android.version()}catch(e){/* 미리보기: 업데이트 내용의 마지막 번호 다음 번호 */var n=0;(window.APP_INFO.notes||[]).forEach(function(x){var m=/^v1\.(\d+)$/.exec(x.v);if(m&&+m[1]>n)n=+m[1];});return '1.'+(n+((window.APP_INFO.notes[0]||{}).v==='current'?1:0));}};
 </script>
@@ -7274,7 +7307,7 @@ window.APP_INFO.version=function(){try{return window.Android.version()}catch(e){
   var root = host.attachShadow ? host.attachShadow({ mode: 'open' }) : host;
   var CSS = ':host{all:initial}' +
     '.w{--bg:#fff;--ink:#16202b;--ink2:#4a5664;--ink3:#7a8594;--line:#dfe5ea;--pill:#dcefe6;--pillInk:#1f6b4c;--btn:#f2f5f7;--main:#16202b;--mainInk:#fff;--yellow:#F5B400;' +
-    'font:15px/1.55 system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:var(--ink);position:fixed;inset:0;display:flex;align-items:flex-end;justify-content:center}' +
+    'font:15px/1.55 system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:var(--ink);word-break:keep-all;overflow-wrap:anywhere;position:fixed;inset:0;display:flex;align-items:flex-end;justify-content:center}' +
     '.w.dk{--bg:#18212b;--ink:#e8edf2;--ink2:#b3bec9;--ink3:#8a96a3;--line:#2b3744;--pill:#173a2c;--pillInk:#7fd3ac;--btn:#222d38;--main:#e8edf2;--mainInk:#101820}' +
     '.scrim{position:absolute;inset:0;background:rgba(10,15,20,.45)}' +
     '.sheet{position:relative;width:100%;max-width:520px;max-height:88%;overflow-y:auto;background:var(--bg);border-radius:24px 24px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.18);' +
@@ -7310,24 +7343,27 @@ window.APP_INFO.version=function(){try{return window.Android.version()}catch(e){
      파일은 사용자가 고른 곳(내 파일·드라이브 등)에만 저장되고, 앱이 인터넷으로 보내지 않는다.
      설정: APP_INFO.backup = { keys:['이름', '접두어*'], idb:[{db, store}], bridge:'Android', save:fn(name,text)->Promise }  ── */
   var B = C.backup || null, bk = { msg: '', busy: false, pending: null, locked: null };
-  /* 비밀번호 잠금: 비밀번호로 만든 열쇠(PBKDF2 20만 번)로 AES-GCM 256 암호화. 비밀번호와 열쇠는 어디에도 저장하지 않음 */
+  /* 비밀번호 잠금: 비밀번호로 만든 열쇠(PBKDF2-SHA256 60만 번, 파일의 it 칸에 적음 · 칸이 없는 예전 파일은 20만 번)로 AES-GCM 256 암호화. 비밀번호와 열쇠는 어디에도 저장하지 않음 */
   var BLOCK = (function () {
     function ok() { return !!(window.crypto && crypto.subtle && crypto.getRandomValues && window.TextEncoder && window.TextDecoder); }
     function b64(u8) { var t = ''; for (var i = 0; i < u8.length; i += 0x8000) t += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(t); }
     function unb64(t) { var b = atob(String(t || '')), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
-    function key(pw, salt) {
+    var IT = 600000;
+    function key(pw, salt, it) {
       return crypto.subtle.importKey('raw', new TextEncoder().encode(String(pw)), 'PBKDF2', false, ['deriveKey']).then(function (k) {
-        return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: salt, iterations: 200000, hash: 'SHA-256' }, k, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+        return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: salt, iterations: it, hash: 'SHA-256' }, k, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
       });
     }
     function seal(text, pw) {
       var salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
-      return key(pw, salt).then(function (k) { return crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, k, new TextEncoder().encode(text)); })
-        .then(function (ct) { return { v: 1, s: b64(salt), i: b64(iv), d: b64(new Uint8Array(ct)) }; });
+      return key(pw, salt, IT).then(function (k) { return crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, k, new TextEncoder().encode(text)); })
+        .then(function (ct) { return { v: 1, it: IT, s: b64(salt), i: b64(iv), d: b64(new Uint8Array(ct)) }; });
     }
     function open(o, pw) {
       if (!o || typeof o.s !== 'string' || typeof o.i !== 'string' || typeof o.d !== 'string') return Promise.reject(new Error('bad'));
-      return key(pw, unb64(o.s)).then(function (k) { return crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(o.i) }, k, unb64(o.d)); })
+      var it = o.it == null ? 200000 : +o.it;
+      if (!(it >= 100000 && it <= 5000000 && it % 1 === 0)) return Promise.reject(new Error('bad'));
+      return key(pw, unb64(o.s), it).then(function (k) { return crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(o.i) }, k, unb64(o.d)); })
         .then(function (pt) { return new TextDecoder().decode(pt); });
     }
     return { ok: ok, seal: seal, open: open };
@@ -7381,7 +7417,8 @@ window.APP_INFO.version=function(){try{return window.Android.version()}catch(e){
   function bkSave() {
     if (bk.busy) return;
     var pwEl = root.querySelector('#bk-pw'), pw = pwEl ? pwEl.value : '';
-    if (pw && pw.length < 6) { bkSet('비밀번호는 6글자 이상 넣어 주세요.'); return; }
+    if (pw && pw.length < 8) { bkSet('비밀번호는 8글자 이상으로 해 주세요'); return; }
+    if (pw && /^\d+$/.test(pw) && bk.numOk !== pw) { bk.numOk = pw; bkSet('숫자만 쓰면 쉽게 풀릴 수 있어요. 글자를 섞어 주세요. 그대로 쓰려면 \'백업 파일로 저장\'을 한 번 더 눌러 주세요'); var e0 = root.querySelector('#bk-pw'); if (e0) e0.value = pw; return; }
     bkSet(pw ? '비밀번호로 잠근 백업 파일을 만드는 중이에요…' : '백업 파일을 만드는 중이에요…', true);
     var ls = {}; lsKeys().forEach(function (k) { ls[k] = localStorage.getItem(k); });
     Promise.all((B.idb || []).map(idbDump)).then(function (dumps) {
@@ -7452,7 +7489,7 @@ window.APP_INFO.version=function(){try{return window.Android.version()}catch(e){
         '<div class="row"><button class="btn main" type="button" data-bk="apply"' + (bk.busy ? ' disabled' : '') + '>불러오기</button><button class="btn" type="button" data-bk="cancel">취소</button></div>'
       : bk.locked ? '<p class="hint">🔒 비밀번호가 걸린 백업이에요.</p><div class="row"><input class="pw" id="bk-upw" type="password" autocomplete="off" maxlength="40" placeholder="백업 비밀번호" aria-label="백업 비밀번호"><button class="btn main" type="button" data-bk="unlock"' + (bk.busy ? ' disabled' : '') + '>열기</button><button class="btn" type="button" data-bk="cancel">취소</button></div>'
       : '<p class="hint">폰을 바꾸거나 앱을 지우기 전에 파일로 저장해 두세요. 파일은 내가 고른 곳에만 저장되고 인터넷으로 보내지 않아요.</p>' +
-        (BLOCK.ok() ? '<input class="pw" id="bk-pw" type="password" autocomplete="new-password" maxlength="40" placeholder="비밀번호 (선택 · 6글자 이상, 넣으면 잠가요)" aria-label="백업 비밀번호 (선택)">' : '') +
+        (BLOCK.ok() ? '<input class="pw" id="bk-pw" type="password" autocomplete="new-password" maxlength="40" placeholder="비밀번호 (선택, 8글자 이상)" aria-label="비밀번호 (선택, 8글자 이상) · 넣으면 잠가요">' : '') +
         '<div class="row"><button class="btn" type="button" data-bk="save"' + (bk.busy ? ' disabled' : '') + '>백업 파일로 저장</button><button class="btn" type="button" data-bk="open"' + (bk.busy ? ' disabled' : '') + '>백업 불러오기</button></div>') +
       (bk.msg ? '<p class="hint" role="status">' + esc(bk.msg) + '</p>' : '');
   }

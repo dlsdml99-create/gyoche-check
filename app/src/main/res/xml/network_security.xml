@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 보안: 암호화되지 않은 연결(http) 금지, 폰 시스템 인증서만 믿음(사용자가 넣은 인증서로 가로채기 막기) -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

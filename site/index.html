@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>챙김이 다운로드</title>
 <meta name="description" content="유통기한·교체 주기를 대신 기억했다가 알려주는 안드로이드 앱">
@@ -156,7 +156,7 @@ footer { color: var(--sub); font-size: 14px; border-top: 1px solid var(--line); 
     <a class="btn cg" href="https://github.com/dlsdml99-create/gyoche-check/releases/download/v__N__/gyoche-check.apk"><svg><use href="#ic-down"/></svg>챙김이 다운로드</a>
     <a class="small-link" href="#install-h">설치가 처음이라면 아래 설치하는 법을 봐 주세요</a>
     <a class="small-link" href="guide.html"><b>사용 설명서 보기</b> · 탭별 쓰는 법</a>
-    <div class="qr pc-only"><div class="code" id="qr-cg"></div>PC로 보고 있다면 폰 카메라로 찍으세요</div>
+    <div class="qr pc-only"><div class="code" id="qr-cg" data-url="https://github.com/dlsdml99-create/gyoche-check/releases/download/v__N__/gyoche-check.apk"></div>PC로 보고 있다면 폰 카메라로 찍어 주세요</div>
   </section>
   <section class="detail" aria-labelledby="cg-h">
     <div class="detail-head"><svg class="icon" aria-hidden="true"><use href="#ic-cg"/></svg><h2 id="cg-h">챙김이는 이런 앱이에요</h2></div>
@@ -196,7 +196,7 @@ footer { color: var(--sub); font-size: 14px; border-top: 1px solid var(--line); 
   </section>
   <section class="detail" aria-labelledby="cg-new">
     <div class="detail-head"><svg class="icon" aria-hidden="true"><use href="#ic-cg"/></svg><h2 id="cg-new">v1.__N__ 업데이트 내용</h2></div>
-    <ul class="feat cgx"><li><span>🚗 자동차 탭도 다른 탭처럼: + 버튼에서 '말로 기록'("엔진오일 오늘 갈았어 5만 2천 키로")과 '정비 영수증 찍기'로 바꾼 부품·주행거리·비용을 한 번에 기록해요. 위쪽에 가격 비교도 생겼어요</span></li><li><span>🎙 음식·생필품 빈 화면에도 '말로' 버튼이 생겼어요. 빈 화면 바로가기를 모든 탭에서 찍기 → 말로 → 직접 입력 순서로 맞췄어요</span></li><li><span>★ 내 품목·추천(우유 등)을 고르면 보통 기한이 바로 들어가서, 날짜를 한 번 더 누르지 않아도 등록돼요</span></li><li><span>👀 처음 쓰는 분은 빈 화면의 '예시로 둘러보기'로 미리 써 볼 수 있어요. 예시는 내 기록과 섞이지 않아요</span></li><li><span>🔎 찾기에서 '우유 이마트'처럼 띄어 쓰면 둘 다 맞는 것만 보여요. 목록은 기한순·이름순·최근 등록순으로 바꿀 수 있어요</span></li><li><span>⚡ 물건이 수천 개여도 탭이 빨리 바뀌어요</span></li><li><span>✏️ 문구·띄어쓰기를 다듬고, 닫기·칩·위쪽 버튼을 누르기 쉽게 키우고, 밝은 화면 글자를 더 진하게 했어요</span></li><li><span>🔐 보안: 백업·가족 공유 비밀번호는 6글자 이상(예전 백업도 그대로 열려요), 폰 자동 백업에서 앱 기록 빼기, 바깥 링크는 챙김이 주소만 열기, 이 페이지도 바깥 스크립트·글꼴 없이 열려요</span></li></ul>
+    <ul class="feat cgx"><li><span>🚗 자동차 탭도 다른 탭처럼: + 버튼에서 '말로 기록'("엔진오일 오늘 갈았어 5만 2천 키로")과 '정비 영수증 찍기'로 바꾼 부품·주행거리·비용을 한 번에 기록해요. 위쪽에 가격 비교도 생겼어요</span></li><li><span>🎙 음식·생필품 빈 화면에도 '말로' 버튼이 생겼어요. 빈 화면 바로가기를 모든 탭에서 찍기 → 말로 → 직접 입력 순서로 맞췄어요</span></li><li><span>★ 내 품목·추천(우유 등)을 고르면 보통 기한이 바로 들어가서, 날짜를 한 번 더 누르지 않아도 등록돼요</span></li><li><span>👀 처음 쓰는 분은 빈 화면의 '예시로 둘러보기'로 미리 써 볼 수 있어요. 예시는 내 기록과 섞이지 않아요</span></li><li><span>🔎 찾기에서 '우유 이마트'처럼 띄어 쓰면 둘 다 맞는 것만 보여요. 목록은 기한순·이름순·최근 등록순으로 바꿀 수 있어요</span></li><li><span>⚡ 물건이 수천 개여도 탭이 빨리 바뀌어요</span></li><li><span>✏️ 문구·띄어쓰기를 다듬고, 닫기·칩·위쪽 버튼을 누르기 쉽게 키우고, 밝은 화면 글자를 더 진하게 했어요</span></li><li><span>👀 '예시로 둘러보기'를 누르면 지금 보던 탭의 예시가 열려요 (전에는 어느 탭에서 눌러도 자동차 탭으로 넘어갔어요)</span></li><li><span>💰 금액 칸에 마이너스 숫자를 넣으면 알려 드리고 저장하지 않아요. 지난 날짜로 음식을 등록하면 한 번 더 물어봐요</span></li><li><span>🚗 다음 교체일이 내년이면 연도까지 보여요(예: 2027.5.13). 말로 기록에서 '이틀 전·사흘 전·지난주·지난달·2주 전'도 알아들어요</span></li><li><span>🔤 이름순 정렬에서 숫자를 크기대로 줄 세워요(우유 2L → 우유 10L). 옷·생필품의 '1분 정리' 안내를 그 탭에 맞는 말로 고쳤어요</span></li><li><span>👆 물건 자세히 보기의 고치기·수량 −/+·남은 양 버튼과 작은 글자 버튼, 왼쪽 아래 버전 글씨를 누르기 쉽게 키웠어요. 처음 안내 창도 지금 화면에 맞게 고쳤어요</span></li><li><span>💾 앱 저장 공간이 가득 차서 저장하지 못하면, 한 번만이 아니라 다시 실패할 때마다 알려 드려요</span></li><li><span>✏️ 설정 '테마'를 '화면 색(폰 설정 따라·밝게·어둡게)'으로 바꾸고, 앱 정보 창 글자가 단어 중간에서 끊기지 않게 했어요. 사용 설명서의 옛말(삭제·편집·수정)도 고치기·지우기로 맞췄어요</span></li><li><span>🔐 보안: 백업·가족 공유 비밀번호는 이제 8글자 이상이고 더 튼튼하게 잠가요(예전 백업도 그대로 열려요). 숫자만 쓰면 한 번 더 알려 드려요. 가족이 보낸 글에 잘못된 날짜가 섞여 있으면 빼고 받아요. 폰 자동 백업에서 앱 기록을 빼고, 바깥 링크는 챙김이 주소만 열어요</span></li></ul>
     <h3 style="margin:14px 0 6px;font-size:15px">v1.40</h3>
     <ul class="feat cgx"><li><span>✏️ 문구 다듬기: 같은 일을 다르게 부르던 말을 맞췄어요. 편집·삭제·수정 → 고치기·지우기, ⋮ 간단 수정 → 빠르게 고치기</span></li><li><span>💬 '점검하세요'·'등록하세요'처럼 시키는 말투를 '점검해 주세요'처럼 부드럽게 바꾸고, 띄어쓰기(알려 드려요)를 맞췄어요</span></li></ul>
     <h3 style="margin:14px 0 6px;font-size:15px">v1.39</h3>
@@ -287,22 +287,7 @@ footer { color: var(--sub); font-size: 14px; border-top: 1px solid var(--line); 
   <footer><a class="ios-link" href="https://dlsdml99-create.github.io/gyoche-check/app.html">아이폰·PC에서 쓰기(웹앱)</a> · <a href="https://dlsdml99-create.github.io/gyoche-check/privacy.html">개인정보처리방침</a> · 만든 사람 <a href="https://github.com/dlsdml99-create">dlsdml99-create</a></footer>
 </main>
 <script src="qrcode.js"></script>
-<script>
-(function () {
-  function draw(id, url) {
-    var el = document.getElementById(id);
-    if (!el || typeof qrcode !== 'function') { if (el) el.parentNode.hidden = true; return; }
-    try {
-      var q = qrcode(0, 'M'); q.addData(url); q.make();
-      var n = q.getModuleCount(), d = '';
-      for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (q.isDark(r, c)) d += 'M' + c + ' ' + r + 'h1v1h-1z';
-      el.innerHTML = '<svg viewBox="0 0 ' + n + ' ' + n + '" shape-rendering="crispEdges" role="img" aria-label="다운로드 QR"><path fill="#111" d="' + d + '"/></svg>';
-    } catch (e) { el.parentNode.hidden = true; }
-  }
-  draw('qr-cg', 'https://github.com/dlsdml99-create/gyoche-check/releases/download/v__N__/gyoche-check.apk');
-  draw('qr-nb', 'https://github.com/dlsdml99-create/nbbang-qr/releases/latest/download/nbbang-qr.apk');
-})();
-</script>
+<script src="page.js"></script>
 
 
 </body></html>
